@@ -1,0 +1,35 @@
+/* Asegúrate de que el contenedor principal ocupe el ancho completo */
+.card.flex {
+  max-width: 1500px;
+}
+
+/* Asegúrate de que las tarjetas ocupen el ancho completo de su contenedor */
+.p-card {
+  width: 100%;
+  box-sizing: border-box;
+  /* Incluye padding y border en el ancho total */
+  margin: 0;
+  /* Elimina el margen predeterminado */
+}
+
+/* Opcional: Ajusta el espacio interno si es necesario */
+.card {
+  padding: 1rem;
+  /* Ajusta el padding según sea necesario */
+}
+
+/* Ajusta la lista para asegurarte de que ocupe el ancho completo */
+.p-list-group {
+  width: 100%;
+  margin: 0;
+  /* Elimina el margen si es necesario */
+  padding: 0;
+  /* Elimina el padding si es necesario */
+  list-style-type: none;
+  /* Elimina los puntos de la lista si es necesario */
+}
+
+.p-list-group-item {
+  padding: 0.5rem 1rem;
+  /* Ajusta el padding según sea necesario */
+}

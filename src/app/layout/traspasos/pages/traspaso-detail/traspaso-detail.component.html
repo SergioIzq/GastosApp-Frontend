@@ -1,0 +1,248 @@
+<div class="card">
+    <div class="p-grid p-justify-center p-align-center">
+        <div>
+            <ng-container *ngIf="(error$ | async); else newOrDetalleTraspaso" class="mt-4">
+                <div class="alert alert-danger" role="alert">
+                    <strong>Ha habido un error en la carga de datos</strong>
+                </div>
+            </ng-container>
+
+            <ng-template #newOrDetalleTraspaso>
+
+                <form *ngIf="isNewTraspaso" [formGroup]="newTraspasoForm" (ngSubmit)="onSubmit()">
+                    <p-fieldset legend="Datos traspaso">
+                        <div class="grid p-fluid mt-3">
+                            <!-- Primera fila de inputs -->
+                            <div class="field col-12 md:col-6">
+                                <p-dropdown [options]="filteredCuentasOrigen" optionLabel="Nombre" [filter]="true"
+                                    formControlName="CuentaOrigen" filterBy="Nombre" [showClear]="true"
+                                    emptyMessage="No se encontraron resultados"
+                                    emptyFilterMessage="No se encontraron resultados"
+                                    placeholder="Selecciona cuenta origen" (onChange)="onCuentaOrigenChange($event)">
+                                    >
+
+                                    <ng-template pTemplate="selectedItem" let-selectedOption>
+                                        <div class="flex align-items-center gap-2">
+                                            <div>{{ selectedOption?.Nombre }}</div>
+                                        </div>
+                                    </ng-template>
+
+                                    <ng-template let-categoria pTemplate="item">
+                                        <div class="flex align-items-center gap-2">
+                                            <div>{{ categoria.Nombre }}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+
+                                <div *ngIf="newTraspasoForm.get('Cuenta.Nombre')?.invalid && 
+                                         (newTraspasoForm.get('Cuenta.Nombre')?.['dirty'] ||  
+                                          newTraspasoForm.get('Cuenta.Nombre')?.['touched'])" class="text-danger">
+                                    <div *ngIf="newTraspasoForm.get('Cuenta.Nombre')?.errors?.['required']">
+                                        El campo Cuenta origen es obligatorio.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <p-dropdown [options]="filteredCuentasDestinos" optionLabel="Nombre"
+                                    emptyMessage="No se encontraron resultados"
+                                    emptyFilterMessage="No se encontraron resultados" [filter]="true"
+                                    formControlName="CuentaDestino" filterBy="Nombre" [showClear]="true"
+                                    (onChange)="onCuentaDestinoChange($event)" placeholder="Selecciona cuenta destino">
+
+                                    <ng-template pTemplate="selectedItem" let-selectedOption>
+                                        <div class="flex align-items-center gap-2">
+                                            <div>{{ selectedOption?.Nombre }}</div>
+                                        </div>
+                                    </ng-template>
+
+                                    <ng-template let-categoria pTemplate="item">
+                                        <div class="flex align-items-center gap-2">
+                                            <div>{{ categoria.Nombre }}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+                                <div *ngIf="newTraspasoForm.get('Cuenta.Nombre')?.invalid && 
+                                         (newTraspasoForm.get('Cuenta.Nombre')?.['dirty'] || 
+                                          newTraspasoForm.get('Cuenta.Nombre')?.['touched'])" class="text-danger">
+                                    <div *ngIf="newTraspasoForm.get('Cuenta.Nombre')?.errors?.['required']">
+                                        El campo Cuenta destino es obligatorio.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label euro-input-container">
+                                    <input type="text" id="Importe" pInputText formControlName="Importe"
+                                        appNumberFormatter>
+                                    <label for="Importe">Importe</label>
+                                    <div *ngIf="newTraspasoForm.get('Importe')?.invalid && (newTraspasoForm.get('Importe')?.['dirty'] || newTraspasoForm.get('Importe')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="newTraspasoForm.get('Importe')?.errors?.['required']">El campo
+                                            Importe
+                                            es
+                                            obligatorio.</div>
+                                        <div *ngIf="newTraspasoForm.get('Importe')?.errors?.['pattern']">Formato
+                                            incorrecto. Ej: 123456,23</div>
+                                        <div *ngIf="newTraspasoForm.get('Importe')?.errors?.['min']">El Importe
+                                            mínimo es 1 €</div>
+
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-calendar formControlName="Fecha" [showIcon]="true" dateFormat="dd/mm/yy"
+                                        [readonlyInput]="true"></p-calendar>
+                                    <label for="Fecha">Fecha</label>
+                                </span>
+                            </div>
+                            <div class="field col-12 md:col-12">
+                                <span class="p-float-label">
+                                    <input type="text" id="Descripcion" pInputText formControlName="Descripcion">
+                                    <label for="Descripcion">Descripcion</label>
+                                    <div *ngIf="newTraspasoForm.get('Descripcion')?.invalid && (newTraspasoForm.get('Descripcion')?.['dirty'] || newTraspasoForm.get('Descripcion')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="newTraspasoForm.get('Descripcion')?.errors?.['maxlength']">Ha
+                                            excedido
+                                            el
+                                            máximo número de caracteres (100)</div>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="field col-6 md:col-6">
+                                <p-button label="Cancelar" icon="pi pi-times" severity="danger" [raised]="true"
+                                    iconPos="right" [style]="{'width': '140px', 'margin-top': '1rem'}"
+                                    (click)="goBack()">
+                                </p-button>
+                            </div>
+                                <div class="field col-6 md:col-6" style="text-align: center;">
+                                    <p-button label="Realizar traspaso" icon="pi pi-check" severity="success"
+                                        [raised]="true" iconPos="right" [disabled]="newTraspasoForm.invalid || !newTraspasoForm.dirty || deshabilitarBoton" type="submit"
+                                        [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                    </p-button>
+                                </div>
+                        </div>
+                    </p-fieldset>
+                </form>
+
+                <form *ngIf="!isNewTraspaso" [formGroup]="detailTraspasoForm" (ngSubmit)="onSubmit()">
+                    <p-fieldset legend="Datos traspaso">
+                        <div class="grid p-fluid mt-3">
+                            <!-- Primera fila de inputs -->
+                            <div class="field col-12 md:col-6">
+                                <p-dropdown [options]="filteredCuentasOrigen" optionLabel="Nombre"
+                                    emptyMessage="No se encontraron resultados"
+                                    emptyFilterMessage="No se encontraron resultados" [filter]="true"
+                                    formControlName="CuentaOrigen" filterBy="Nombre" [showClear]="true"
+                                    placeholder="Selecciona cuenta origen" (onChange)="onCuentaOrigenChange($event)">
+                                    >
+
+                                    <ng-template pTemplate="selectedItem" let-selectedOption>
+                                        <div class="flex align-items-center gap-2">
+                                            <div>{{ selectedOption?.Nombre }}</div>
+                                        </div>
+                                    </ng-template>
+
+                                    <ng-template let-categoria pTemplate="item">
+                                        <div class="flex align-items-center gap-2">
+                                            <div>{{ categoria.Nombre }}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+
+                                <div *ngIf="detailTraspasoForm.get('Cuenta.Nombre')?.invalid && 
+                                         (detailTraspasoForm.get('Cuenta.Nombre')?.['dirty'] ||  
+                                         detailTraspasoForm.get('Cuenta.Nombre')?.['touched'])" class="text-danger">
+                                    <div *ngIf="detailTraspasoForm.get('Cuenta.Nombre')?.errors?.['required']">
+                                        El campo Cuenta origen es obligatorio.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <p-dropdown [options]="filteredCuentasDestinos" optionLabel="Nombre" [filter]="true"
+                                    formControlName="CuentaDestino" filterBy="Nombre" [showClear]="true"
+                                    emptyMessage="No se encontraron resultados"
+                                    emptyFilterMessage="No se encontraron resultados"
+                                    (onChange)="onCuentaDestinoChange($event)" placeholder="Selecciona cuenta destino">
+
+                                    <ng-template pTemplate="selectedItem" let-selectedOption>
+                                        <div class="flex align-items-center gap-2">
+                                            <div>{{ selectedOption?.Nombre }}</div>
+                                        </div>
+                                    </ng-template>
+
+                                    <ng-template let-categoria pTemplate="item">
+                                        <div class="flex align-items-center gap-2">
+                                            <div>{{ categoria.Nombre }}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+                                <div *ngIf="detailTraspasoForm.get('Cuenta.Nombre')?.invalid && 
+                                         (detailTraspasoForm.get('Cuenta.Nombre')?.['dirty'] || 
+                                         detailTraspasoForm.get('Cuenta.Nombre')?.['touched'])" class="text-danger">
+                                    <div *ngIf="detailTraspasoForm.get('Cuenta.Nombre')?.errors?.['required']">
+                                        El campo Cuenta destino es obligatorio.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label euro-input-container">
+                                    <input type="text" id="Importe" pInputText formControlName="Importe"
+                                        appNumberFormatter>
+                                    <label for="Importe">Importe</label>
+                                    <div *ngIf="detailTraspasoForm.get('Importe')?.invalid && (detailTraspasoForm.get('Importe')?.['dirty'] || detailTraspasoForm.get('Importe')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="detailTraspasoForm.get('Importe')?.errors?.['required']">El campo
+                                            Importe
+                                            es
+                                            obligatorio.</div>
+                                        <div *ngIf="detailTraspasoForm.get('Importe')?.errors?.['pattern']">Formato
+                                            incorrecto. Ej: 123456,23</div>
+                                        <div *ngIf="detailTraspasoForm.get('Importe')?.errors?.['min']">El Importe
+                                            mínimo es 1 €</div>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-calendar formControlName="Fecha" [showIcon]="true" dateFormat="dd/mm/yy"
+                                        [readonlyInput]="true"></p-calendar>
+                                    <label for="Fecha">Fecha</label>
+                                </span>
+                            </div>
+                            <div class="field col-12 md:col-12">
+                                <span class="p-float-label">
+                                    <input type="text" id="Descripcion" pInputText formControlName="Descripcion">
+                                    <label for="Descripcion">Descripcion</label>
+                                    <div *ngIf="detailTraspasoForm.get('Descripcion')?.invalid && (detailTraspasoForm.get('Descripcion')?.['dirty'] || detailTraspasoForm.get('Descripcion')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="detailTraspasoForm.get('Descripcion')?.errors?.['maxlength']">Ha
+                                            excedido
+                                            el
+                                            máximo número de caracteres (100)</div>
+                                    </div>
+                                </span>
+                            </div>
+                            <!-- Fila de botones -->
+                            <div class="field col-6 md:col-6">
+                                <p-button label="Cancelar" icon="pi pi-times" severity="danger" [raised]="true"
+                                    iconPos="right" [style]="{'width': '140px', 'margin-top': '1rem'}"
+                                    (click)="goBack()">
+                                </p-button>
+                            </div>
+
+                            <div class="field col-6 md:col-6" style="text-align: center;">
+                                <p-button label="Guardar" icon="pi pi-check" severity="success" [raised]="true"
+                                    iconPos="right" [disabled]="detailTraspasoForm.invalid || !detailTraspasoForm.dirty || deshabilitarBoton"
+                                    type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                </p-button>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </form>
+
+            </ng-template>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,223 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <h2 class="page-title">Traspasos</h2>
+    </div>
+    <div class="p-col-12 p-sm-6">
+        <div class="card">
+            <p-table #dt [value]="transformedData" dataKey="id" [pageLinks]="5" [rowHover]="true" [rows]="10"
+                [totalRecords]="totalRecords" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
+                [loading]="cargando" 
+                [filterDelay]="0"
+                [globalFilterFields]="['Fecha','CuentaOrigen', 'CuentaDestino','SaldoCuentaOrigen','SaldoCuentaDestino','Importe','Descripcion']">
+
+                <ng-template pTemplate="caption">
+                    <div class="grid datatable-header"
+                        style="display: flex; justify-content: flex-start; align-items: center;">
+                        <!-- Botón Nuevo -->
+                        <div class="field col-12 md:col-4" style="width:150px">
+                            <p-button pRipple severity="success" [raised]="true" label="Nuevo" icon="pi pi-plus"
+                                iconPos="right" class="mr-0 nuevo-button"
+                                [routerLink]="['/traspasos/traspaso-detail', 0]"></p-button>
+                        </div>
+
+                        <!-- Botón Limpiar -->
+                        <div class="field col-12 md:col-4" style="width:150px">
+                            <p-button label="Limpiar" [outlined]="true" icon="pi pi-filter-slash" [raised]="true"
+                                (click)="clear(dt)" class="search-input"></p-button>
+                        </div>
+
+                        <!-- Botón Exportar Excel -->
+                        <div class="field col-4 md:col-4" style="width:200px; text-align: right;">
+                            <p-button label="Exportar Excel" pRipple severity="info" [raised]="true"
+                                icon="pi pi-file-excel" [disabled]="isButtonDisabled"
+                                (click)="exportarAExcel()"></p-button>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="Fecha" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Fecha
+                                <p-sortIcon field="Fecha" />
+                                <p-columnFilter type="text" field="Fecha" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                { label: 'Contiene', value: 'contains' },
+                                { label: 'No contiene', value: 'notContains' },
+                                { label: 'Empieza con', value: 'startsWith' },
+                                { label: 'Termina con', value: 'endsWith' },
+                                { label: 'Es igual a', value: 'equals' },
+                                { label: 'No es igual a', value: 'notEquals' },
+                                { label: 'Es nulo', value: 'isNull' },
+                                { label: 'No es nulo', value: 'isNotNull' }
+                            ]" />
+                            </div>
+                        </th>
+                        <th pSortableColumn="CuentaOrigen" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Cuenta origen
+                                <p-sortIcon field="CuentaOrigen" />
+                                <p-columnFilter type="text" field="CuentaOrigen" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                { label: 'Contiene', value: 'contains' },
+                                { label: 'No contiene', value: 'notContains' },
+                                { label: 'Empieza con', value: 'startsWith' },
+                                { label: 'Termina con', value: 'endsWith' },
+                                { label: 'Es igual a', value: 'equals' },
+                                { label: 'No es igual a', value: 'notEquals' },
+                                { label: 'Es nulo', value: 'isNull' },
+                                { label: 'No es nulo', value: 'isNotNull' }
+                            ]" />
+                            </div>
+                        </th>
+                        <th pSortableColumn="CuentaOrigen" style="min-width: 12rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Saldo cuenta origen
+                                <p-sortIcon field="CuentaOrigen" />
+                                <p-columnFilter type="text" field="CuentaOrigen" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                { label: 'Contiene', value: 'contains' },
+                                { label: 'No contiene', value: 'notContains' },
+                                { label: 'Empieza con', value: 'startsWith' },
+                                { label: 'Termina con', value: 'endsWith' },
+                                { label: 'Es igual a', value: 'equals' },
+                                { label: 'No es igual a', value: 'notEquals' },
+                                { label: 'Es nulo', value: 'isNull' },
+                                { label: 'No es nulo', value: 'isNotNull' }
+                            ]" />
+                            </div>
+                        </th>
+                        <th pSortableColumn="CuentaDestino" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Cuenta destino
+                                <p-sortIcon field="CuentaDestino" />
+                                <p-columnFilter type="text" field="CuentaDestino" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+                        <th pSortableColumn="CuentaDestino" style="min-width: 12rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Saldo cuenta destino
+                                <p-sortIcon field="CuentaDestino" />
+                                <p-columnFilter type="text" field="CuentaDestino" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+                        <th pSortableColumn="Importe" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Importe
+                                <p-sortIcon field="Importe" />
+                                <p-columnFilter type="text" field="Importe" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+                        <th pSortableColumn="Descripcion" style="min-width: 12rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Descripción
+                                <p-sortIcon field="Descripcion" />
+                                <p-columnFilter type="text" field="Descripcion" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="width: 2rem"></th>
+                        <th style="width: 2rem"></th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-traspaso>
+                    <tr>
+                        <td>{{ traspaso.Fecha }}</td>
+                        <td>{{ traspaso.CuentaOrigen }}</td>
+                        <td [style.color]="traspaso.SaldoCuentaOrigen > 0 ? 'green' : 'red'">
+                            {{ traspaso.SaldoCuentaOrigen | currency:'EUR'}}
+                        </td>
+                        <td>{{ traspaso.CuentaDestino }}</td>
+                        <td [style.color]="traspaso.SaldoCuentaDestino > 0 ? 'green' : 'red'">
+                            {{ traspaso.SaldoCuentaDestino | currency:'EUR'}}
+                        </td>
+                        <td [style.color]="traspaso.Importe >= 0 ? 'green' : 'red'">
+                            {{ traspaso.Importe > 0 ? '+' : '' }}{{ traspaso.Importe | currency:'EUR'}}
+                        </td>
+                        <td>{{ traspaso.Descripcion }}</td>
+                        <td>
+                            <p-button pRipple icon="pi pi-pencil" class="mr-2 rounded-button" [rounded]="true"
+                                [outlined]="true" severity="success"
+                                [routerLink]="['/traspasos/traspaso-detail', traspaso.Id]" />
+                        </td>
+                        <td>
+                            <p-button pRipple icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"
+                                (click)="showDeleteConfirmationDialog(traspaso.Id)" />
+                        </td>
+
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="12">No se encontraron traspasos con esos filtros</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <!-- Paginador personalizado -->
+            <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="size"
+                [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 20, 30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} traspasos">
+            </p-paginator>
+        </div>
+        <p-dialog header="Confirmación de Eliminación" [modal]="true" [(visible)]="showConfirmationDialog"
+            [style]="{ width: '25rem' }" [style.max-width.px]="getDialogWidth()">
+            <div style="margin-bottom: 1rem;">
+                <!-- Agrega margen en la parte inferior para separar el texto de los botones -->
+                <span class="p-text-secondary block">¿Está seguro de que quiere borrar este traspaso?</span>
+            </div>
+            <div class="">
+                <p-button label="Cancelar" [raised]="true" severity="secondary" (click)="showConfirmationDialog = false"
+                    class="" />
+                <p-button label="Eliminar" [raised]="true" severity="danger" (click)="onDeleteTraspaso()"
+                    iconPos="right" class="pa-button" icon="pi pi-trash" />
+            </div>
+        </p-dialog>
+
+    </div>
+</div>

@@ -1,0 +1,96 @@
+<div class="card">
+    <div class="p-grid p-justify-center p-align-center">
+        <div>
+            <ng-container *ngIf="(error$ | async); else newOrDetalleCuenta" class="mt-4">
+                <div class="alert alert-danger" role="alert">
+                    <strong>Ha habido un error en la carga de datos</strong>
+                </div>
+            </ng-container>
+
+            <ng-template #newOrDetalleCuenta>
+
+                <form *ngIf="isNewCuenta" [formGroup]="newCuentaForm" (ngSubmit)="onSubmit()">
+                    <p-fieldset legend="Datos cuenta">
+                        <div class="grid p-fluid mt-3">
+                            <!-- Primera fila de inputs -->
+                            <div class="field col-12 md:col-12">
+                                <span class="p-float-label">
+                                    <input type="text" id="Nombre" pInputText formControlName="Nombre">
+                                    <label for="Nombre">Nombre</label>
+                                    <div *ngIf="newCuentaForm.get('Nombre')?.invalid && (newCuentaForm.get('Nombre')?.['dirty'] || newCuentaForm.get('Nombre')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="newCuentaForm.get('Nombre')?.errors?.['required']">El campo
+                                            Nombre
+                                            es
+                                            obligatorio.</div>
+                                        <div *ngIf="newCuentaForm.get('Nombre')?.errors?.['maxlength']">Ha excedido
+                                            el
+                                            máximo número de caracteres (100)</div>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <!-- Fila de botones -->
+                            <div class="field col-6 md:col-6">
+                                <p-button label="Cancelar" icon="pi pi-times" severity="danger" [raised]="true"
+                                    iconPos="right" [style]="{'width': '140px', 'margin-top': '1rem'}"
+                                    (click)="goBack()">
+                                </p-button>
+                            </div>
+
+                            <div class="field col-6 md:col-6" style="text-align: center;">
+                                <p-button label="Crear" icon="pi pi-check" severity="success" [raised]="true"
+                                    iconPos="right" [disabled]="newCuentaForm.invalid || !newCuentaForm.dirty || deshabilitarBoton" type="submit"
+                                    [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                </p-button>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </form>
+
+
+
+                <form *ngIf="!isNewCuenta" [formGroup]="detailCuentaForm" (ngSubmit)="onSubmit()">
+                    <p-fieldset legend="Datos cuenta">
+                        <div class="grid p-fluid mt-3">
+                            <!-- Primera fila de inputs -->
+                            <div class="field col-12 md:col-12">
+                                <span class="p-float-label">
+                                    <input type="text" id="Nombre" pInputText formControlName="Nombre">
+                                    <label for="Nombre">Nombre</label>
+                                    <div *ngIf="newCuentaForm.get('Nombre')?.invalid && (newCuentaForm.get('Nombre')?.['dirty'] || newCuentaForm.get('Nombre')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="newCuentaForm.get('Nombre')?.errors?.['required']">El campo
+                                            Nombre
+                                            es
+                                            obligatorio.</div>
+                                        <div *ngIf="newCuentaForm.get('Nombre')?.errors?.['maxlength']">Ha excedido
+                                            el
+                                            máximo número de caracteres (100)</div>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <!-- Fila de botones -->
+                            <div class="field col-6 md:col-6">
+                                <p-button label="Cancelar" icon="pi pi-times" severity="danger" [raised]="true"
+                                    iconPos="right" [style]="{'width': '140px', 'margin-top': '1rem'}"
+                                    (click)="goBack()">
+                                </p-button>
+                            </div>
+
+                            <div class="field col-6 md:col-6" style="text-align: center;">
+                                <p-button label="Guardar" icon="pi pi-check" severity="success" [raised]="true"
+                                    iconPos="right" [disabled]="detailCuentaForm.invalid || !detailCuentaForm.dirty || deshabilitarBoton"
+                                    type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                </p-button>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </form>
+
+            </ng-template>
+        </div>
+    </div>
+
+</div>

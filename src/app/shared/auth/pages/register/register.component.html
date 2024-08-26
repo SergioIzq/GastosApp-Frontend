@@ -1,0 +1,63 @@
+<div class="card">
+    <div class="p-grid p-justify-center p-align-center">
+
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <p-fieldset legend="Datos registro">
+                <div class="grid p-fluid mt-3">
+                    <!-- Primera fila de inputs -->
+                    <div class="field col-12 md:col-12">
+                        <span class="p-float-label">
+                            <input type="email" id="Correo" pInputText formControlName="Correo">
+                            <label for="Correo">Correo electrónico</label>
+                            <div *ngIf="registerForm.get('Correo')?.invalid && (registerForm.get('Correo')?.['dirty'] || registerForm.get('Correo')?.['touched'])"
+                                class="text-danger">
+                                <div *ngIf="registerForm.get('Correo')?.errors?.['required']">El campo
+                                    Correo electrónico
+                                    es
+                                    obligatorio.</div>
+                                <div *ngIf="registerForm.get('Correo')?.errors?.['email']">Formato email inválido.
+                                    Ej: sergio@gmail.com</div>
+
+                                <div *ngIf="registerForm.get('Correo')?.errors?.['maxlength']">Ha excedido
+                                    el
+                                    máximo número de caracteres (5)</div>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="field col-12 md:col-12">
+                        <span class="p-float-label">
+                            <p-password formControlName="Contrasena" promptLabel="Elija contraseña"
+                                weakLabel="Muy débil" mediumLabel="Normal" strongLabel="Fuerte" [toggleMask]="true" />
+                            <label for="Contrasena">Contraseña</label>
+                            <div *ngIf="registerForm.get('Contrasena')?.invalid && (registerForm.get('Contrasena')?.['dirty'] || registerForm.get('Contrasena')?.['touched'])"
+                                class="text-danger">
+                                <div *ngIf="registerForm.get('Contrasena')?.errors?.['required']">El campo
+                                    Contraseña
+                                    es
+                                    obligatorio.</div>
+                                <div *ngIf="registerForm.get('Contrasena')?.errors?.['maxlength']">Ha excedido
+                                    el
+                                    máximo número de caracteres (5)</div>
+                            </div>
+                        </span>
+                    </div>
+                    <!-- Fila de botones -->
+
+                    <div class="field col-12 md:col-12 mt-6" style="text-align: center;">
+                        <p-button label="Registrarse" icon="pi pi-check" severity="success" [raised]="true"
+                            iconPos="right" [disabled]="registerForm.invalid" type="submit"
+                            [style]="{'width': '150px', 'margin-top': '1rem'}">
+                        </p-button>
+                    </div>
+                </div>
+            </p-fieldset>
+        </form>
+
+
+
+
+    </div>
+
+
+</div>

@@ -1,0 +1,480 @@
+<h2 class="page-title">Resumen de Ingresos y Gastos</h2>
+
+<div class="grid p-fluid mt-3">
+
+    <div class="field col-6 md:col-3 md:mt-4">
+        <!-- Filtros de Fecha -->
+        <span class="p-float-label">
+            <p-calendar [(ngModel)]="fechaInicio" id="fechaInicio" dateFormat="dd/mm/yy"></p-calendar>
+            <label for="fechaInicio">Fecha Inicio</label>
+        </span>
+    </div>
+    <div class="field col-6 md:col-3 md:mt-4">
+        <span class="p-float-label">
+            <p-calendar [(ngModel)]="fechaFin" id="fechaFin" dateFormat="dd/mm/yy"></p-calendar>
+            <label for="fechaFin">Fecha Fin</label>
+        </span>
+    </div>
+
+    <div class="field col-6 md:col-2 md:mt-4">
+        <p-button label="Aplicar Filtros" severity="success" icon="pi pi-check" (click)="aplicarFiltrosFecha()"
+            [disabled]="puedeBuscar"></p-button>
+    </div>
+    <div class="field col-6 md:col-2 md:mt-4">
+        <p-button label="Limpiar Filtros" severity="warning" icon="pi pi-times" [disabled]="puedeBuscar"
+            (click)="limpiarFiltros()"></p-button>
+    </div>
+    <!-- Botón Exportar Excel -->
+    <div class="field col-12 md:col-2 md:mt-4">
+        <p-button label="Exportar Excel" pRipple severity="info" [raised]="true" icon="pi pi-file-excel"
+            [disabled]="isButtonDisabled"
+            (click)="exportarAExcel()"></p-button>
+    </div>
+
+    <div class="field-group col-12 md:col-12" *ngIf="mostrarContenido">
+        <h3>Ingresos</h3>
+
+        <div class="card">
+            <p-table #dt [value]="ingresosFormatted" dataKey="id" [rowHover]="true" [rows]="10"
+                [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [filterDelay]="0"
+                [globalFilterFields]="['Importe', 'FormaPago','Concepto','CategoriaNombre','Cliente','Descripcion','Fecha','Cuenta','Persona']">
+
+                <ng-template pTemplate="caption">
+                    <div class="grid datatable-header"
+                        style="display: flex; justify-content: flex-start; align-items: flex-start;">
+
+                        <!-- Botón Limpiar -->
+                        <div class="field col-12 md:col-4" style="width:150px">
+                            <p-button label="Limpiar" [outlined]="true" icon="pi pi-filter-slash" [raised]="true"
+                                (click)="clear(dt)" class="search-input"></p-button>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="Fecha" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Fecha
+                                <p-sortIcon field="Fecha" />
+                                <p-columnFilter type="text" field="Fecha" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+                        <th pSortableColumn="Persona" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Persona
+                                <p-sortIcon field="Persona" />
+                                <p-columnFilter type="text" field="Persona" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+
+                        <th pSortableColumn="FormaPago" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Forma de Pago
+                                <p-sortIcon field="FormaPago" />
+                                <p-columnFilter type="text" field="FormaPago" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+
+                        <th pSortableColumn="Cliente" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Cliente
+                                <p-sortIcon field="Cliente" />
+                                <p-columnFilter type="text" field="Cliente" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+
+                        <th pSortableColumn="CategoriaNombre" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Categoria
+                                <p-sortIcon field="CategoriaNombre" />
+                                <p-columnFilter type="text" field="CategoriaNombre" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+                        <th pSortableColumn="Concepto" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Concepto
+                                <p-sortIcon field="Concepto" />
+                                <p-columnFilter type="text" field="Concepto" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+
+
+
+                        <th pSortableColumn="Cuenta" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Cuenta
+                                <p-sortIcon field="Cuenta" />
+                                <p-columnFilter type="text" field="Cuenta" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+
+                        <th pSortableColumn="Importe" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Importe
+                                <p-sortIcon field="Importe" />
+                                <p-columnFilter type="text" field="Importe" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                        { label: 'Contiene', value: 'contains' },
+                                        { label: 'No contiene', value: 'notContains' },
+                                        { label: 'Empieza con', value: 'startsWith' },
+                                        { label: 'Termina con', value: 'endsWith' },
+                                        { label: 'Es igual a', value: 'equals' },
+                                        { label: 'No es igual a', value: 'notEquals' },
+                                        { label: 'Es nulo', value: 'isNull' },
+                                        { label: 'No es nulo', value: 'isNotNull' }
+                                    ]" />
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-ingreso>
+                    <tr>
+                        <td>{{ ingreso.Fecha }}</td>
+                        <td>{{ ingreso.Persona }}</td>
+                        <td>{{ ingreso.FormaPago }}</td>
+                        <td>{{ ingreso.Cliente }}</td>
+                        <td>{{ ingreso.CategoriaNombre }}</td>
+                        <td>{{ ingreso.Concepto }}</td>
+                        <td>{{ ingreso.Cuenta }}</td>
+                        <td style="color: green;">+{{ ingreso.Importe | currency: 'EUR'}}</td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="12">No se encontraron ingresos con esos filtros</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <!-- Paginador personalizado -->
+            <p-paginator (onPageChange)="onPageChangeGasto($event)" [first]="first" [rows]="sizeIngresos"
+                [totalRecords]="totalIngresosRecords" [rowsPerPageOptions]="[10, 20, 30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} ingresos">
+            </p-paginator>
+        </div>
+        <!-- Mostrar el total de ingreso -->
+        <label><strong>Total de Ingresos:</strong></label>
+        <div *ngIf="this.respuestaIngresos?.IngresosTotales" style="color: green;">
+            <span>+{{ respuestaIngresos?.IngresosTotales | currency:'EUR' }}</span>
+        </div>
+    </div>
+
+    <div class="field-group col-12 md:col-12" *ngIf="mostrarContenido ">
+        <h3>Gastos</h3>
+
+        <div class="card">
+            <p-table #dt [value]="gastosFormatted" dataKey="id" [rowHover]="true" [rows]="10"
+                [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [filterDelay]="0"
+                [globalFilterFields]="['Importe', 'FormaPago','Concepto','CategoriaNombre','Proveedor','Descripcion','Fecha','Cuenta','Persona']">
+
+                <ng-template pTemplate="caption">
+                    <div class="grid datatable-header"
+                        style="display: flex; justify-content: flex-start; align-items: flex-start;">
+
+                        <!-- Botón Limpiar -->
+                        <div class="field col-12 md:col-4" style="width:150px">
+                            <p-button label="Limpiar" [outlined]="true" icon="pi pi-filter-slash" [raised]="true"
+                                (click)="clear(dt)" class="search-input"></p-button>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="Fecha" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Fecha
+                                <p-sortIcon field="Fecha" />
+                                <p-columnFilter type="text" field="Fecha" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+                        <th pSortableColumn="Persona" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Persona
+                                <p-sortIcon field="Persona" />
+                                <p-columnFilter type="text" field="Persona" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+
+                        <th pSortableColumn="FormaPago" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Forma de Pago
+                                <p-sortIcon field="FormaPago" />
+                                <p-columnFilter type="text" field="FormaPago" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+
+                        <th pSortableColumn="Proveedor" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Proveedor
+                                <p-sortIcon field="Proveedor" />
+                                <p-columnFilter type="text" field="Proveedor" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+
+                        <th pSortableColumn="CategoriaNombre" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Categoria
+                                <p-sortIcon field="CategoriaNombre" />
+                                <p-columnFilter type="text" field="CategoriaNombre" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+                        <th pSortableColumn="Concepto" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Concepto
+                                <p-sortIcon field="Concepto" />
+                                <p-columnFilter type="text" field="Concepto" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+
+
+
+                        <th pSortableColumn="Cuenta" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Cuenta
+                                <p-sortIcon field="Cuenta" />
+                                <p-columnFilter type="text" field="Cuenta" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+
+                        <th pSortableColumn="Importe" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Importe
+                                <p-sortIcon field="Importe" />
+                                <p-columnFilter type="text" field="Importe" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                        { label: 'Contiene', value: 'contains' },
+                                        { label: 'No contiene', value: 'notContains' },
+                                        { label: 'Empieza con', value: 'startsWith' },
+                                        { label: 'Termina con', value: 'endsWith' },
+                                        { label: 'Es igual a', value: 'equals' },
+                                        { label: 'No es igual a', value: 'notEquals' },
+                                        { label: 'Es nulo', value: 'isNull' },
+                                        { label: 'No es nulo', value: 'isNotNull' }
+                                    ]" />
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-gasto>
+                    <tr>
+                        <td>{{ gasto.Fecha }}</td>
+                        <td>{{ gasto.Persona }}</td>
+                        <td>{{ gasto.FormaPago }}</td>
+                        <td>{{ gasto.Proveedor }}</td>
+                        <td>{{ gasto.CategoriaNombre }}</td>
+                        <td>{{ gasto.Concepto }}</td>
+                        <td>{{ gasto.Cuenta }}</td>
+                        <td style="color: red;">-{{ gasto.Importe | currency: 'EUR'}}</td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="12">No se encontraron gastos con esos filtros</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <!-- Paginador personalizado -->
+            <p-paginator (onPageChange)="onPageChangeGasto($event)" [first]="first" [rows]="sizeGastos"
+                [totalRecords]="totalGastosRecords" [rowsPerPageOptions]="[10, 20, 30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} gastos">
+            </p-paginator>
+        </div>
+        <!-- Mostrar el total de gastos -->
+        <label><strong>Total de Gastos:</strong></label>
+        <div *ngIf="respuestaGastos?.GastosTotales" style="color: red;">
+            <span>-{{ respuestaGastos?.GastosTotales | currency:'EUR' }}</span>
+        </div>
+    </div>
+
+    <div class="grid col-12 md:col-12 justify-content-center" *ngIf="mostrarContenido">
+        <div class="field-group col-12 md:col-12">
+            <h3 class="text-center">Estadísticas</h3>
+        </div>
+        <div class="field-group col-12 md:col-6" style="display: flex; justify-content: center;">
+            <!-- Contenedor flex para alinear horizontalmente -->
+            <p-card [style]="{'width':'100%'}">
+                <div class="">
+                    <div style="display: flex; justify-content: center;" style="margin-top: -42px;">
+                        <h4>Beneficio Total</h4>
+                    </div>
+                    <div style="display: flex; justify-content: center; text-align: center;"
+                        *ngIf="beneficiosTotales != null">
+                        <div class="field-group col-6 md:col-6">
+                            <i class="pi" [ngClass]="beneficiosTotales >= 0 ? 'pi-check-circle' : 'pi-times-circle'"
+                                [style.color]="beneficiosTotales >= 0 ? 'green' : 'red'" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="field-group col-6 md:col-6 mt-1">
+                            <span [style.color]="beneficiosTotales >= 0 ? 'green' : 'red'"
+                                *ngIf="beneficiosTotales != null">
+                                {{ beneficiosTotales | currency:'EUR' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </p-card>
+        </div>
+        <div class="field-group col-12 md:col-6" style="display: flex; justify-content: center;">
+            <p-chart type="pie" [data]="dataPie" [options]="optionsPie" style="display: inline-block;"></p-chart>
+        </div>
+    </div>
+
+</div>

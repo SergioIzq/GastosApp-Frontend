@@ -1,0 +1,149 @@
+<div class="card">
+    <div class="p-grid p-justify-center p-align-center">
+        <div>
+            <ng-container *ngIf="(error$ | async); else newOrDetalleConcepto" class="mt-4">
+                <div class="alert alert-danger" role="alert">
+                    <strong>Ha habido un error en la carga de datos</strong>
+                </div>
+            </ng-container>
+
+            <ng-template #newOrDetalleConcepto>
+
+                <form *ngIf="isNewConcepto" [formGroup]="newConceptoForm" (ngSubmit)="onSubmit()">
+                    <p-fieldset legend="Datos concepto">
+                        <div class="grid p-fluid mt-3">
+                            <!-- Primera fila de inputs -->
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <input type="text" id="Nombre" pInputText formControlName="Nombre">
+                                    <label for="Nombre">Nombre</label>
+                                    <div *ngIf="newConceptoForm.get('Nombre')?.invalid && (newConceptoForm.get('Nombre')?.['dirty'] || newConceptoForm.get('Nombre')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="newConceptoForm.get('Nombre')?.errors?.['required']">El campo
+                                            Nombre
+                                            es
+                                            obligatorio.</div>
+                                        <div *ngIf="newConceptoForm.get('Nombre')?.errors?.['maxlength']">Ha excedido
+                                            el
+                                            máximo número de caracteres (100)</div>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <p-dropdown [options]="categorias?.Items" optionLabel="Nombre" [filter]="true"
+                                    emptyMessage="No se encontraron resultados"
+                                    emptyFilterMessage="No se encontraron resultados" formControlName="Categoria"
+                                    filterBy="Nombre" [showClear]="true" placeholder="Selecciona categoría">
+
+                                    <ng-template pTemplate="selectedItem" let-selectedOption>
+                                        <div class="flex align-items-center gap-2">
+                                            <div>{{ selectedOption?.Nombre }}</div>
+                                        </div>
+                                    </ng-template>
+
+                                    <ng-template let-categoria pTemplate="item">
+                                        <div class="flex align-items-center gap-2">
+                                            <div>{{ categoria.Nombre }}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+
+                                <div *ngIf="newConceptoForm.get('Categoria.Nombre')?.invalid && 
+                                         (newConceptoForm.get('Categoria.Nombre')?.['dirty'] || 
+                                          newConceptoForm.get('Categoria.Nombre')?.['touched'])" class="text-danger">
+                                    <div *ngIf="newConceptoForm.get('Categoria.Nombre')?.errors?.['required']">
+                                        El campo Categoría es obligatorio.
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Fila de botones -->
+                            <div class="field col-6 md:col-6">
+                                <p-button label="Cancelar" icon="pi pi-times" severity="danger" [raised]="true"
+                                    iconPos="right" [style]="{'width': '140px', 'margin-top': '1rem'}"
+                                    (click)="goBack()">
+                                </p-button>
+                            </div>
+
+                            <div class="field col-6 md:col-6" style="text-align: center;">
+                                <p-button label="Crear" icon="pi pi-check" severity="success" [raised]="true"
+                                    iconPos="right" [disabled]="newConceptoForm.invalid || !newConceptoForm.dirty || deshabilitarBoton" type="submit"
+                                    [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                </p-button>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </form>
+
+
+
+                <form *ngIf="!isNewConcepto" [formGroup]="detailConceptoForm" (ngSubmit)="onSubmit()">
+                    <p-fieldset legend="Datos concepto">
+                        <div class="grid p-fluid mt-3">
+                            <!-- Primera fila de inputs -->
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <input type="text" id="Nombre" pInputText formControlName="Nombre">
+                                    <label for="Nombre">Nombre</label>
+                                    <div *ngIf="newConceptoForm.get('Nombre')?.invalid && (newConceptoForm.get('Nombre')?.['dirty'] || newConceptoForm.get('Nombre')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="newConceptoForm.get('Nombre')?.errors?.['required']">El campo
+                                            Nombre
+                                            es
+                                            obligatorio.</div>
+                                        <div *ngIf="newConceptoForm.get('Nombre')?.errors?.['maxlength']">Ha excedido
+                                            el
+                                            máximo número de caracteres (100)</div>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="categorias?.Items" optionLabel="Nombre"
+                                        emptyMessage="No se encontraron resultados"
+                                        emptyFilterMessage="No se encontraron resultados" [filter]="true"
+                                        formControlName="Categoria" filterBy="Nombre" [showClear]="true"
+                                        placeholder="Selecciona categoría">
+
+                                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ selectedOption?.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template let-categoria pTemplate="item">
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ categoria.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </span>
+                            </div>
+
+                            <!-- Fila de botones -->
+                            <div class="field col-6 md:col-6">
+                                <p-button label="Cancelar" icon="pi pi-times" severity="danger" [raised]="true"
+                                    iconPos="right" [style]="{'width': '140px', 'margin-top': '1rem'}"
+                                    (click)="goBack()">
+                                </p-button>
+                            </div>
+
+                            <div class="field col-6 md:col-6" style="text-align: center;">
+                                <p-button label="Guardar" icon="pi pi-check" severity="success" [raised]="true"
+                                    iconPos="right" [disabled]="detailConceptoForm.invalid || !detailConceptoForm.dirty || deshabilitarBoton"
+                                    type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                </p-button>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </form>
+
+            </ng-template>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,24 @@
+.container {
+    text-align: center;
+    margin-top: 5rem; 
+}
+
+span {
+    margin-top: 50px;
+}
+
+.p-card {
+    background-color: #fff3cd; 
+    border-color: #ffeeba; 
+}
+
+.p-link {
+    color: #007bff;
+    text-decoration: none; 
+    transition: color 0.3s; 
+}
+
+.p-link:hover {
+    color: #0056b3; 
+    text-decoration: underline; 
+}

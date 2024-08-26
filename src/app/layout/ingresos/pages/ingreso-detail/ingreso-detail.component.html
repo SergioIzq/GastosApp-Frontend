@@ -1,0 +1,419 @@
+<div class="card">
+    <div class="p-grid p-justify-center p-align-center">
+        <div>
+            <ng-container *ngIf="(error$ | async); else newOrDetalleIngreso" class="mt-4">
+                <div class="alert alert-danger" role="alert">
+                    <strong>Ha habido un error en la carga de datos</strong>
+                </div>
+            </ng-container>
+
+            <ng-template #newOrDetalleIngreso>
+
+                <form *ngIf="isNewIngreso" [formGroup]="newIngresoForm" (ngSubmit)="onSubmit()">
+                    <p-fieldset legend="Datos ingreso">
+                        <div class="grid p-fluid mt-3">
+                            <!-- Primera fila de inputs -->
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label euro-input-container">
+                                    <input type="text" id="Monto" style="text-align: right;" pInputText formControlName="Monto" appNumberFormatter>
+                                    <label for="Monto">Importe</label>
+                                    <div *ngIf="newIngresoForm.get('Monto')?.invalid && (newIngresoForm.get('Monto')?.['dirty'] || newIngresoForm.get('Monto')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="newIngresoForm.get('Monto')?.errors?.['required']">El campo importe
+                                            es
+                                            obligatorio.</div>
+                                        <div *ngIf="newIngresoForm.get('Monto')?.errors?.['pattern']">El importe debe
+                                            ser
+                                            un
+                                            número válido. Ej: 22.22</div>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-calendar formControlName="Fecha" [showIcon]="true" dateFormat="dd/mm/yy"
+                                        [readonlyInput]="true"></p-calendar>
+                                    <label for="Fecha">Fecha</label>
+                                </span>
+                            </div>
+
+                            <!-- Segunda fila de inputs -->
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="clientes?.Items" optionLabel="Nombre" [filter]="true"
+                                        emptyMessage="No se encontraron resultados"
+                                        emptyFilterMessage="No se encontraron resultados" formControlName="Cliente"
+                                        filterBy="Nombre" [showClear]="true">
+
+                                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ selectedOption?.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template let-categoria pTemplate="item">
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ categoria.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <label for="clienteDropdown">Cliente</label>
+                                </span>
+                            </div>
+
+
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="formasPago?.Items" optionLabel="Nombre" [filter]="true"
+                                        emptyMessage="No se encontraron resultados"
+                                        emptyFilterMessage="No se encontraron resultados" formControlName="FormaPago"
+                                        filterBy="Nombre" [showClear]="true">
+
+                                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ selectedOption?.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template let-categoria pTemplate="item">
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ categoria.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <label for="formaPagoDropdown">Formas de pago</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="categorias" optionLabel="Nombre" [filter]="true"
+                                        emptyMessage="No se encontraron resultados" formControlName="Concepto"
+                                        emptyFilterMessage="No se encontraron resultados"
+                                         filterBy="Nombre" [showClear]="true"
+                                        (onChange)="onCategoriaChange($event)">
+
+                                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ selectedOption?.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template let-categoria pTemplate="item">
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ categoria.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <label for="personaDropdown">Categoría</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="filteredConceptos" optionLabel="Nombre" [filter]="true"
+                                        emptyMessage="No se encontraron resultados"
+                                        emptyFilterMessage="No se encontraron resultados" formControlName="Concepto"
+                                        filterBy="Nombre" [showClear]="true">
+
+                                        <ng-template pTemplate=" selectedItem" let-selectedOption>
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ selectedOption?.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template let-categoria pTemplate="item">
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ categoria.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <label for="personaDropdown">Concepto</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="personas?.Items" optionLabel="Nombre" [filter]="true"
+                                        emptyMessage="No se encontraron resultados"
+                                        emptyFilterMessage="No se encontraron resultados" formControlName="Persona"
+                                        filterBy="Nombre" [showClear]="true">
+
+                                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ selectedOption?.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template let-categoria pTemplate="item">
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ categoria.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <label for="personaDropdown">Persona</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="cuentas?.Items" optionLabel="Nombre" [filter]="true"
+                                        emptyMessage="No se encontraron resultados"
+                                        emptyFilterMessage="No se encontraron resultados" formControlName="Cuenta"
+                                        filterBy="Nombre" [showClear]="true">
+
+                                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ selectedOption?.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template let-categoria pTemplate="item">
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ categoria.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <label for="cuentaDropdown">Cuenta</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-12">
+                                <span class="p-float-label">
+                                    <input type="text" id="Descripcion" pInputText formControlName="Descripcion">
+                                    <label for="Descripcion">Descripción</label>
+                                    <div *ngIf="newIngresoForm.get('Descripcion')?.invalid && (newIngresoForm.get('Descripcion')?.['dirty'] || newIngresoForm.get('Descripcion')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="newIngresoForm.get('Descripcion')?.errors?.['maxlength']">Ha
+                                            excedido
+                                            el máximo número de caracteres (200)</div>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <!-- Fila de botones -->
+                            <div class="field col-6 md:col-6">
+                                <p-button label="Cancelar" icon="pi pi-times" severity="danger" iconPos="right"
+                                    [raised]="true" [style]="{'width': '140px', 'margin-top': '1rem'}"
+                                    (click)="goBack()">
+                                </p-button>
+                            </div>
+
+                            <div class="field col-6 md:col-6" style="text-align: center;">
+                                <p-button label="Crear" icon="pi pi-check" severity="success" iconPos="right"
+                                    [disabled]="newIngresoForm.invalid || newIngresoForm.pristine || deshabilitarBoton" type="submit" [raised]="true"
+                                    [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                </p-button>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </form>
+
+
+
+                <form *ngIf="!isNewIngreso" [formGroup]="detailIngresoForm" (ngSubmit)="onSubmit()">
+                    <p-fieldset legend="Datos ingreso">
+                        <div class="grid p-fluid mt-3">
+                            <!-- Primera fila de inputs -->
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label euro-input-container">
+                                    <input type="text" id="Monto" style="text-align: right;" pInputText formControlName="Monto" appNumberFormatter>
+                                    <label for="Monto">Importe</label>
+                                    <div *ngIf="detailIngresoForm.get('Monto')?.invalid && (detailIngresoForm.get('Monto')?.['dirty'] || detailIngresoForm.get('Monto')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="detailIngresoForm.get('Monto')?.errors?.['required']">El campo
+                                            importe
+                                            es
+                                            obligatorio.</div>
+                                        <div *ngIf="detailIngresoForm.get('Monto')?.errors?.['pattern']">El importe debe
+                                            ser
+                                            un
+                                            número válido. Ej: 22.22</div>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-calendar formControlName="Fecha" [showIcon]="true" dateFormat="dd/mm/yy"
+                                        [readonlyInput]="true"></p-calendar>
+                                    <label for="Fecha">Fecha</label>
+                                </span>
+                            </div>
+
+                            <!-- Segunda fila de inputs -->
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="clientes?.Items" optionLabel="Nombre" [filter]="true"
+                                        emptyMessage="No se encontraron resultados"
+                                        emptyFilterMessage="No se encontraron resultados" formControlName="Cliente"
+                                        filterBy="Nombre" [showClear]="true">
+
+                                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ selectedOption?.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template let-categoria pTemplate="item">
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ categoria.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <label for="clienteDropdown">Cliente</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="formasPago?.Items" optionLabel="Nombre" [filter]="true"
+                                        emptyMessage="No se encontraron resultados"
+                                        emptyFilterMessage="No se encontraron resultados" formControlName="FormaPago"
+                                        filterBy="Nombre" [showClear]="true">
+
+                                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ selectedOption?.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template let-categoria pTemplate="item">
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ categoria.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <label for="formaPagoDropdown">Forma de pago</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="categorias" optionLabel="Nombre" [filter]="true"
+                                        emptyMessage="No se encontraron resultados" formControlName="Categoria"
+                                        emptyFilterMessage="No se encontraron resultados"
+                                        filterBy="Nombre" [showClear]="true" (onChange)="onCategoriaChange($event)">
+
+                                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ selectedOption?.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template let-categoria pTemplate="item">
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ categoria.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <label for="personaDropdown">Categoría</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="filteredConceptos" optionLabel="Nombre" [filter]="true"
+                                        emptyMessage="No se encontraron resultados"
+                                        emptyFilterMessage="No se encontraron resultados" formControlName="Concepto"
+                                        filterBy="Nombre" [showClear]="true" (onchange)="onCategoriaChange($event)">
+
+                                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ selectedOption?.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template let-categoria pTemplate="item">
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ categoria.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <label for="personaDropdown">Concepto</label>
+                                </span>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="personas?.Items" optionLabel="Nombre" [filter]="true"
+                                        emptyMessage="No se encontraron resultados"
+                                        emptyFilterMessage="No se encontraron resultados" formControlName="Persona"
+                                        filterBy="Nombre" [showClear]="true">
+
+                                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ selectedOption?.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template let-categoria pTemplate="item">
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ categoria.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <label for="personaDropdown">Persona</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="cuentas?.Items" optionLabel="Nombre" [filter]="true"
+                                        emptyMessage="No se encontraron resultados"
+                                        emptyFilterMessage="No se encontraron resultados" formControlName="Cuenta"
+                                        filterBy="Nombre" [showClear]="true">
+
+                                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ selectedOption?.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template let-categoria pTemplate="item">
+                                            <div class="flex align-items-center gap-2">
+                                                <div>{{ categoria.Nombre }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <label for="cuentaDropdown">Cuenta</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-12">
+                                <span class="p-float-label">
+                                    <input type="text" id="Descripcion" pInputText formControlName="Descripcion">
+                                    <label for="Descripcion">Descripción</label>
+                                    <div *ngIf="newIngresoForm.get('Descripcion')?.invalid && (newIngresoForm.get('Descripcion')?.['dirty'] || newIngresoForm.get('Descripcion')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="newIngresoForm.get('Descripcion')?.errors?.['maxlength']">Ha
+                                            excedido
+                                            el máximo número de caracteres (200)</div>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <!-- Fila de botones -->
+                            <div class="field col-6 md:col-6">
+                                <p-button label="Cancelar" icon="pi pi-times" severity="danger" iconPos="right"
+                                    [raised]="true" [style]="{'width': '140px', 'margin-top': '1rem'}"
+                                    (click)="goBack()">
+                                </p-button>
+                            </div>
+
+                            <div class="field col-6 md:col-6" style="text-align: center;">
+                                <p-button label="Guardar" icon="pi pi-check" severity="success" iconPos="right"
+                                    [disabled]="detailIngresoForm.invalid || detailIngresoForm.pristine || deshabilitarBoton" type="submit"
+                                    [raised]="true" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                </p-button>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </form>
+
+            </ng-template>
+        </div>
+    </div>
+
+
+</div>

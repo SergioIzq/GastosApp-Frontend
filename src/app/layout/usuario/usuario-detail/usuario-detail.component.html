@@ -1,0 +1,91 @@
+<div class="card">
+    <div class="p-grid p-justify-center p-align-center">
+        <div>
+            <ng-container *ngIf="(error$ | async); else newOrDetalleUsuario" class="mt-4">
+                <div class="alert alert-danger" role="alert">
+                    <strong>Ha habido un error en la carga de datos</strong>
+                </div>
+            </ng-container>
+
+            <ng-template #newOrDetalleUsuario>
+
+                <form [formGroup]="detailUsuarioForm" (ngSubmit)="onSubmit()">
+                    <p-fieldset legend="Datos usuario">
+                        <div class="grid p-fluid mt-3">
+                            <!-- Primera fila de inputs -->
+                            <div class="field col-12 md:col-12">
+                                <span class="p-float-label">
+                                    <input type="text" id="Correo" pInputText formControlName="Correo">
+                                    <label for="Correo">Correo</label>
+                                    <div *ngIf="detailUsuarioForm.get('Correo')?.invalid && (detailUsuarioForm.get('Correo')?.['dirty'] || detailUsuarioForm.get('Correo')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="detailUsuarioForm.get('Correo')?.errors?.['required']">El campo
+                                            Correo
+                                            es
+                                            obligatorio.</div>
+                                        <div *ngIf="detailUsuarioForm.get('Correo')?.errors?.['email']">Formato email inválido. Ej: sergio@gmail.com</div>
+                                        <div *ngIf="detailUsuarioForm.get('Correo')?.errors?.['maxlength']">Ha excedido
+                                            el
+                                            máximo número de caracteres (100)</div>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-12">
+                                <span class="p-float-label">
+                                    <input type="text" id="NuevaContrasena" pInputText formControlName="NuevaContrasena">
+                                    <label for="NuevaContrasena">Nueva contraseña</label>
+                                    <div *ngIf="detailUsuarioForm.get('NuevaContrasena')?.invalid && (detailUsuarioForm.get('NuevaContrasena')?.['dirty'] || detailUsuarioForm.get('NuevaContrasena')?.['touched'])"
+                                        class="text-danger">
+                                        <div *ngIf="detailUsuarioForm.get('NuevaContrasena')?.errors?.['required']">El campo
+                                            Contraseña
+                                            es
+                                            obligatorio.</div>
+                                        <div *ngIf="detailUsuarioForm.get('NuevaContrasena')?.errors?.['maxlength']">Ha
+                                            excedido
+                                            el
+                                            máximo número de caracteres (100)</div>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <!-- Fila de botones -->
+                            <div class="field col-6 md:col-6">
+                                <p-button label="Eliminar" icon="pi pi-times" severity="danger" [raised]="true"
+                                    iconPos="right" [style]="{'width': '140px', 'margin-top': '1rem'}"
+                                    (click)="showConfirmationDialog = true">
+                                </p-button>
+                            </div>
+
+                            <div class="field col-6 md:col-6" style="text-align: center;">
+                                <p-button label="Guardar" icon="pi pi-check" severity="success" [raised]="true"
+                                    iconPos="right" [disabled]="detailUsuarioForm.invalid || !detailUsuarioForm.dirty"
+                                    type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                </p-button>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </form>
+
+            </ng-template>
+
+            <p-dialog header="Confirmación de Eliminación" [modal]="true" [(visible)]="showConfirmationDialog"
+                [style]="{ width: '25rem' }" [style.max-width.px]="getDialogWidth()">
+                <div style="margin-bottom: 1rem;">
+                    <!-- Agrega margen en la parte inferior para separar el texto de los botones -->
+                    <span class="p-text-secondary block">¿Está seguro de que quiere borrar el usuario actual? Si lo hace
+                        toda la información
+                        asociada a éste será eliminada permanentemente.</span>
+                </div>
+                <div class="">
+                    <p-button label="Cancelar" [raised]="true" severity="secondary"
+                        (click)="showConfirmationDialog = false" class="mr-4"/>
+                    <p-button label="Eliminar" [raised]="true" severity="danger" (click)="onDeleteUsuario()"
+                        iconPos="right" class="pa-button" icon="pi pi-trash" />
+                </div>
+            </p-dialog>
+        </div>
+    </div>
+
+
+</div>
