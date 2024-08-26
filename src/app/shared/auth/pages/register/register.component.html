@@ -46,7 +46,7 @@
 
                     <div class="field col-12 md:col-12 mt-6" style="text-align: center;">
                         <p-button label="Registrarse" icon="pi pi-check" severity="success" [raised]="true"
-                            iconPos="right" [disabled]="registerForm.invalid" type="submit"
+                            iconPos="right" [disabled]="registerForm.invalid || !registerForm.dirty || deshabilitarBoton" type="submit"
                             [style]="{'width': '150px', 'margin-top': '1rem'}">
                         </p-button>
                     </div>

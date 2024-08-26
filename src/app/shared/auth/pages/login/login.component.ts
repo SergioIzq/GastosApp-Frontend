@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActionsSubject, Store, select } from '@ngrx/store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { filter, Observable } from 'rxjs';
+import { filter, Observable, Subject, takeUntil } from 'rxjs';
 import * as AuthActions from '../../ngrx/auth.actions';
 import { selectAuthError, selectAuthLoading } from '../../ngrx/auth.selectors';
 import { AppState } from 'src/app/app.state';
@@ -12,10 +12,12 @@ import { AppState } from 'src/app/app.state';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
+  deshabilitarBoton: boolean = false;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private fb: FormBuilder,
@@ -35,14 +37,28 @@ export class LoginComponent implements OnInit{
   ngOnInit() {
     this.actionsSubject.pipe(filter(action => action.type == '[Auth] Login Success'))
       .subscribe((action: any) => {
-        this.router.navigate(['/home'])                
+        this.router.navigate(['/home'])
       });
+
+    this.loginForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.deshabilitarBoton = false;
+    });
+
+    this.loginForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.deshabilitarBoton = false;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   onSubmit(): void {
     if (this.loginForm.valid) {
       const { Correo, Contrasena } = this.loginForm.value;
-      this.store.dispatch(AuthActions.login({ Correo, Contrasena }));      
+      this.store.dispatch(AuthActions.login({ Correo, Contrasena }));
+      this.deshabilitarBoton = true;
     }
   }
 

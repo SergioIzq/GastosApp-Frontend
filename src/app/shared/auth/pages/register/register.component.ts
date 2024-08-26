@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ActionsSubject, Store } from '@ngrx/store';
 import * as AuthActions from '../../ngrx/auth.actions';
 import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
-import { filter } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -15,13 +15,15 @@ export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   loading: boolean = false;
   errorMessage: string = '';
+  deshabilitarBoton: boolean = false;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private store: Store<AuthState>,
     private actionsSubject: ActionsSubject
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.registerForm = this.fb.group({
@@ -30,9 +32,22 @@ export class RegisterComponent implements OnInit {
     });
 
     this.actionsSubject.pipe(filter(action => action.type == '[Auth] Sign Up Success'))
-    .subscribe((action: any) => {
-      this.router.navigate(['/home'])
+      .subscribe((action: any) => {
+        this.router.navigate(['/home'])
+      });
+
+    this.registerForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.deshabilitarBoton = false;
     });
+
+    this.registerForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.deshabilitarBoton = false;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   onSubmit() {
@@ -45,5 +60,6 @@ export class RegisterComponent implements OnInit {
 
     this.store.dispatch(AuthActions.signUp({ Correo, Contrasena }));
     this.registerForm.markAsPristine();
+    this.deshabilitarBoton = true;
   }
 }

@@ -8026,3 +8026,4 @@ dist
 .angular/cache/16.2.14/angular-webpack/1e06d2a7da5bd8c75b2435e4723ba12080d99d8b/0.pack
 .angular/cache/16.2.14/angular-webpack/0497ad6871f9666ac658cbe04d0ef1dcb655f0e9/index.pack
 .angular/cache/16.2.14/angular-webpack/0497ad6871f9666ac658cbe04d0ef1dcb655f0e9/0.pack
+*.pack
