@@ -18,8 +18,8 @@ export class ResumenListEffects {
 
   loadIngresos$ = createEffect(() => this.actions$.pipe(
     ofType(ResumenListActions.LoadIngresos),
-    mergeMap(({ page, size, fechaInicio, fechaFin }) =>
-      this.resumenService.getCantidadIngresos(page, size, fechaInicio, fechaFin).pipe(
+    mergeMap(({ page, size, fechaInicio, fechaFin, idUsuario }) =>
+      this.resumenService.getCantidadIngresos(page, size, fechaInicio, fechaFin, idUsuario).pipe(
         map((payload: ResumenIngresosResponse) => ResumenListActions.LoadIngresosSuccess({ payload })),
         catchError((error) => {
           return of(ResumenListActions.LoadIngresosFailure({ errorMessage: error }));
@@ -30,8 +30,8 @@ export class ResumenListEffects {
 
   loadGastos$ = createEffect(() => this.actions$.pipe(
     ofType(ResumenListActions.LoadGastos),
-    mergeMap(({ page, size, fechaInicio, fechaFin }) =>
-      this.resumenService.getCantidadGastos(page, size, fechaInicio, fechaFin).pipe(
+    mergeMap(({ page, size, fechaInicio, fechaFin, idUsuario }) =>
+      this.resumenService.getCantidadGastos(page, size, fechaInicio, fechaFin, idUsuario).pipe(
         map((payload: ResumenGastosResponse) => ResumenListActions.LoadGastosSuccess({ payload })),
         catchError((error) => {
           return of(ResumenListActions.LoadGastosFailure({ errorMessage: error }));

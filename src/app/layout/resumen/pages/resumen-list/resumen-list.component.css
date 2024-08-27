@@ -57,3 +57,8 @@
 .p-mb-2 {
     margin-bottom: 0.5rem;
 }
+
+.hidden {
+    display: none;
+  }
+  

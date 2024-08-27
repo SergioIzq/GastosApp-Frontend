@@ -1,14 +1,12 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Observable, takeUntil, Subject } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Observable, takeUntil, Subject, filter } from 'rxjs';
+import { ActionsSubject, Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
 import { Location } from '@angular/common';
 import * as SelectResumenList from '../../ngrx/selectors/resumen-list.selectors'
 import * as ResumenListActions from 'src/app/layout/resumen/ngrx/actions/resumen-list.actions';
 import { Table } from 'primeng/table';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
-import { Ingreso } from 'src/app/shared/models/entidades/ingreso.model';
-import { Gasto } from 'src/app/shared/models/entidades/gasto.model';
 import 'chartjs-adapter-date-fns';
 import {
   Chart as ChartJS,
@@ -18,6 +16,7 @@ import {
   Tooltip,
   Legend,
   Title,
+  Chart,
 } from 'chart.js';
 
 ChartJS.register(
@@ -30,17 +29,16 @@ ChartJS.register(
 );
 import { ResumenIngresosResponse } from 'src/app/shared/models/entidades/resumenIngresosResponse.model';
 import { ResumenGastosResponse } from 'src/app/shared/models/entidades/ResumenGastosResumen.model';
-import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
-import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 
 @Component({
   selector: 'app-resumen-list',
   templateUrl: './resumen-list.component.html',
   styleUrls: ['./resumen-list.component.css']
 })
-export class ResumenListComponent implements OnInit, OnDestroy {
+export class ResumenListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   gastosFormatted: any = null;
   ingresosFormatted: any = null;
@@ -74,17 +72,48 @@ export class ResumenListComponent implements OnInit, OnDestroy {
   first = 0;
   beneficiosTotales: number | null = null;
   mostrarContenido: boolean = false;
-  dirPath!: string;
-  res: Excel = new Excel();
+  idUsuario!: number;
+  chart: Chart<'pie', any, any> | undefined;
+  showChart: boolean = false;
 
   constructor(
     private store: Store<AppState>,
     private location: Location,
     private primengConfig: PrimeNGConfig,
-    private messageService: MessageService
-  ) { }
+    private messageService: MessageService,
+    private actionsSubject: ActionsSubject
+  ) {
+
+    this.initGlobalChart();
+
+  }
 
   ngOnInit(): void {
+
+    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
+      this.idUsuario = idUsuario;
+    });
+
+
+    this.actionsSubject.pipe(filter(action => action.type === '[Resumen] Load Ingresos Success'), takeUntil(this.destroy$))
+      .subscribe((action: any) => {
+        this.store.dispatch(ResumenListActions.LoadGastos({
+          fechaInicio: this.fechaInicio,
+          page: 1,
+          size: 10,
+          fechaFin: this.fechaFin,
+          idUsuario: this.idUsuario
+        }));
+      });
+
+    this.actionsSubject.pipe(filter(action => action.type === '[Resumen] Load Gastos Success'), takeUntil(this.destroy$))
+      .subscribe((action: any) => {
+
+        this.updateGlobalChart(this.respuestaIngresos.IngresosTotales, this.respuestaGastos.GastosTotales)
+        this.beneficiosTotales = this.respuestaIngresos.IngresosTotales - this.respuestaGastos.GastosTotales;
+        this.showChart = true;
+      });
+
     this.primengConfig.setTranslation({
       dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
       dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
@@ -98,49 +127,34 @@ export class ResumenListComponent implements OnInit, OnDestroy {
       weekHeader: 'Sm'
     });
 
-    this.store.select(selectUsuarioPorId).pipe(takeUntil(this.destroy$)).subscribe((usuario: any) => {
-      if (usuario)
-        this.dirPath = usuario.DirectorioExcel;
-    });
-
     this.store.select(SelectResumenList.selectCargando).pipe(takeUntil(this.destroy$)).subscribe(cargando => {
       this.cargando = cargando;
     });
 
     this.error$ = this.store.select(SelectResumenList.selectErrorCarga)
 
+  }
 
-    this.store.select(SelectResumenList.selectListaGastos).pipe(takeUntil(this.destroy$)).subscribe(respuesta => {
-      if (respuesta) {
-        this.respuestaGastos = respuesta;
-        this.gastosFormatted = this.transformGastos(this.respuestaGastos.Gastos);
-
-        this.totalGastosRecords = this.respuestaGastos.GastosTotalCount
-      }
-    });
-
-
-    this.store.select(SelectResumenList.selectListaIngresos).pipe(takeUntil(this.destroy$)).subscribe(respuesta => {
-      if (respuesta) {
-        this.respuestaIngresos = respuesta;
-        this.ingresosFormatted = this.transformIngresos(this.respuestaIngresos.Ingresos);
-
-
-        this.totalIngresosRecords = this.respuestaIngresos.IngresosTotalCount
-        if (this.respuestaGastos.GastosTotales) {
-          this.beneficiosTotales = this.respuestaIngresos.IngresosTotales - this.respuestaGastos.GastosTotales;
-          this.initGlobalChart()
-          this.isButtonDisabled = false;
-        }
-        this.mostrarContenido = true;
-      }
-    });
+  ngAfterViewInit(): void {
+    this.initGlobalChart();
   }
 
   ngOnDestroy(): void {
+
+    this.limpiarFiltros()
+    
+    this.showChart = false;
     this.destroy$.next(true);
+    this.destroy$.complete()
+
     this.destroy$.unsubscribe();
+    // Si existe un gráfico, destrúyelo y libera recursos
+    if (this.chart) {
+      this.chart.destroy();
+      this.chart = undefined;
+    }
   }
+
 
   getDialogWidth(): string {
     const maxWidthSmallScreens = 300;
@@ -197,6 +211,8 @@ export class ResumenListComponent implements OnInit, OnDestroy {
     this.fechaFin = null;
     this.mostrarContenido = false;
     this.isButtonDisabled = true;
+    this.showChart = false;
+    console.log('filtros l')
   }
 
   aplicarFiltrosFecha() {
@@ -205,21 +221,42 @@ export class ResumenListComponent implements OnInit, OnDestroy {
       this.fechaInicio = new Date(this.fechaInicio);
       this.fechaFin = new Date(this.fechaFin);
       if (this.fechaInicio <= this.fechaFin) {
-        this.store.dispatch(ResumenListActions.LoadGastos({
-          fechaInicio: this.fechaInicio,
-          page: 1,
-          size: 10,
-          fechaFin: this.fechaFin
-        }));
 
         this.store.dispatch(ResumenListActions.LoadIngresos({
           fechaInicio: this.fechaInicio,
           page: 1,
           size: 10,
-          fechaFin: this.fechaFin
+          fechaFin: this.fechaFin,
+          idUsuario: this.idUsuario
         }));
 
+        this.store.select(SelectResumenList.selectListaGastos).pipe(takeUntil(this.destroy$)).subscribe(respuesta => {
+          if (respuesta) {
+            this.respuestaGastos = respuesta;
+            this.gastosFormatted = this.transformGastos(this.respuestaGastos.Gastos);
 
+            this.totalGastosRecords = this.respuestaGastos.GastosTotalCount
+
+          }
+        });
+
+
+        this.store.select(SelectResumenList.selectListaIngresos).pipe(takeUntil(this.destroy$)).subscribe(respuesta => {
+          if (respuesta) {
+            this.respuestaIngresos = respuesta;
+            this.ingresosFormatted = this.transformIngresos(this.respuestaIngresos.Ingresos);
+
+
+            this.totalIngresosRecords = this.respuestaIngresos.IngresosTotalCount
+            if (this.respuestaGastos.GastosTotales) {
+
+              this.isButtonDisabled = false;
+            }
+            this.mostrarContenido = true;
+            this.updateGlobalChart(this.respuestaIngresos.IngresosTotales, this.respuestaGastos.GastosTotales)
+
+          }
+        });
       } else {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: "La fecha de inicio debe ser igual o menor a la fecha de fin", life: 3000 });
       }
@@ -343,7 +380,8 @@ export class ResumenListComponent implements OnInit, OnDestroy {
       page: this.pageGastos,
       size: this.sizeGastos,
       fechaInicio: this.fechaInicio,
-      fechaFin: this.fechaFin
+      fechaFin: this.fechaFin,
+      idUsuario: this.idUsuario
     }));
   }
 
@@ -356,42 +394,58 @@ export class ResumenListComponent implements OnInit, OnDestroy {
       page: this.pageIngresos,
       size: this.sizeIngresos,
       fechaInicio: this.fechaInicio,
-      fechaFin: this.fechaFin
+      fechaFin: this.fechaFin,
+      idUsuario: this.idUsuario
+
     }));
   }
 
   initGlobalChart() {
-    // Calcular totales globales    
-    const totalIngresos = this.respuestaIngresos.IngresosTotales
-    const totalGastos = this.respuestaGastos.GastosTotales
-
-    // Preparar los datos para el gráfico de pastel
-    this.dataPie = {
-      labels: ['Ingresos', 'Gastos'],
-      datasets: [{
-        data: [totalIngresos, totalGastos],
-        backgroundColor: ['rgba(0,128,0,0.6)', 'rgba(255,0,0,0.6)'],
-        borderColor: ['rgba(0,128,0,1)', 'rgba(255,0,0,1)'],
-        borderWidth: 1
-      }]
-    };
-
-    // Configuración de las opciones del gráfico
-    this.optionsPie = {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        tooltip: {
-          callbacks: {
-            label: function (tooltipItem: any) {
-              return tooltipItem.label + ': ' + tooltipItem.raw + ' €';
+    const canvas = document.getElementById('pieChart') as HTMLCanvasElement;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        this.chart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: ['Ingresos', 'Gastos'],
+            datasets: [{
+              data: [0, 0], // Inicialmente vacío
+              backgroundColor: ['rgba(0,128,0,0.6)', 'rgba(255,0,0,0.6)'],
+              borderColor: ['rgba(0,128,0,1)', 'rgba(255,0,0,1)'],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'top',
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (tooltipItem: any) {
+                    return tooltipItem.label + ': ' + tooltipItem.raw + ' €';
+                  }
+                }
+              }
             }
           }
-        }
+        });
+      } else {
+        console.error('No se pudo obtener el contexto 2D del canvas.');
       }
-    };
+    } else {
+      console.error('No se encontró el elemento canvas con ID pieChart.');
+    }
+  }
+
+
+  updateGlobalChart(totalIngresos: number, totalGastos: number) {
+    if (this.chart) {
+      this.chart.data.datasets[0].data = [totalIngresos, totalGastos];
+      this.chart.update(); // Actualizar el gráfico para reflejar los nuevos datos
+    }
   }
 
 

@@ -11,7 +11,7 @@ import { ResponseOne } from 'src/app/shared/models/entidades/responseOne.model';
 })
 export class UsuarioService {
 
-  apiUrl = 'https://localhost:7115/api/'
+  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
   constructor(private http: HttpClient) { }
 
   getAll(idUsuario: number): Observable<ResponseData<Usuario>> {

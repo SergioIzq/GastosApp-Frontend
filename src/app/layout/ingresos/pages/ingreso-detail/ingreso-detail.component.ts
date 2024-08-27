@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Observable, takeUntil, of, switchMap, filter, pipe } from 'rxjs';
+import { Subject, Observable, takeUntil, of, switchMap, filter, pipe, combineLatest } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Ingreso } from 'src/app/shared/models/entidades/ingreso.model';
 import { ActionsSubject, Store } from '@ngrx/store';
@@ -92,7 +92,7 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.store.select(selectUsuarioPorId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: any) => {
-      this.idUsuario = idUsuario.Id;
+      this.idUsuario = idUsuario?.Id;
       if (this.idUsuario) {
         this.store.dispatch(IngresoDetailActions.GetPersonasIngreso({ idUsuario: this.idUsuario }));
         this.store.dispatch(IngresoDetailActions.GetClientesIngreso({ idUsuario: this.idUsuario }));
@@ -177,7 +177,9 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
       .subscribe((conceptos: any) => {
         if (conceptos) {
           this.conceptos = conceptos;
-          this.extractCategorias(conceptos.Items);
+          if (!this.selectedCategoria) {
+            this.extractCategorias(conceptos.Items);
+          }
         }
       });
 
@@ -202,7 +204,9 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
             Concepto: ingreso.Concepto,
           });
           this.originalIngresoData = { ...ingreso };
-          this.filterConceptos()
+          this.categorias.push(ingreso.Concepto.Categoria);
+
+          this.filteredConceptos.push(ingreso.Concepto);
           this.detailIngresoForm.markAsPristine();
         }
       });
@@ -226,11 +230,15 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
   onSubmit() {
     const formValue = this.isNewIngreso ? this.newIngresoForm.value : this.detailIngresoForm.value;
     formValue.IdUsuario = this.idUsuario;
-    // Crear un objeto Date con la fecha proporcionada
-    const fechaLocal = new Date(formValue.Fecha);
+    let fechaLocal = formValue.Fecha;
 
-    // Convertir la fecha local a UTC para almacenamiento
-    const fechaUTC = new Date(fechaLocal.getTime() - fechaLocal.getTimezoneOffset() * 60000).toISOString();
+
+    if (typeof fechaLocal === 'string' && fechaLocal.includes('/')) {
+      const [day, month, year] = fechaLocal.split('/').map(Number);
+      fechaLocal = new Date(year, month - 1, day);
+    }
+
+    const fechaUTC = fechaLocal.toISOString();
 
     const formattedImporte = this.replaceCommasWithDots(formValue.Monto);
 
@@ -296,7 +304,9 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
   }
 
   onCategoriaChange(event: any): void {
+    this.extractCategorias(this.conceptos.Items)
     this.selectedCategoria = event.value ? event.value.Id : null;
+    this.detailIngresoForm.patchValue({ Concepto: null })
     this.filterConceptos();
   }
 

@@ -172,13 +172,13 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.conceptos$ = this.store.select(GastoSelector.selectConceptos);
-    this.conceptos$
-      .pipe(takeUntil(this.destroy$))
+    this.store.select(GastoSelector.selectConceptos).pipe(takeUntil(this.destroy$))
       .subscribe((conceptos: any) => {
         if (conceptos) {
           this.conceptos = conceptos;
-          this.extractCategorias(conceptos.Items);
+          if (!this.selectedCategoria) {
+            this.extractCategorias(conceptos.Items);
+          }
         }
       });
 
@@ -199,11 +199,13 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
             ...gasto,
             Fecha: fechaLocal,
             Monto: monto,
-            Concepto: gasto.Concepto,
-            Categoria: gasto.Concepto.Categoria,
+            Categoria: gasto.Concepto.Categoria
           });
-          this.originalGastoData = { ...gasto };
-          this.filterConceptos()
+
+          this.originalGastoData = { ...gasto }
+          this.categorias.push(gasto.Concepto.Categoria);
+
+          this.filteredConceptos.push(gasto.Concepto);
           this.detailGastoForm.markAsPristine();
 
         }
@@ -231,11 +233,15 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
 
     formValue.IdUsuario = this.idUsuario;
 
-    // Crear un objeto Date con la fecha proporcionada
-    const fechaLocal = new Date(formValue.Fecha);
+    let fechaLocal = formValue.Fecha;
 
-    // Convertir la fecha local a UTC para almacenamiento
-    const fechaUTC = new Date(fechaLocal.getTime() - fechaLocal.getTimezoneOffset() * 60000).toISOString();
+
+    if (typeof fechaLocal === 'string' && fechaLocal.includes('/')) {
+      const [day, month, year] = fechaLocal.split('/').map(Number);
+      fechaLocal = new Date(year, month - 1, day);
+    }
+
+    const fechaUTC = fechaLocal.toISOString();
 
     const formattedImporte = this.replaceCommasWithDots(formValue.Monto);
 
@@ -301,7 +307,9 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
   }
 
   onCategoriaChange(event: any): void {
+    this.extractCategorias(this.conceptos.Items)
     this.selectedCategoria = event.value ? event.value.Id : null;
+    this.detailGastoForm.patchValue({Concepto: null})
     this.filterConceptos();
   }
 

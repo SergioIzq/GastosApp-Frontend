@@ -6,7 +6,7 @@ import { ResumenIngresosResponse } from 'src/app/shared/models/entidades/resumen
 // Acciones para ingresos
 export const LoadIngresos = createAction(
     '[Resumen] Load Ingresos',
-    props<{ page: number; size: number; fechaInicio: Date | null; fechaFin: Date | null }>()
+    props<{ page: number; size: number; fechaInicio: Date | null; fechaFin: Date | null; idUsuario: number }>()
 );
 
 export const LoadIngresosSuccess = createAction(
@@ -22,7 +22,7 @@ export const LoadIngresosFailure = createAction(
 // Acciones para gastos
 export const LoadGastos = createAction(
     '[Resumen] Load Gastos',
-    props<{ page: number; size: number; fechaInicio: Date | null; fechaFin: Date | null }>()
+    props<{ page: number; size: number; fechaInicio: Date | null; fechaFin: Date | null; idUsuario: number; }>()
 );
 
 export const LoadGastosSuccess = createAction(

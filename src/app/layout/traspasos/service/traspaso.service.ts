@@ -12,7 +12,7 @@ import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 })
 export class TraspasoService {
 
-  apiUrl = 'https://localhost:7115/api/'
+  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
   constructor(private http: HttpClient) { }
 
   realizarTraspaso(traspaso: Traspaso): Observable<ResponseOne<Traspaso>> {

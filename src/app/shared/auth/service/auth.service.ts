@@ -7,14 +7,14 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
     // apiUrl = 'https://gastosapp-backend.onrender.com/api';
-    apiUrl='https://localhost:7115'
-  constructor(private http: HttpClient) { }
+    apiUrl = 'https://gastosapp-backend.onrender.com/api/';
+    constructor(private http: HttpClient) { }
 
   login(correo: string, contrasena: string): Observable<string> {
-    return this.http.post<string>(`${this.apiUrl}/auth/login`, { correo, contrasena });
+    return this.http.post<string>(`${this.apiUrl}auth/login`, { correo, contrasena });
   }
 
   signUp(correo: string, contrasena: string): Observable<string> {
-    return this.http.post<string>(`${this.apiUrl}/auth/register`, { correo, contrasena });
+    return this.http.post<string>(`${this.apiUrl}auth/register`, { correo, contrasena });
   }
 }

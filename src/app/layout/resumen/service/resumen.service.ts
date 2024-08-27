@@ -12,7 +12,7 @@ import { ResumenDatos } from 'src/app/shared/models/entidades/resumenDatos.model
 })
 export class ResumenService {
 
-  apiUrl = 'https://localhost:7115/api/'
+  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<Resumen[]> {
@@ -20,7 +20,7 @@ export class ResumenService {
     return this.http.get<Resumen[]>(url);
   }
 
-  getCantidadIngresos(page: number, size: number, fechaInicio: Date | null, fechaFin: Date | null): Observable<ResumenIngresosResponse> {
+  getCantidadIngresos(page: number, size: number, fechaInicio: Date | null, fechaFin: Date | null, idUsuario: number): Observable<ResumenIngresosResponse> {
     const url = `${this.apiUrl}resumen/getCantidadIngresos`;
 
     if (fechaInicio && fechaFin) {
@@ -28,7 +28,8 @@ export class ResumenService {
         .set('page', page)
         .set('size', size)
         .set('periodoInicio', fechaInicio.toISOString())
-        .set('periodoFin', fechaFin.toISOString());
+        .set('periodoFin', fechaFin.toISOString())
+        .set('idUsuario', idUsuario);
       return this.http.get<ResumenIngresosResponse>(url, { params });
     } else {
       return this.http.get<ResumenIngresosResponse>(url, {});
@@ -36,7 +37,7 @@ export class ResumenService {
 
   }
 
-  getCantidadGastos(page: number, size: number, fechaInicio: Date | null, fechaFin: Date | null): Observable<ResumenGastosResponse> {
+  getCantidadGastos(page: number, size: number, fechaInicio: Date | null, fechaFin: Date | null, idUsuario: number): Observable<ResumenGastosResponse> {
     const url = `${this.apiUrl}resumen/getCantidadGastos`;
 
     if (fechaInicio && fechaFin) {
@@ -44,7 +45,8 @@ export class ResumenService {
         .set('page', page)
         .set('size', size)
         .set('periodoInicio', fechaInicio.toISOString())
-        .set('periodoFin', fechaFin.toISOString());
+        .set('periodoFin', fechaFin.toISOString())
+        .set('idUsuario', idUsuario);
       return this.http.get<ResumenGastosResponse>(url, { params });
     } else {
       return this.http.get<ResumenGastosResponse>(url, {});
@@ -53,7 +55,7 @@ export class ResumenService {
 
   exportExcel(datos: ResumenDatos, dirPath: string): Observable<any> {
     const url = `${this.apiUrl}resumen/exportExcel`;
-    const body ={
+    const body = {
       Datos: datos,
       dirPath: dirPath
     }
