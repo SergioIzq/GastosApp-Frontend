@@ -18,8 +18,8 @@ import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 })
 export class IngresoService {
 
-  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
-
+  // apiUrl = 'https://gastosapp-backend.onrender.com/api/';
+  apiUrl = 'https://localhost:7115/api/'
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<Ingreso[]> {

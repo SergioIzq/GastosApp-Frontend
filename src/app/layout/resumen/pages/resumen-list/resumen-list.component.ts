@@ -58,8 +58,8 @@ export class ResumenListComponent implements OnInit, OnDestroy {
   indiceActual = 0;
   cantidadPorPagina = 10;
   globalFilter: { value: string, matchMode: string } | null = null;
-  fechaInicio: Date | null = null;
-  fechaFin: Date | null = null;
+  fechaInicio: Date | null = new Date();
+  fechaFin: Date | null = new Date();
   dataPie: any = [];
   optionsPie: any = [];
   options: any;

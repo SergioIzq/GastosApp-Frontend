@@ -11,8 +11,8 @@ import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 })
 export class CategoriaService {
 
-  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
-
+  // apiUrl = 'https://gastosapp-backend.onrender.com/api/';
+apiUrl = 'https://localhost:7115/api/'
   constructor(private http: HttpClient) { }
 
   private getHeaders(): HttpHeaders {

@@ -12,8 +12,7 @@ import { ResumenDatos } from 'src/app/shared/models/entidades/resumenDatos.model
 })
 export class ResumenService {
 
-  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
-
+  apiUrl = 'https://localhost:7115/api/'
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<Resumen[]> {

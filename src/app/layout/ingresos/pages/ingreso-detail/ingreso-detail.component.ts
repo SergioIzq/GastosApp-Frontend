@@ -121,6 +121,9 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
           // Si el ID es 0, significa que es una nueva visita
           this.isNewIngreso = true;
           this.ingresoPorId$ = of(null);
+          this.newIngresoForm.patchValue({
+            Fecha: new Date().toLocaleDateString('es-ES')
+          })
         } else {
           // Si el ID no es 0, obtener el ingreso por el ID
           this.isNewIngreso = false;

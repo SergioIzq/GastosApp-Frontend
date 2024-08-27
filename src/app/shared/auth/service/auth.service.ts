@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-    apiUrl = 'https://gastosapp-backend.onrender.com/api';
-
+    // apiUrl = 'https://gastosapp-backend.onrender.com/api';
+    apiUrl='https://localhost:7115'
   constructor(private http: HttpClient) { }
 
   login(correo: string, contrasena: string): Observable<string> {

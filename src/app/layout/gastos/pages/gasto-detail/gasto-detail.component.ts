@@ -121,6 +121,9 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
           // Si el ID es 0, significa que es una nueva visita
           this.isNewGasto = true;
           this.gastoPorId$ = of(null);
+          this.newGastoForm.patchValue({
+            Fecha: new Date().toLocaleDateString('es-ES')
+          })
         } else {
           // Si el ID no es 0, obtener el gasto por el ID
           this.isNewGasto = false;

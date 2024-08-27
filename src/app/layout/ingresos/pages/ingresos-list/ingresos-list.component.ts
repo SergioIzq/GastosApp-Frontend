@@ -46,8 +46,6 @@ export class IngresosListComponent implements OnInit, OnDestroy {
   first = 0;
   totalPages: number = 1;
   idUsuario!: number;
-  dirPath: string = "";
-  res: Excel = new Excel();
 
   constructor(
     private store: Store<AppState>,
@@ -62,10 +60,6 @@ export class IngresosListComponent implements OnInit, OnDestroy {
 
     this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
-    });
-
-    this.store.select(selectUsuarioPorId).pipe(takeUntil(this.destroy$)).subscribe((usuario: any) => {
-      this.dirPath = usuario.DirectorioExcel;
     });
 
     this.loadIngresos()

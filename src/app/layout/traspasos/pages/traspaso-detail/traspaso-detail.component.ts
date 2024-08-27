@@ -99,6 +99,9 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
         if (id === 0) {
           this.isNewTraspaso = true;
           this.traspasoPorId$ = of(null);
+          this.newTraspasoForm.patchValue({
+            Fecha: new Date().toLocaleDateString('es-ES')
+          })
         } else {
           this.store.dispatch(TraspasoDetailActions.GetTraspaso({ id: id }));
           this.traspasoPorId$ = this.store.select(TraspasoSelector.selectedTraspasoSelector);

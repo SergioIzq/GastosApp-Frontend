@@ -13,8 +13,7 @@ import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 })
 export class ConceptoService {
 
-  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
-
+  apiUrl = 'https://localhost:7115/api/'
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<ResponseData<Concepto>> {
