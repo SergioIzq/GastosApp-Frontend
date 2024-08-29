@@ -172,8 +172,15 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
     formValue.IdUsuario = this.usuario.Id;
     const importe = this.replaceCommasWithDots(formValue.Importe);
 
-    const fechaLocal = new Date(formValue.Fecha);
-    const fechaUTC = new Date(fechaLocal.getTime() - fechaLocal.getTimezoneOffset() * 60000).toISOString();
+    let fechaLocal = formValue.Fecha;
+
+
+    if (typeof fechaLocal === 'string' && fechaLocal.includes('/')) {
+      const [day, month, year] = fechaLocal.split('/').map(Number);
+      fechaLocal = new Date(year, month - 1, day);
+    }
+
+    const fechaUTC = fechaLocal.toISOString();
 
     const formattedFormValue = {
       ...formValue,
