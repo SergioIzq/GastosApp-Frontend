@@ -39,9 +39,14 @@ export class FormaPagoDetailEffects extends BaseService {
     mergeMap(({ formaPago }) => this.formaPagoDetailService.update(formaPago)
       .pipe(
         map((response: any) => {
-          const successMessage = response.message;
-          this.handleSuccess(successMessage);
-          return FormaPagoDetailActions.UpdateFormaPagoSuccess({ successMessage });
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Operación exitosa',
+            detail: 'Forma de pago actualizada correctamente',
+            life: 5000
+          });
+
+          return FormaPagoDetailActions.UpdateFormaPagoSuccess({ successMessage: response });
         }),
         catchError((error) => {
           return of(FormaPagoDetailActions.UpdateFormaPagoFailure({ errorMessage: error }));

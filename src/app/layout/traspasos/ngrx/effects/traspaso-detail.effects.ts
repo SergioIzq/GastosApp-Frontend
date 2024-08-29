@@ -40,7 +40,13 @@ export class TraspasoDetailEffects extends BaseService {
       .pipe(
         map((response: any) => {
           const successMessage = response.message;
-          this.handleSuccess(successMessage);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Operación exitosa',
+            detail: 'Traspaso actualizado correctamente',
+            life: 5000
+          });
+
           return TraspasoDetailActions.UpdateTraspasoSuccess({ successMessage });
         }),
         catchError((error) => {
@@ -66,16 +72,8 @@ export class TraspasoDetailEffects extends BaseService {
           return TraspasoDetailActions.RealizarTraspasoSuccess({ traspaso });
         }),
         catchError((error) => {
-          const errorMessage = this.getErrorMessage(error);
 
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: errorMessage,
-            life: 5000
-          });
-
-          return of(TraspasoDetailActions.RealizarTraspasoFail({ errorMessage }));
+          return of(TraspasoDetailActions.RealizarTraspasoFail({ errorMessage: error }));
         })
       )
     ))
@@ -93,22 +91,5 @@ export class TraspasoDetailEffects extends BaseService {
     )
   ));
 
-  // Método para obtener el mensaje de error
-  private getErrorMessage(error: any): string {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side or network error
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Backend error
-      if (error.error && typeof error.error === 'string') {
-        errorMessage = error.error;
-      } else if (error.error.message) {
-        errorMessage = error.error.message;
-      } else {
-        errorMessage = `Server returned code: ${error.status}, error message is: ${error.message}`;
-      }
-    }
-    return errorMessage;
-  }
+
 }
