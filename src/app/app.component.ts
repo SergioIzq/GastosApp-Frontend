@@ -25,7 +25,8 @@ export class AppComponent {
       today: 'Hoy',
       clear: 'Limpiar',
       dateFormat: 'dd/mm/yy',
-      weekHeader: 'Sm'
+      weekHeader: 'Sm',
+      firstDayOfWeek: 1
     });
   }
 }
