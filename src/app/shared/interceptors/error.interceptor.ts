@@ -26,7 +26,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
                     // Muestra un mensaje de error
                     this.messageService.add({
-                        severity: 'warning',
+                        severity: 'warn',
                         summary: 'Sesión expirada',
                         detail: 'Tu sesión ha expirado. Por favor, inicia sesión de nuevo.',
                         life: 8000
