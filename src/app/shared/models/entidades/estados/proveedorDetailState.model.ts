@@ -1,7 +1,7 @@
 import { Proveedor } from "../proveedor.model";
 
 export interface ProveedorDetailState {
-    cargando: boolean;
+    loading: boolean;
     errorCarga: boolean;
     proveedorPorId: Proveedor | null;
 }

@@ -124,9 +124,23 @@ app-menu {
 }
 
 
-.text-danger{
+.text-danger {
     font-size: 13px;
     text-align: center;
     margin-top: 10px;
     color: red;
 }
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+  }
+  

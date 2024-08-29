@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, filter, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { selectErrorCarga, selectProveedoresList, selectCargando } from '../../ngrx/selectors/proveedores-list.selectors';
+import { selectErrorCarga, selectProveedoresList, selectLoading } from '../../ngrx/selectors/proveedores-list.selectors';
 import { ActionsSubject, Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
 import { Router } from '@angular/router';
@@ -25,7 +25,7 @@ import { saveAs } from 'file-saver';
 })
 export class ProveedoresListComponent implements OnInit, OnDestroy {
 
-  cargando: boolean = true;
+  loading: boolean = false;
   respuesta: ResponseData<Proveedor> = new ResponseData();
   error$: Observable<boolean> = new Observable();
   clienteToDeleteId!: number | null;
@@ -72,8 +72,8 @@ export class ProveedoresListComponent implements OnInit, OnDestroy {
       matchAny: 'Cumplir alguna'
     });
 
-    this.store.select(SelectProveedoresList.selectCargando).pipe(takeUntil(this.destroy$)).subscribe(cargando => {
-      this.cargando = cargando;
+    this.store.select(SelectProveedoresList.selectLoading).pipe(takeUntil(this.destroy$)).subscribe(loading => {
+      this.loading = loading;
     });
     this.error$ = this.store.select(SelectProveedoresList.selectErrorCarga);
 

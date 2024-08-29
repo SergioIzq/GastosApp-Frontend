@@ -8,7 +8,7 @@ import { AppState } from 'src/app/app.state';
 import { Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { filter, takeUntil } from 'rxjs/operators';
-import { selectUsuarioPorId } from './ngrx/selectors/menu.selectors';
+import { selectLoading, selectUsuarioPorId } from './ngrx/selectors/menu.selectors';
 import { Usuario } from '../models/entidades/usuario.model';
 
 @Component({
@@ -24,6 +24,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   usuario!: Usuario | null;
   idUsuario!: number;
   dirPath!: any;
+  loading: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -47,6 +48,10 @@ export class MenuComponent implements OnInit, OnDestroy {
 
     this.store.select(selectIsAuthenticated).pipe(takeUntil(this.destroy$)).subscribe(isAuthenticated => {
       this.items = isAuthenticated ? this.getAuthenticatedMenuItems() : this.getUnauthenticatedMenuItems();
+    });
+
+    this.store.select(selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
     });
 
     this.actionsSubject.pipe(filter(action => action.type === '[Auth] Logout'), takeUntil(this.destroy$))

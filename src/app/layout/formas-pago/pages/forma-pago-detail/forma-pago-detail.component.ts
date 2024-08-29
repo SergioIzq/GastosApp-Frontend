@@ -21,7 +21,7 @@ export class FormaPagoDetailComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   formaId: number = 0;
   formaPorId$!: Observable<FormaPago | null>;
-  cargando$!: Observable<boolean>;
+  loading: boolean = false;
   error$!: Observable<boolean>;
   detailFormaPagoForm: FormGroup;
   originalFormaPagoData!: FormaPago;
@@ -88,7 +88,10 @@ export class FormaPagoDetailComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.cargando$ = this.store.select(FormaPagoSelector.selectCargando);
+    this.store.select(FormaPagoSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
+    });
+
     this.error$ = this.store.select(FormaPagoSelector.selectErrorCarga);
 
     this.actionsSubject.pipe(filter(action => action.type === 'CreateFormaPagoSuccess'), takeUntil(this.destroy$))

@@ -1,8 +1,7 @@
 import { Cliente } from "../cliente.model";
-import { ResponseOne } from "../responseOne.model";
 
 export interface ClienteDetailState{
-    cargando: boolean;
+    loading: boolean;
     errorCarga: boolean;
     clientePorId: Cliente | null; 
 }

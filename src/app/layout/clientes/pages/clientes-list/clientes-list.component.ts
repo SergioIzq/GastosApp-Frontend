@@ -14,8 +14,6 @@ import { Cliente } from 'src/app/shared/models/entidades/cliente.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
-import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
-import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -26,7 +24,7 @@ import { saveAs } from 'file-saver';
 })
 export class ClientesListComponent implements OnInit, OnDestroy {
 
-  cargando: boolean = true;
+  loading: boolean = true;
   respuesta: ResponseData<Cliente> = new ResponseData();
   error$: Observable<boolean> = new Observable();
   clienteToDeleteId!: number | null;
@@ -73,8 +71,8 @@ export class ClientesListComponent implements OnInit, OnDestroy {
       matchAny: 'Cumplir alguna'
     });
 
-    this.store.select(SelectClientesList.selectCargando).pipe(takeUntil(this.destroy$)).subscribe(cargando => {
-      this.cargando = cargando;
+    this.store.select(SelectClientesList.selectLoading).pipe(takeUntil(this.destroy$)).subscribe(loading => {
+      this.loading = loading;
     });
     this.error$ = this.store.select(SelectClientesList.selectErrorCarga);
 

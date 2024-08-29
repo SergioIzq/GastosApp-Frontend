@@ -1,7 +1,7 @@
 import { ResponseData } from "../responseData.model";
 
 export interface EntidadListState<T> {
-  cargando: boolean;
+  loading: boolean;
   lista: ResponseData<T>;
   errorCarga: boolean;
 }

@@ -10,9 +10,9 @@ export const selectedGastoSelector = createSelector(
     (state: GastoDetailState) => state.gastoPorId
 );
 
-export const selectCargando = createSelector(
+export const selectLoading = createSelector(
     selectGastoDetailFeature,
-    (state: GastoDetailState) => state.cargando
+    (state: GastoDetailState) => state.loading
 );
 
 export const selectErrorCarga = createSelector(

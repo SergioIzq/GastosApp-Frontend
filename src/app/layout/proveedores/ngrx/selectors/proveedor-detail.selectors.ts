@@ -10,9 +10,9 @@ export const selectedProveedorSelector = createSelector(
     (state: ProveedorDetailState) => state.proveedorPorId
 );
 
-export const selectCargando = createSelector(
+export const selectLoading = createSelector(
     selectProveedorDetailFeature,
-    (state: ProveedorDetailState) => state.cargando
+    (state: ProveedorDetailState) => state.loading
 );
 
 export const selectErrorCarga = createSelector(

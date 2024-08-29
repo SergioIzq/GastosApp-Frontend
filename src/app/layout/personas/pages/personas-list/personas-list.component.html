@@ -6,7 +6,7 @@
         <div class="card">
             <p-table #dt [value]="respuesta.Items" dataKey="id" [pageLinks]="5" [rowHover]="true" [rows]="10"
                 [totalRecords]="totalRecords" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
-                [loading]="cargando" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} personas"
+                [loading]="loading" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} personas"
                 [filterDelay]="0" [globalFilterFields]="['Nombre']">
 
                 <ng-template pTemplate="caption">
@@ -28,8 +28,7 @@
                         <!-- Botón Exportar Excel -->
                         <div class="field col-12 md:col-4" style="width:200px; text-align: right;">
                             <p-button label="Exportar Excel" pRipple severity="info" [raised]="true"
-                                icon="pi pi-file-excel"
-                                [disabled]="isButtonDisabled"
+                                icon="pi pi-file-excel" [disabled]="isButtonDisabled"
                                 (click)="exportarAExcel()"></p-button>
                         </div>
                     </div>
@@ -54,7 +53,7 @@
                             ]" />
                             </div>
                         </th>
-                        
+
                         <th style="width: 3rem"></th>
                         <th style="width: 3rem"></th>
                     </tr>
@@ -92,16 +91,21 @@
             [style]="{ width: '25rem' }" [style.max-width.px]="getDialogWidth()">
             <div style="margin-bottom: 1rem;">
                 <!-- Agrega margen en la parte inferior para separar el texto de los botones -->
-                <span class="p-text-secondary block">¿Está seguro de que quiere borrar esta persona? Si lo hace toda la información
+                <span class="p-text-secondary block">¿Está seguro de que quiere borrar esta persona? Si lo hace toda la
+                    información
                     asociada a ésta será eliminada permanentemente</span>
             </div>
             <div class="">
                 <p-button label="Cancelar" [raised]="true" severity="secondary" (click)="showConfirmationDialog = false"
                     class="" />
-                <p-button label="Eliminar" [raised]="true" severity="danger" (click)="onDeletePersona()"
-                    iconPos="right" class="pa-button" icon="pi pi-trash" />
+                <p-button label="Eliminar" [raised]="true" severity="danger" (click)="onDeletePersona()" iconPos="right"
+                    class="pa-button" icon="pi pi-trash" />
             </div>
         </p-dialog>
 
     </div>
+</div>
+
+<div *ngIf="loading" class="overlay">
+    <p-progressSpinner ariaLabel="loading" />
 </div>

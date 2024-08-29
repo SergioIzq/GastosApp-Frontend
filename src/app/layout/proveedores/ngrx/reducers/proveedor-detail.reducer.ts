@@ -2,26 +2,26 @@ import { createReducer, on } from "@ngrx/store";
 import { ProveedorDetailState } from "src/app/shared/models/entidades/estados/proveedorDetailState.model";
 import * as ProveedorDetailActions from '../actions/proveedor-detail.actions'
 
-export const estadoInicial: ProveedorDetailState = { cargando: false, proveedorPorId: null, errorCarga: false };
+export const estadoInicial: ProveedorDetailState = { loading: false, proveedorPorId: null, errorCarga: false };
 
 const proveedorDetailReducer = createReducer(
     estadoInicial,
     on(ProveedorDetailActions.GetProveedor, (state) => ({
         ...state,
-        cargando: true,
+        loading: true,
         errorCarga: false,
         createdSuccess: false
     })),
     on(ProveedorDetailActions.GetProveedorSuccess, (state, { proveedorPorId }) => ({
         ...state,
-        cargando: false,
+        loading: false,
         proveedorPorId: proveedorPorId,
         errorCarga: false,
         createdSuccess: false
     })),
     on(ProveedorDetailActions.GetProveedorFail, (state) => ({
         ...state,
-        cargando: false,
+        loading: false,
         proveedorPorId: null,
         errorCarga: true,
         createdSuccess: false
@@ -29,34 +29,34 @@ const proveedorDetailReducer = createReducer(
 
     on(ProveedorDetailActions.CreateProveedor, (state) => ({
         ...state,
-        cargando: true,
+        loading: true,
         createdSuccess: false
     })),
     on(ProveedorDetailActions.CreateProveedorSuccess, (state, { proveedor }) => ({
         ...state,
-        cargando: false,
+        loading: false,
         createdSuccess: true,
         proveedor: proveedor
     })),
     on(ProveedorDetailActions.CreateProveedorFailure, (state) => ({
         ...state,
-        cargando: false,
+        loading: false,
         proveedor: null,
         createdSuccess: false
     })),
     on(ProveedorDetailActions.UpdateProveedor, (state) => ({
         ...state,
-        cargando: true,
+        loading: true,
         createdSuccess: false
     })),
     on(ProveedorDetailActions.UpdateProveedorSuccess, (state) => ({
         ...state,
-        cargando: false,
+        loading: false,
         createdSuccess: false
     })),
     on(ProveedorDetailActions.UpdateProveedorFailure, (state, action) => ({
         ...state,
-        cargando: false,
+        loading: false,
         createdSuccess: false
     }))
 );

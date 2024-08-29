@@ -27,7 +27,7 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   gastoId: number = 0;
   gastoPorId$!: Observable<Gasto | null>;
-  cargando$!: Observable<boolean>;
+  loading: boolean = false;
   error$!: Observable<boolean>;
   detailGastoForm: FormGroup;
   originalGastoData!: Gasto;
@@ -211,7 +211,10 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.cargando$ = this.store.select(GastoSelector.selectCargando);
+    this.store.select(GastoSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
+    });
+
     this.error$ = this.store.select(GastoSelector.selectErrorCarga);
 
     this.detailGastoForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
@@ -309,7 +312,7 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
   onCategoriaChange(event: any): void {
     this.extractCategorias(this.conceptos.Items)
     this.selectedCategoria = event.value ? event.value.Id : null;
-    this.detailGastoForm.patchValue({Concepto: null})
+    this.detailGastoForm.patchValue({ Concepto: null })
     this.filterConceptos();
   }
 

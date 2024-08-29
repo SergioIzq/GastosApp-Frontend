@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, filter, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { selectErrorCarga, selectConceptosList, selectCargando } from '../../ngrx/selectors/conceptos-list.selectors';
+import { selectErrorCarga } from '../../ngrx/selectors/conceptos-list.selectors';
 import { ActionsSubject, Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
 import { Router } from '@angular/router';
@@ -27,7 +27,7 @@ import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.sele
 })
 export class ConceptosListComponent implements OnInit, OnDestroy {
 
-  cargando: boolean = true;
+  loading: boolean = true;
   respuesta: ResponseData<Concepto> = new ResponseData();
   error$: Observable<boolean> = new Observable();
   conceptoToDeleteId!: number | null;
@@ -75,9 +75,10 @@ export class ConceptosListComponent implements OnInit, OnDestroy {
       matchAny: 'Cumplir alguna'
     });
 
-    this.store.select(SelectConceptosList.selectCargando).pipe(takeUntil(this.destroy$)).subscribe(cargando => {
-      this.cargando = cargando;
+    this.store.select(SelectConceptosList.selectLoading).pipe(takeUntil(this.destroy$)).subscribe(loading => {
+      this.loading = loading;
     });
+    
     this.error$ = this.store.select(SelectConceptosList.selectErrorCarga);
 
     this.actionsSubject.pipe(filter(action => action.type === 'DeleteConceptoSuccess'), takeUntil(this.destroy$))

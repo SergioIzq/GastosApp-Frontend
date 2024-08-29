@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, filter, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { selectErrorCarga } from '../../ngrx/selectors/traspasos-list.selectors';
+import { selectErrorCarga, selectLoading } from '../../ngrx/selectors/traspasos-list.selectors';
 import { ActionsSubject, Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
 import { Router } from '@angular/router';
@@ -26,7 +26,7 @@ import { saveAs } from 'file-saver';
 })
 export class TraspasosListComponent implements OnInit, OnDestroy {
 
-  cargando: boolean = true;
+  loading: boolean = false;
   respuesta: ResponseData<Traspaso> = new ResponseData();
   error$: Observable<boolean> = new Observable();
   traspasoToDeleteId!: number | null;
@@ -85,9 +85,10 @@ export class TraspasosListComponent implements OnInit, OnDestroy {
       matchAny: 'Cumplir alguna'
     });
 
-    this.store.select(SelectTraspasosList.selectCargando).pipe(takeUntil(this.destroy$)).subscribe(cargando => {
-      this.cargando = cargando;
+    this.store.select(SelectTraspasosList.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
     });
+
     this.error$ = this.store.select(SelectTraspasosList.selectErrorCarga);
 
     this.error$ = this.store.select(selectErrorCarga);

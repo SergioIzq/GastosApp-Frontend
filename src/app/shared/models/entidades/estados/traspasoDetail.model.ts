@@ -3,7 +3,7 @@ import { ResponseData } from "../responseData.model";
 import { Traspaso } from "../traspaso.model";
 
 export interface TraspasoDetailState {
-    cargando: boolean;
+    loading: boolean;
     errorCarga: boolean;
     traspasoPorId: Traspaso | null;    
     cuentas: ResponseData<Cuenta> | null;

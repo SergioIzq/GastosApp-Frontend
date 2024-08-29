@@ -42,7 +42,7 @@ export class ResumenListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   gastosFormatted: any = null;
   ingresosFormatted: any = null;
-  cargando: boolean = true;
+  loading: boolean = false;
   respuestaIngresos: ResumenIngresosResponse = new ResumenIngresosResponse();
   respuestaGastos: ResumenGastosResponse = new ResumenGastosResponse();
   totalRecords: number = 0;
@@ -127,8 +127,8 @@ export class ResumenListComponent implements OnInit, OnDestroy, AfterViewInit {
       weekHeader: 'Sm'
     });
 
-    this.store.select(SelectResumenList.selectCargando).pipe(takeUntil(this.destroy$)).subscribe(cargando => {
-      this.cargando = cargando;
+    this.store.select(SelectResumenList.selectLoading).pipe(takeUntil(this.destroy$)).subscribe(loading => {
+      this.loading = loading;
     });
 
     this.error$ = this.store.select(SelectResumenList.selectErrorCarga)

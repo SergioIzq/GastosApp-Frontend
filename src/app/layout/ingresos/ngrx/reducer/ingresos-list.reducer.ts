@@ -3,40 +3,40 @@ import * as IngresosListActions from '../actions/ingresos-list.actions'
 import { EntidadListState } from "src/app/shared/models/entidades/estados/entidadListState.model";
 import { Ingreso } from "src/app/shared/models/entidades/ingreso.model";
 
-export const estadoInicial: EntidadListState<Ingreso> = { cargando: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
+export const estadoInicial: EntidadListState<Ingreso> = { loading: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
 
 export const ingresosListReducer = createReducer(
     estadoInicial,
     on(IngresosListActions.LoadingIngresos, (state) => {
         return {
             ...state,
-            cargando: true,
+            loading: true,
         }
     }),
     on(IngresosListActions.LoadingIngresosSuccess, (state, { listaIngresos }) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             lista: listaIngresos
         };
     }),
     on(IngresosListActions.LoadingIngresosFailure, (state) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             errorCarga: true
         };
     }),
     on(IngresosListActions.DeleteIngresoSuccess, (state) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
         };
     }),
     on(IngresosListActions.DeleteIngresoFailure, (state, action) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             errorMessage: action.errorMessage
         };
     }),

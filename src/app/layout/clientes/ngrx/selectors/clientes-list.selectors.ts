@@ -10,9 +10,9 @@ export const selectClientesList = createSelector(
     (state: EntidadListState<any>) => state.lista
 );
 
-export const selectCargando = createSelector(
+export const selectLoading = createSelector(
     selectClientesFeature,
-    (state: EntidadListState<Cliente>) => state.cargando
+    (state: EntidadListState<Cliente>) => state.loading
 );
 
 export const selectErrorCarga = createSelector(

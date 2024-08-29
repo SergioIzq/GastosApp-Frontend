@@ -27,6 +27,7 @@ import { TagModule } from 'primeng/tag';
 import { ChartModule } from 'primeng/chart';
 import { PaginatorModule } from 'primeng/paginator';
 import { PasswordModule } from 'primeng/password';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { PasswordModule } from 'primeng/password';
     CalendarModule,
     ToastModule,
     ToolbarModule,
+    ProgressSpinnerModule,
     MenuModule,
     SidebarModule,
     TooltipModule,

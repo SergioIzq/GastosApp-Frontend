@@ -29,7 +29,7 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   ingresoId: number = 0;
   ingresoPorId$!: Observable<Ingreso | null>;
-  cargando$!: Observable<boolean>;
+  loading: boolean = false;
   error$!: Observable<boolean>;
   detailIngresoForm: FormGroup;
   originalIngresoData!: Ingreso;
@@ -211,7 +211,10 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.cargando$ = this.store.select(IngresoSelector.selectCargando);
+    this.store.select(IngresoSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe(loading => {
+      this.loading = loading;
+    });
+
     this.error$ = this.store.select(IngresoSelector.selectErrorCarga);
     this.detailIngresoForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.deshabilitarBoton = false;

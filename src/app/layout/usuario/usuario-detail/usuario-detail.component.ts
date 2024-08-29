@@ -23,7 +23,7 @@ export class UsuarioDetailComponent implements OnInit, OnDestroy {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
   usuarioPorId$!: Observable<Usuario | null>;
-  cargando$!: Observable<boolean>;
+  loading: boolean = false;
   error$!: Observable<boolean>;
   detailUsuarioForm: FormGroup;
   originalUsuarioData!: Usuario;
@@ -55,12 +55,15 @@ export class UsuarioDetailComponent implements OnInit, OnDestroy {
       if (usuario) {
         this.detailUsuarioForm.patchValue({
           ...usuario,
-        });        
+        });
         this.originalUsuarioData = { ...usuario };
       }
     });
 
-    this.cargando$ = this.store.select(UsuarioSelector.selectCargando);
+    this.store.select(UsuarioSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
+    });
+    
     this.error$ = this.store.select(UsuarioSelector.selectErrorCarga);
 
   }

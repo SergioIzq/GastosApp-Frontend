@@ -45,8 +45,8 @@
 
                     <div class="field col-12 md:col-12" style="text-align: center;">
                         <p-button label="Iniciar sesión" icon="pi pi-check" severity="success" [raised]="true"
-                            iconPos="right" [disabled]="loginForm.invalid || !loginForm.dirty || deshabilitarBoton" type="submit"
-                            [style]="{'width': '190px', 'margin-top': '1rem'}">
+                            iconPos="right" [disabled]="loginForm.invalid || !loginForm.dirty || deshabilitarBoton"
+                            type="submit" [style]="{'width': '190px', 'margin-top': '1rem'}">
                         </p-button>
                     </div>
                 </div>
@@ -59,4 +59,8 @@
     </div>
 
 
+</div>
+
+<div *ngIf="loading" class="overlay">
+    <p-progressSpinner ariaLabel="loading" />
 </div>

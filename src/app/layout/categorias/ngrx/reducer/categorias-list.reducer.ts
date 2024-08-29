@@ -3,40 +3,40 @@ import * as CategoriasListActions from '../actions/categorias-list.actions'
 import { EntidadListState } from "src/app/shared/models/entidades/estados/entidadListState.model";
 import { Categoria } from "src/app/shared/models/entidades/categoria.model";
 
-export const estadoInicial: EntidadListState<Categoria> = { cargando: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
+export const estadoInicial: EntidadListState<Categoria> = { loading: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
 
 export const categoriasListReducer = createReducer(
     estadoInicial,
     on(CategoriasListActions.LoadingCategorias, (state) => {
         return {
             ...state,
-            cargando: true,
+            loading: true,
         }
     }),
     on(CategoriasListActions.LoadingCategoriasSuccess, (state, { listaCategorias }) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             lista: listaCategorias
         };
     }),
     on(CategoriasListActions.LoadingCategoriasFailure, (state) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             errorCarga: true
         };
     }),
     on(CategoriasListActions.DeleteCategoriaSuccess, (state) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
         };
     }),
     on(CategoriasListActions.DeleteCategoriaFailure, (state, action) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             errorMessage: action.errorMessage
         };
     }),

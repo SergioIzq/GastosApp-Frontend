@@ -23,7 +23,8 @@
                                             Correo
                                             es
                                             obligatorio.</div>
-                                        <div *ngIf="detailUsuarioForm.get('Correo')?.errors?.['email']">Formato email inválido. Ej: sergio@gmail.com</div>
+                                        <div *ngIf="detailUsuarioForm.get('Correo')?.errors?.['email']">Formato email
+                                            inválido. Ej: sergio@gmail.com</div>
                                         <div *ngIf="detailUsuarioForm.get('Correo')?.errors?.['maxlength']">Ha excedido
                                             el
                                             máximo número de caracteres (100)</div>
@@ -33,11 +34,13 @@
 
                             <div class="field col-12 md:col-12">
                                 <span class="p-float-label">
-                                    <input type="text" id="NuevaContrasena" pInputText formControlName="NuevaContrasena">
+                                    <input type="text" id="NuevaContrasena" pInputText
+                                        formControlName="NuevaContrasena">
                                     <label for="NuevaContrasena">Nueva contraseña</label>
                                     <div *ngIf="detailUsuarioForm.get('NuevaContrasena')?.invalid && (detailUsuarioForm.get('NuevaContrasena')?.['dirty'] || detailUsuarioForm.get('NuevaContrasena')?.['touched'])"
                                         class="text-danger">
-                                        <div *ngIf="detailUsuarioForm.get('NuevaContrasena')?.errors?.['required']">El campo
+                                        <div *ngIf="detailUsuarioForm.get('NuevaContrasena')?.errors?.['required']">El
+                                            campo
                                             Contraseña
                                             es
                                             obligatorio.</div>
@@ -79,13 +82,15 @@
                 </div>
                 <div class="">
                     <p-button label="Cancelar" [raised]="true" severity="secondary"
-                        (click)="showConfirmationDialog = false" class="mr-4"/>
+                        (click)="showConfirmationDialog = false" class="mr-4" />
                     <p-button label="Eliminar" [raised]="true" severity="danger" (click)="onDeleteUsuario()"
                         iconPos="right" class="pa-button" icon="pi pi-trash" />
                 </div>
             </p-dialog>
         </div>
     </div>
+</div>
 
-
+<div *ngIf="loading" class="overlay">
+    <p-progressSpinner ariaLabel="loading" />
 </div>

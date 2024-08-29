@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, filter, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { selectErrorCarga, selectPersonasList, selectCargando } from '../../ngrx/selectors/personas-list.selectors';
+import { selectErrorCarga } from '../../ngrx/selectors/personas-list.selectors';
 import { ActionsSubject, Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
 import { Router } from '@angular/router';
@@ -16,7 +16,6 @@ import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
-import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 
 
@@ -27,7 +26,7 @@ import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 })
 export class PersonasListComponent implements OnInit, OnDestroy {
 
-  cargando: boolean = true;
+  loading: boolean = true;
   respuesta: ResponseData<Persona> = new ResponseData();
   error$: Observable<boolean> = new Observable();
   personaToDeleteId!: number | null;
@@ -75,8 +74,8 @@ export class PersonasListComponent implements OnInit, OnDestroy {
       matchAny: 'Cumplir alguna'
     });
 
-    this.store.select(SelectPersonasList.selectCargando).pipe(takeUntil(this.destroy$)).subscribe(cargando => {
-      this.cargando = cargando;
+    this.store.select(SelectPersonasList.selectLoading).pipe(takeUntil(this.destroy$)).subscribe(loading => {
+      this.loading = loading;
     });
     this.error$ = this.store.select(SelectPersonasList.selectErrorCarga);
 

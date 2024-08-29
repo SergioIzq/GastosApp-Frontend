@@ -3,27 +3,27 @@ import * as ProveedorsListActions from '../actions/proveedores-list.actions'
 import { EntidadListState } from "src/app/shared/models/entidades/estados/entidadListState.model";
 import { Proveedor } from "src/app/shared/models/entidades/proveedor.model";
 
-export const estadoInicial: EntidadListState<Proveedor> = { cargando: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
+export const estadoInicial: EntidadListState<Proveedor> = { loading: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
 
 export const proveedoresListReducer = createReducer(
     estadoInicial,
     on(ProveedorsListActions.LoadingProveedores, (state) => {
         return {
             ...state,
-            cargando: true,
+            loading: true,
         }
     }),
     on(ProveedorsListActions.LoadingProveedoresSuccess, (state, { listaProveedores }) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             lista: listaProveedores
         };
     }),
     on(ProveedorsListActions.LoadingProveedoresFailure, (state) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             errorCarga: true,
             lista: { TotalRecords: 0, Items: [] }
         };
@@ -31,14 +31,14 @@ export const proveedoresListReducer = createReducer(
     on(ProveedorsListActions.DeleteProveedorSuccess, (state) => {
         return {
             ...state,
-            cargando: false,        
+            loading: false,        
             errorCarga: true    
         };
     }),
     on(ProveedorsListActions.DeleteProveedorFailure, (state, action) => {
         return {
             ...state,
-            cargando: false,            
+            loading: false,            
             errorMessage: action.errorMessage,
         };
     }),

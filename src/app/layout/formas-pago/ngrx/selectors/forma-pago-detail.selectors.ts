@@ -10,9 +10,9 @@ export const selectedFormaPagoSelector = createSelector(
     (state: FormaPagoDetailState) => state.formaPagoPorId
 );
 
-export const selectCargando = createSelector(
+export const selectLoading = createSelector(
     selectFormaPagoDetailFeature,
-    (state: FormaPagoDetailState) => state.cargando
+    (state: FormaPagoDetailState) => state.loading
 );
 
 export const selectErrorCarga = createSelector(

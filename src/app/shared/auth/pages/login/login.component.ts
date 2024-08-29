@@ -14,7 +14,7 @@ import { AppState } from 'src/app/app.state';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  loading$: Observable<boolean>;
+  loading: boolean = false;
   error$: Observable<string | null>;
   deshabilitarBoton: boolean = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -30,7 +30,6 @@ export class LoginComponent implements OnInit {
       Contrasena: ['', Validators.required]
     });
 
-    this.loading$ = this.store.pipe(select(selectAuthLoading));
     this.error$ = this.store.pipe(select(selectAuthError));
   }
 
@@ -47,7 +46,12 @@ export class LoginComponent implements OnInit {
     this.loginForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.deshabilitarBoton = false;
     });
+
+    this.store.select(selectAuthLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
+    });
   }
+
 
   ngOnDestroy(): void {
     this.destroy$.next(true);

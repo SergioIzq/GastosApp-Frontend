@@ -26,7 +26,7 @@ import { saveAs } from 'file-saver';
 })
 export class CuentasListComponent implements OnInit, OnDestroy {
 
-  cargando: boolean = true;
+  loading: boolean = true;
   respuesta: ResponseData<Cuenta> = new ResponseData();
   error$: Observable<boolean> = new Observable();
   cuentaToDeleteId!: number | null;
@@ -80,8 +80,8 @@ export class CuentasListComponent implements OnInit, OnDestroy {
       matchAny: 'Cumplir alguna'
     });
 
-    this.store.select(SelectCuentasList.selectCargando).pipe(takeUntil(this.destroy$)).subscribe(cargando => {
-      this.cargando = cargando;
+    this.store.select(SelectCuentasList.selectLoading).pipe(takeUntil(this.destroy$)).subscribe(loading => {
+      this.loading = loading;
     });
     this.error$ = this.store.select(SelectCuentasList.selectErrorCarga);
 

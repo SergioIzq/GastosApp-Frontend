@@ -44,17 +44,18 @@
 
                             <!-- Fila de botones -->
                             <div class="field col-6 md:col-6">
-                                <p-button label="Cancelar" icon="pi pi-times" severity="danger" [raised]="true" iconPos="right"
-                                    [style]="{'width': '140px', 'margin-top': '1rem'}" (click)="goBack()">
+                                <p-button label="Cancelar" icon="pi pi-times" severity="danger" [raised]="true"
+                                    iconPos="right" [style]="{'width': '140px', 'margin-top': '1rem'}"
+                                    (click)="goBack()">
                                 </p-button>
                             </div>
 
                             <div class="field col-6 md:col-6" style="text-align: center;">
-                                <p-button label="Crear" icon="pi pi-check" severity="success" [raised]="true" iconPos="right"
+                                <p-button label="Crear" icon="pi pi-check" severity="success" [raised]="true"
+                                    iconPos="right"
                                     [disabled]="newCategoriaForm.invalid || !newCategoriaForm.dirty || deshabilitarBoton"
-                                    type="submit"
-                                    [style]="{'width': '140px', 'margin-top': '1rem'}">
-                                </p-button>                                
+                                    type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                </p-button>
                             </div>
                         </div>
                     </p-fieldset>
@@ -96,17 +97,18 @@
 
                             <!-- Fila de botones -->
                             <div class="field col-6 md:col-6">
-                                <p-button label="Cancelar" icon="pi pi-times" severity="danger" [raised]="true" iconPos="right"
-                                    [style]="{'width': '140px', 'margin-top': '1rem'}" (click)="goBack()">
+                                <p-button label="Cancelar" icon="pi pi-times" severity="danger" [raised]="true"
+                                    iconPos="right" [style]="{'width': '140px', 'margin-top': '1rem'}"
+                                    (click)="goBack()">
                                 </p-button>
                             </div>
 
                             <div class="field col-6 md:col-6" style="text-align: center;">
-                                <p-button label="Guardar" icon="pi pi-check" severity="success"  [raised]="true" iconPos="right"
+                                <p-button label="Guardar" icon="pi pi-check" severity="success" [raised]="true"
+                                    iconPos="right"
                                     [disabled]="detailCategoriaForm.invalid || !detailCategoriaForm.dirty || deshabilitarBoton"
-                                    type="submit"
-                                    [style]="{'width': '140px', 'margin-top': '1rem'}">
-                                </p-button>                             
+                                    type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                </p-button>
                             </div>
                         </div>
                     </p-fieldset>
@@ -115,5 +117,9 @@
             </ng-template>
         </div>
     </div>
-    
+
+</div>
+
+<div *ngIf="loading" class="overlay">
+    <p-progressSpinner ariaLabel="loading" />
 </div>

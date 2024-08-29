@@ -10,9 +10,9 @@ export const selectedCuentaSelector = createSelector(
     (state: CuentaDetailState) => state.cuentaPorId
 );
 
-export const selectCargando = createSelector(
+export const selectLoading = createSelector(
     selectCuentaDetailFeature,
-    (state: CuentaDetailState) => state.cargando
+    (state: CuentaDetailState) => state.loading
 );
 
 export const selectErrorCarga = createSelector(

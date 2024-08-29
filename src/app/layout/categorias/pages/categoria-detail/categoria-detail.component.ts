@@ -21,7 +21,7 @@ export class CategoriaDetailComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   categoriaId: number = 0;
   categoriaPorId$!: Observable<Categoria | null>;
-  cargando$!: Observable<boolean>;
+  loading: boolean = false;
   error$!: Observable<boolean>;
   detailCategoriaForm: FormGroup;
   originalCategoriaData!: Categoria;
@@ -88,23 +88,26 @@ export class CategoriaDetailComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.cargando$ = this.store.select(CategoriaSelector.selectCargando);
+    this.store.select(CategoriaSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
+    });
+
     this.error$ = this.store.select(CategoriaSelector.selectErrorCarga);
 
-    this.actionsSubject.pipe(filter(action => action.type === 'CreateCategoriaSuccess'),(takeUntil(this.destroy$)))
+    this.actionsSubject.pipe(filter(action => action.type === 'CreateCategoriaSuccess'), (takeUntil(this.destroy$)))
       .subscribe((action: any) => {
         this.router.navigate(['categorias/categoria-detail', action.categoria.Item.Id])
         this.isNewCategoria = false;
         this.detailCategoriaForm.patchValue(action.Item);
         this.detailCategoriaForm.markAsPristine();
       });
-      this.detailCategoriaForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
-        this.deshabilitarBoton = false;
-      });
-      
-      this.newCategoriaForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
-        this.deshabilitarBoton = false;
-      });
+    this.detailCategoriaForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.deshabilitarBoton = false;
+    });
+
+    this.newCategoriaForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.deshabilitarBoton = false;
+    });
   }
 
   ngOnDestroy() {

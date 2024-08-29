@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Persona } from 'src/app/shared/models/entidades/persona.model';
 import { ActionsSubject, Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
-import { ActivatedRoute, Router } from '@angular/router'; 
+import { ActivatedRoute, Router } from '@angular/router';
 import * as PersonaDetailActions from '../../ngrx/actions/persona-detail.actions';
 import * as PersonaSelector from '../../ngrx/selectors/persona-detail.selectors';
 import { Location } from '@angular/common';
@@ -22,7 +22,7 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   personaId: number = 0;
   personaPorId$!: Observable<Persona | null>;
-  cargando$!: Observable<boolean>;
+  loading: boolean = false;
   error$!: Observable<boolean>;
   detailPersonaForm: FormGroup;
   originalPersonaData!: Persona;
@@ -30,8 +30,8 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
   newPersonaForm!: FormGroup;
   createdSuccess$!: Observable<boolean>;
   createdPersona$!: Observable<ResponseOne<Persona> | null>;
-  selectedOption!:string;
-  idUsuario!:number;
+  selectedOption!: string;
+  idUsuario!: number;
   deshabilitarBoton: boolean = false;
 
   constructor(
@@ -46,28 +46,28 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
       IdUsuario: [''],
       Nombre: ['', [Validators.required, Validators.maxLength(100)]],
     });
-    
-    
+
+
     this.detailPersonaForm = this.fb.group({
       Id: [''],
       IdUsuario: [''],
       Nombre: ['', [Validators.required, Validators.maxLength(100)]],
     });
-  
+
   }
 
   ngOnInit(): void {
 
-    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario:number)=>{
+    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
     });
 
     this.actionsSubject.pipe(filter(action => action.type === 'CreatePersonaSuccess'), takeUntil(this.destroy$))
-    .subscribe((action: any) => {
-      this.router.navigate(['personas/persona-detail', action.persona.Item.Id])
-      this.isNewPersona = false;
-      this.detailPersonaForm.patchValue(action.Item); 
-    });
+      .subscribe((action: any) => {
+        this.router.navigate(['personas/persona-detail', action.persona.Item.Id])
+        this.isNewPersona = false;
+        this.detailPersonaForm.patchValue(action.Item);
+      });
 
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const idString = params.get('id');
@@ -76,7 +76,7 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
         this.personaId = id;
         if (id === 0) {
           this.isNewPersona = true;
-          this.personaPorId$ = of(null); 
+          this.personaPorId$ = of(null);
         } else {
           this.isNewPersona = false;
           this.store.dispatch(PersonaDetailActions.GetPersona({ id: id }));
@@ -99,13 +99,16 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.cargando$ = this.store.select(PersonaSelector.selectCargando);
-    this.error$ = this.store.select(PersonaSelector.selectErrorCarga);  
+    this.store.select(PersonaSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
+    });
     
+    this.error$ = this.store.select(PersonaSelector.selectErrorCarga);
+
     this.detailPersonaForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.deshabilitarBoton = false;
     });
-    
+
     this.newPersonaForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.deshabilitarBoton = false;
     });
@@ -138,12 +141,12 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
   }
 
   onPersonaChange(event: any) {
-    const selectedCategory = event.value; 
+    const selectedCategory = event.value;
     this.newPersonaForm.get('Persona')?.patchValue({
       Id: selectedCategory?.Id || '',
       Nombre: selectedCategory?.Nombre || '',
       Descripcion: selectedCategory?.Descripcion || ''
     });
-  }  
+  }
 
 }

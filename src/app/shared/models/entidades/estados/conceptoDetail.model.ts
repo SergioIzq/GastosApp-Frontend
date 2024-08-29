@@ -4,7 +4,7 @@ import { Categoria } from "../categoria.model";
 import { ResponseData } from "../responseData.model";
 
 export interface ConceptoDetailState{
-    cargando: boolean;
+    loading: boolean;
     errorCarga: boolean;
     conceptoPorId: Concepto | null;
     categorias: ResponseData<Categoria> | null;

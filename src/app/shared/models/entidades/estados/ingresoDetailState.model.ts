@@ -8,7 +8,7 @@ import { Cliente } from "../cliente.model";
 import { Concepto } from "../concepto.model";
 
 export interface IngresoDetailState {
-    cargando: boolean;
+    loading: boolean;
     errorCarga: boolean;
     ingresoPorId: Ingreso | null;
     errorMessage: string;

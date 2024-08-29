@@ -23,7 +23,7 @@ export class ConceptoDetailComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   conceptoId: number = 0;
   conceptoPorId$!: Observable<Concepto | null>;
-  cargando$!: Observable<boolean>;
+  loading: boolean = false;
   error$!: Observable<boolean>;
   detailConceptoForm: FormGroup;
   originalConceptoData!: Concepto;
@@ -111,7 +111,10 @@ export class ConceptoDetailComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.cargando$ = this.store.select(ConceptoSelector.selectCargando);
+    this.store.select(ConceptoSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe(loading => {
+      this.loading = loading;
+    });
+
     this.error$ = this.store.select(ConceptoSelector.selectErrorCarga);
 
     this.detailConceptoForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {

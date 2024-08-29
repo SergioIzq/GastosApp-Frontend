@@ -10,9 +10,9 @@ export const selectedClienteSelector = createSelector(
     (state: ClienteDetailState) => state.clientePorId
 );
 
-export const selectCargando = createSelector(
+export const selectLoading = createSelector(
     selectClienteDetailFeature,
-    (state: ClienteDetailState) => state.cargando
+    (state: ClienteDetailState) => state.loading
 );
 
 export const selectErrorCarga = createSelector(

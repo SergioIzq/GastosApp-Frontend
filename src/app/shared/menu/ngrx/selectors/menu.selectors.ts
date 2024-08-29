@@ -8,3 +8,8 @@ export const selectUsuarioPorId = createSelector(
     selectMenuFeature,
     (state: MenuState) => state.usuarioPorId
 );
+
+export const selectLoading = createSelector(
+    selectMenuFeature,
+    (state: MenuState) => state.loading
+);

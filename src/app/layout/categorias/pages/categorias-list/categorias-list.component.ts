@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, filter, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { selectErrorCarga, selectCategoriasList, selectCargando } from '../../ngrx/selectors/categorias-list.selectors';
+import { selectErrorCarga } from '../../ngrx/selectors/categorias-list.selectors';
 import { ActionsSubject, Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
 import { Router } from '@angular/router';
@@ -14,8 +14,6 @@ import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
-import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
-import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -26,7 +24,7 @@ import { saveAs } from 'file-saver';
 })
 export class CategoriasListComponent implements OnInit, OnDestroy {
 
-  cargando: boolean = true;
+  loading: boolean = true;
   respuesta: ResponseData<Categoria> = new ResponseData();
   error$: Observable<boolean> = new Observable();
   conceptoToDeleteId!: number | null;
@@ -72,8 +70,8 @@ export class CategoriasListComponent implements OnInit, OnDestroy {
       matchAny: 'Cumplir alguna'
     });
 
-    this.store.select(SelectCategoriasList.selectCargando).pipe(takeUntil(this.destroy$)).subscribe(cargando => {
-      this.cargando = cargando;
+    this.store.select(SelectCategoriasList.selectLoading).pipe(takeUntil(this.destroy$)).subscribe(loading => {
+      this.loading = loading;
     });
 
     this.error$ = this.store.select(SelectCategoriasList.selectErrorCarga);

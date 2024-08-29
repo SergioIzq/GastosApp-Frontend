@@ -5,9 +5,9 @@ import { UsuarioDetailState } from '../../../shared/models/entidades/estados/usu
 
 export const selectUsuarioDetailFeature = (state: AppState) => state.usuario;
 
-export const selectCargando = createSelector(
+export const selectLoading = createSelector(
     selectUsuarioDetailFeature,
-    (state: UsuarioDetailState) => state.cargando
+    (state: UsuarioDetailState) => state.loading
 );
 
 export const selectErrorCarga = createSelector(

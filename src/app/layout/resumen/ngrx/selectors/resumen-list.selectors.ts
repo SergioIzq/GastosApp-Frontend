@@ -16,9 +16,9 @@ export const selectListaIngresos = createSelector(
     (state: ResumenListState) => state.listaIngresos
 );
 
-export const selectCargando = createSelector(
+export const selectLoading = createSelector(
     selectResumenFeature,
-    (state: ResumenListState) => state.cargando
+    (state: ResumenListState) => state.loading
 );
 
 export const selectErrorCarga = createSelector(

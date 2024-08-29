@@ -3,7 +3,7 @@ import * as ResumenListActions from '../actions/resumen-list.actions'
 import { ResumenListState } from "src/app/shared/models/entidades/estados/resumenListState.model";
 
 export const estadoInicial: ResumenListState = {
-    cargando: false,   
+    loading: false,   
     errorCarga: false,
     listaGastos: null,
     listaIngresos: null
@@ -14,40 +14,40 @@ export const resumenListReducer = createReducer(
     on(ResumenListActions.LoadGastos, (state) => {
         return {
             ...state,
-            cargando: true,
+            loading: true,
         }
     }),
     on(ResumenListActions.LoadGastosSuccess, (state, { payload }) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             listaGastos: payload
         };
     }),
     on(ResumenListActions.LoadGastosFailure, (state) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             errorCarga: true
         };
     }),
     on(ResumenListActions.LoadIngresos, (state) => {
         return {
             ...state,
-            cargando: true,
+            loading: true,
         }
     }),
     on(ResumenListActions.LoadIngresosSuccess, (state, { payload }) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             listaIngresos: payload
         };
     }),
     on(ResumenListActions.LoadIngresosFailure, (state) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             errorCarga: true
         };
     }),

@@ -6,7 +6,7 @@
         <div class="card">
             <p-table #dt [value]="transformedData" dataKey="id" [rowHover]="true" [rows]="10"
                 [totalRecords]="totalRecords" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
-                [loading]="cargando" [filterDelay]="0"
+                [loading]="loading" [filterDelay]="0"
                 [globalFilterFields]="['Importe', 'FormaPago','Concepto','CategoriaNombre','Cliente','Descripcion','Fecha','Cuenta','Persona']">
 
                 <ng-template pTemplate="caption">
@@ -242,4 +242,8 @@
         </p-dialog>
 
     </div>
+</div>
+
+<div *ngIf="loading" class="overlay">
+    <p-progressSpinner ariaLabel="loading" />
 </div>

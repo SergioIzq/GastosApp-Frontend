@@ -5,6 +5,8 @@ import { ActionsSubject, Store } from '@ngrx/store';
 import * as AuthActions from '../../ngrx/auth.actions';
 import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 import { filter, Subject, takeUntil } from 'rxjs';
+import { selectAuthLoading } from '../../ngrx/auth.selectors';
+import { AppState } from 'src/app/app.state';
 
 @Component({
   selector: 'app-register',
@@ -21,7 +23,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private store: Store<AuthState>,
+    private store: Store<AppState>,
     private actionsSubject: ActionsSubject
   ) { }
 
@@ -43,6 +45,10 @@ export class RegisterComponent implements OnInit {
     this.registerForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.deshabilitarBoton = false;
     });
+
+    this.store.select(selectAuthLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
+    });
   }
 
   ngOnDestroy(): void {
@@ -53,9 +59,7 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     if (this.registerForm.invalid) {
       return;
-    }
-
-    this.loading = true;
+    }    
     const { Correo, Contrasena } = this.registerForm.value;
 
     this.store.dispatch(AuthActions.signUp({ Correo, Contrasena }));

@@ -10,9 +10,9 @@ export const selectedPersonaSelector = createSelector(
     (state: PersonaDetailState) => state.personaPorId
 );
 
-export const selectCargando = createSelector(
+export const selectLoading = createSelector(
     selectPersonaDetailFeature,
-    (state: PersonaDetailState) => state.cargando
+    (state: PersonaDetailState) => state.loading
 );
 
 export const selectErrorCarga = createSelector(

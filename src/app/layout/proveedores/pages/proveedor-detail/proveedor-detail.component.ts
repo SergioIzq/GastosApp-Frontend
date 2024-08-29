@@ -21,7 +21,7 @@ export class ProveedorDetailComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   proveedorId: number = 0;
   proveedorPorId$!: Observable<Proveedor | null>;
-  cargando$!: Observable<boolean>;
+  loading: boolean = false;
   error$!: Observable<boolean>;
   detailProveedorForm: FormGroup;
   originalProveedorData!: Proveedor;
@@ -88,7 +88,10 @@ export class ProveedorDetailComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.cargando$ = this.store.select(ProveedorSelector.selectCargando);
+    this.store.select(ProveedorSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
+    });
+
     this.error$ = this.store.select(ProveedorSelector.selectErrorCarga);
 
     this.actionsSubject.pipe(filter(action => action.type === 'CreateProveedorSuccess'), takeUntil(this.destroy$))

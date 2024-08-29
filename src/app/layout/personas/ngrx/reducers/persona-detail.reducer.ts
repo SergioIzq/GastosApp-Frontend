@@ -2,26 +2,26 @@ import { createReducer, on } from "@ngrx/store";
 import { PersonaDetailState } from "src/app/shared/models/entidades/estados/personaDetail.model";
 import * as PersonaDetailActions from '../actions/persona-detail.actions'
 
-export const estadoInicial: PersonaDetailState = { cargando: false, personaPorId: null, errorCarga: false };
+export const estadoInicial: PersonaDetailState = { loading: false, personaPorId: null, errorCarga: false };
 
 const personaDetailReducer = createReducer(
     estadoInicial,
     on(PersonaDetailActions.GetPersona, (state) => ({
         ...state,
-        cargando: true,
+        loading: true,
         errorCarga: false,
         createdSuccess: false
     })),
     on(PersonaDetailActions.GetPersonaSuccess, (state, { personaPorId }) => ({
         ...state,
-        cargando: false,
+        loading: false,
         personaPorId: personaPorId,
         errorCarga: false,
         createdSuccess: false
     })),
     on(PersonaDetailActions.GetPersonaFail, (state) => ({
         ...state,
-        cargando: false,
+        loading: false,
         personaPorId: null,
         errorCarga: true,
         createdSuccess: false
@@ -29,34 +29,34 @@ const personaDetailReducer = createReducer(
 
     on(PersonaDetailActions.CreatePersona, (state) => ({
         ...state,
-        cargando: true,
+        loading: true,
         createdSuccess: false
     })),
     on(PersonaDetailActions.CreatePersonaSuccess, (state, { persona }) => ({
         ...state,
-        cargando: false,
+        loading: false,
         createdSuccess: true,
         persona: persona
     })),
     on(PersonaDetailActions.CreatePersonaFailure, (state) => ({
         ...state,
-        cargando: false,
+        loading: false,
         persona: null,
         createdSuccess: false
     })),
     on(PersonaDetailActions.UpdatePersona, (state) => ({
         ...state,
-        cargando: true,
+        loading: true,
         createdSuccess: false
     })),
     on(PersonaDetailActions.UpdatePersonaSuccess, (state) => ({
         ...state,
-        cargando: false,
+        loading: false,
         createdSuccess: false
     })),
     on(PersonaDetailActions.UpdatePersonaFailure, (state, action) => ({
         ...state,
-        cargando: false,
+        loading: false,
         createdSuccess: false
     }))
 );

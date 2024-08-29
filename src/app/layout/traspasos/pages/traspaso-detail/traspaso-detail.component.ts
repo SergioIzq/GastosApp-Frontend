@@ -23,7 +23,7 @@ import { Usuario } from 'src/app/shared/models/entidades/usuario.model';
 export class TraspasoDetailComponent implements OnInit, OnDestroy {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
-  cargando$!: Observable<boolean>;
+  loading: boolean = false;
   error$!: Observable<boolean>;
   newTraspasoForm!: FormGroup;
   detailTraspasoForm!: FormGroup;
@@ -114,7 +114,10 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
     this.traspasoPorId$ = this.store.select(TraspasoSelector.selectedTraspasoSelector);
 
 
-    this.cargando$ = this.store.select(TraspasoSelector.selectCargando);
+    this.store.select(TraspasoSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
+    });
+
     this.error$ = this.store.select(TraspasoSelector.selectErrorCarga);
 
     this.actionsSubject.pipe(filter(action => action.type === 'RealizarTraspasoSuccess'), takeUntil(this.destroy$))

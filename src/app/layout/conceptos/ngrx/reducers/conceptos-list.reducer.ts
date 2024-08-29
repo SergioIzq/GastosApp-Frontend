@@ -3,27 +3,27 @@ import * as ConceptosListActions from '../actions/conceptos-list.actions'
 import { EntidadListState } from "src/app/shared/models/entidades/estados/entidadListState.model";
 import { Concepto } from "src/app/shared/models/entidades/concepto.model";
 
-export const estadoInicial: EntidadListState<Concepto> = { cargando: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
+export const estadoInicial: EntidadListState<Concepto> = { loading: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
 
 export const conceptosListReducer = createReducer(
     estadoInicial,
     on(ConceptosListActions.LoadingConceptos, (state) => {
         return {
             ...state,
-            cargando: true,
+            loading: true,
         }
     }),
     on(ConceptosListActions.LoadingConceptosSuccess, (state, { listaConceptos }) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             lista: listaConceptos
         };
     }),
     on(ConceptosListActions.LoadingConceptosFailure, (state) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             errorCarga: true,
             lista: { TotalRecords: 0, Items: [] }
         };
@@ -31,14 +31,14 @@ export const conceptosListReducer = createReducer(
     on(ConceptosListActions.DeleteConceptoSuccess, (state) => {
         return {
             ...state,
-            cargando: false,        
+            loading: false,        
             errorCarga: true    
         };
     }),
     on(ConceptosListActions.DeleteConceptoFailure, (state, action) => {
         return {
             ...state,
-            cargando: false,            
+            loading: false,            
             errorMessage: action.errorMessage,
         };
     }),

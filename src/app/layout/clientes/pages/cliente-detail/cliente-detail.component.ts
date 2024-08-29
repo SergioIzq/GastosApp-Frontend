@@ -21,7 +21,7 @@ export class ClienteDetailComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   clienteId: number = 0;
   clientePorId$!: Observable<Cliente | null>;
-  cargando$!: Observable<boolean>;
+  loading: boolean = false;
   error$!: Observable<boolean>;
   detailClienteForm: FormGroup;
   originalClienteData!: Cliente;
@@ -88,7 +88,9 @@ export class ClienteDetailComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.cargando$ = this.store.select(ClienteSelector.selectCargando);
+    this.store.select(ClienteSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
+    });
     this.error$ = this.store.select(ClienteSelector.selectErrorCarga);
 
     this.actionsSubject.pipe(filter(action => action.type === 'CreateClienteSuccess'), takeUntil(this.destroy$))

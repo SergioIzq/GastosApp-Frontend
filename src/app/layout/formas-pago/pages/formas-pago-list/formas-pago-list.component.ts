@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, filter, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { selectErrorCarga, selectFormasPagoList, selectCargando } from '../../ngrx/selectors/formas-pago-list.selectors';
+import { selectErrorCarga } from '../../ngrx/selectors/formas-pago-list.selectors';
 import { ActionsSubject, Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
 import { Router } from '@angular/router';
@@ -16,8 +16,6 @@ import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
-import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
-import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 
 
 @Component({
@@ -27,7 +25,7 @@ import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.sele
 })
 export class FormasPagoListComponent implements OnInit, OnDestroy {
 
-  cargando: boolean = true;
+  loading: boolean = true;
   respuesta: ResponseData<FormaPago> = new ResponseData();
   error$: Observable<boolean> = new Observable();
   formaPagoToDeleteId!: number | null;
@@ -73,9 +71,10 @@ export class FormasPagoListComponent implements OnInit, OnDestroy {
       matchAny: 'Cumplir alguna'
     });
 
-    this.store.select(SelectFormasPagoList.selectCargando).pipe(takeUntil(this.destroy$)).subscribe(cargando => {
-      this.cargando = cargando;
+    this.store.select(SelectFormasPagoList.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
     });
+
     this.error$ = this.store.select(SelectFormasPagoList.selectErrorCarga);
 
     this.actionsSubject.pipe(filter(action => action.type === 'DeleteFormaPagoSuccess'),takeUntil(this.destroy$))

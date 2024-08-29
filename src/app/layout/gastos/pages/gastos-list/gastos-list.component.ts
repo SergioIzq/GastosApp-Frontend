@@ -12,8 +12,6 @@ import { Gasto } from 'src/app/shared/models/entidades/gasto.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
-import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
-import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -24,7 +22,7 @@ import { saveAs } from 'file-saver';
 })
 export class GastosListComponent implements OnInit, OnDestroy {
 
-  cargando: boolean = true;
+  loading: boolean = true;
   respuesta: ResponseData<Gasto> = new ResponseData();
   error$: Observable<boolean> = new Observable();
   ingresoToDeleteId!: number | null;
@@ -75,8 +73,8 @@ export class GastosListComponent implements OnInit, OnDestroy {
       matchAny: 'Cumplir alguna'
     });
 
-    this.store.select(SelectGastosList.selectCargando).pipe(takeUntil(this.destroy$)).subscribe(cargando => {
-      this.cargando = cargando;
+    this.store.select(SelectGastosList.selectLoading).pipe(takeUntil(this.destroy$)).subscribe(loading => {
+      this.loading = loading;
     });
 
     this.actionsSubject.pipe(filter(action => action.type === 'DeleteGastoSuccess'), takeUntil(this.destroy$))

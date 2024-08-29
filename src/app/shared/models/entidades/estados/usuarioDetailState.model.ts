@@ -1,6 +1,5 @@
-import { Usuario } from "../usuario.model";
 
 export interface UsuarioDetailState{
-    cargando: boolean;
+    loading: boolean;
     errorCarga: boolean;
 }

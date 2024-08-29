@@ -10,9 +10,9 @@ export const selectCategoriasList = createSelector(
     (state: EntidadListState<Categoria>) => state.lista
 );
 
-export const selectCargando = createSelector(
+export const selectLoading = createSelector(
     selectCategoriasFeature,
-    (state: EntidadListState<Categoria>) => state.cargando
+    (state: EntidadListState<Categoria>) => state.loading
 );
 
 export const selectErrorCarga = createSelector(

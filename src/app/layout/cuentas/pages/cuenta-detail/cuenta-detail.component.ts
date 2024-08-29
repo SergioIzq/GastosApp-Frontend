@@ -9,7 +9,6 @@ import * as CuentaDetailActions from '../../ngrx/actions/cuenta-detail.actions';
 import * as CuentaSelector from '../../ngrx/selectors/cuenta-detail.selectors';
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
-import { NumberFormatterPipe } from 'src/app/shared/pipes/numberFormatterPipe.pipe';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 
 @Component({
@@ -22,7 +21,7 @@ export class CuentaDetailComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   cuentaId: number = 0;
   cuentaPorId$!: Observable<Cuenta | null>;
-  cargando$!: Observable<boolean>;
+  loading: boolean = false;
   error$!: Observable<boolean>;
   detailCuentaForm: FormGroup;
   originalCuentaData!: Cuenta;
@@ -89,7 +88,10 @@ export class CuentaDetailComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.cargando$ = this.store.select(CuentaSelector.selectCargando);
+    this.store.select(CuentaSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
+    });
+
     this.error$ = this.store.select(CuentaSelector.selectErrorCarga);
 
     this.actionsSubject.pipe(filter(action => action.type === 'CreateCuentaSuccess'), takeUntil(this.destroy$))

@@ -10,9 +10,9 @@ export const selectedTraspasoSelector = createSelector(
     (state: TraspasoDetailState) => state.traspasoPorId
 );
 
-export const selectCargando = createSelector(
+export const selectLoading = createSelector(
     selectTraspasoDetailFeature,
-    (state: TraspasoDetailState) => state.cargando
+    (state: TraspasoDetailState) => state.loading
 );
 
 export const selectErrorCarga = createSelector(

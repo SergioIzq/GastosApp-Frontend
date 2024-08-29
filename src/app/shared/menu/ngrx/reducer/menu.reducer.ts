@@ -2,24 +2,24 @@ import { createReducer, on } from '@ngrx/store';
 import * as MenuActions from '../actions/menu.actions';
 import { MenuState } from 'src/app/shared/models/entidades/estados/menustate.model';
 
-export const estadoincial: MenuState = { usuarioPorId: null };
+export const estadoincial: MenuState = { usuarioPorId: null, loading: false };
 
 const menuReducer = createReducer(
     estadoincial,
     on(MenuActions.GetUsuario, (state) => ({
         ...state,
-        cargando: true,
+        loading: true,
         errorCarga: false,
     })),
     on(MenuActions.GetUsuarioSuccess, (state, { usuarioPorId }) => ({
         ...state,
-        cargando: false,
+        loading: false,
         usuarioPorId: usuarioPorId,        
         errorCarga: false,
     })),
     on(MenuActions.GetUsuarioFail, (state) => ({
         ...state,
-        cargando: false,
+        loading: false,
         usuarioPorId: null,
         errorCarga: true,
     })),

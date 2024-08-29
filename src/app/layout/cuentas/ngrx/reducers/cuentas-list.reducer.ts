@@ -3,27 +3,27 @@ import * as CuentasListActions from '../actions/cuentas-list.actions'
 import { EntidadListState } from "src/app/shared/models/entidades/estados/entidadListState.model";
 import { Cuenta } from "src/app/shared/models/entidades/cuenta.model";
 
-export const estadoInicial: EntidadListState<Cuenta> = { cargando: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
+export const estadoInicial: EntidadListState<Cuenta> = { loading: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
 
 export const cuentasListReducer = createReducer(
     estadoInicial,
     on(CuentasListActions.LoadingCuentas, (state) => {
         return {
             ...state,
-            cargando: true,
+            loading: true,
         }
     }),
     on(CuentasListActions.LoadingCuentasSuccess, (state, { listaCuentas }) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             lista: listaCuentas
         };
     }),
     on(CuentasListActions.LoadingCuentasFailure, (state) => {
         return {
             ...state,
-            cargando: false,
+            loading: false,
             errorCarga: true,
             lista: { TotalRecords: 0, Items: [] }
         };
@@ -31,14 +31,14 @@ export const cuentasListReducer = createReducer(
     on(CuentasListActions.DeleteCuentaSuccess, (state) => {
         return {
             ...state,
-            cargando: false,        
+            loading: false,        
             errorCarga: true    
         };
     }),
     on(CuentasListActions.DeleteCuentaFailure, (state, action) => {
         return {
             ...state,
-            cargando: false,            
+            loading: false,            
             errorMessage: action.errorMessage,
         };
     }),
