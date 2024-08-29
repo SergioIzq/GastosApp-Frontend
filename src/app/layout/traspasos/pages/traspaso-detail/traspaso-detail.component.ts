@@ -180,7 +180,7 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
       fechaLocal = new Date(year, month - 1, day);
     }
 
-    const fechaUTC = fechaLocal.toISOString();
+    const fechaUTC = new Date(fechaLocal.getTime() - fechaLocal.getTimezoneOffset() * 60000).toISOString();
 
     const formattedFormValue = {
       ...formValue,
