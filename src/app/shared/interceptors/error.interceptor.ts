@@ -19,7 +19,11 @@ export class ErrorInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(
             catchError((error: HttpErrorResponse) => {
-                if (error.status === 401 && error.error && error.error.message === 'Token expired') {
+
+                const authHeader = error.headers.get('WWW-Authenticate');
+                const isTokenInvalid = authHeader && authHeader.includes('Bearer error="invalid_token"');
+
+                if (error.status === 401 && isTokenInvalid) {
 
                     // Cierra la sesión y redirige al usuario
                     this.store.dispatch(logout());
