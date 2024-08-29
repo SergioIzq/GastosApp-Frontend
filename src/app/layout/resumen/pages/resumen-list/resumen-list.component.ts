@@ -238,7 +238,10 @@ export class ResumenListComponent implements OnInit, OnDestroy, AfterViewInit {
             this.gastosFormatted = this.transformGastos(this.respuestaGastos.Gastos);
 
             this.totalGastosRecords = this.respuestaGastos.GastosTotalCount
+            if (respuesta.GastosTotalCount > 0 ) {
 
+              this.isButtonDisabled = false;
+            }
           }
         });
 
@@ -250,13 +253,14 @@ export class ResumenListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
             this.totalIngresosRecords = this.respuestaIngresos.IngresosTotalCount
-            if (this.respuestaGastos.GastosTotales) {
 
-              this.isButtonDisabled = false;
-            }
             this.mostrarContenido = true;
             this.updateGlobalChart(this.respuestaIngresos.IngresosTotales, this.respuestaGastos.GastosTotales)
 
+            if (respuesta.IngresosTotalCount > 0 ) {
+
+              this.isButtonDisabled = false;
+            }
           }
         });
       } else {
