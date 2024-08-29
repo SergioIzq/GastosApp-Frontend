@@ -130,8 +130,6 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(IngresoDetailActions.GetIngreso({ id: id }));
           this.ingresoPorId$ = this.store.select(IngresoSelector.selectedIngresoSelector);
         }
-      } else {
-        console.error('No hay id por parámetro');
       }
     });
 

@@ -83,8 +83,6 @@ export class ConceptoDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(ConceptoDetailActions.GetConcepto({ id: id }));
           this.conceptoPorId$ = this.store.select(ConceptoSelector.selectedConceptoSelector);
         }
-      } else {
-        console.error('No hay id por parámetro');
       }
     });
 

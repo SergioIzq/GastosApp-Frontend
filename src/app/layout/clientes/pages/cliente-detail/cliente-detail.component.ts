@@ -71,8 +71,6 @@ export class ClienteDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(ClienteDetailActions.GetCliente({ id: id }));
           this.clientePorId$ = this.store.select(ClienteSelector.selectedClienteSelector);
         }
-      } else {
-        console.error('No hay id por parámetro');
       }
     });
     this.clientePorId$ = this.store.select(ClienteSelector.selectedClienteSelector);

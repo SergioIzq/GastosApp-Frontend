@@ -1,18 +1,39 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpErrorResponse } from '@angular/common/http';
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { MessageService } from 'primeng/api'; // O el servicio que uses para mostrar mensajes
+import { Router } from '@angular/router'; // Para redirigir al usuario
+import { AppState } from 'src/app/app.state';
+import { Store } from '@ngrx/store';
+import { logout } from '../auth/ngrx/auth.actions';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor(private messageService: MessageService) { }
+    constructor(
+        private messageService: MessageService,
+        private router: Router,
+        private store: Store<AppState>
+    ) { }
 
-    intercept(req: any, next: HttpHandler): Observable<HttpEvent<any>> {
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(
             catchError((error: HttpErrorResponse) => {
-                if (error.error && error.error.Errors) {
-                    error.error.Errors.forEach((errorMsg: string) => {                        
+                if (error.status == 401) {
+
+                    // Cierra la sesión y redirige al usuario
+                    this.store.dispatch(logout());
+
+                    // Muestra un mensaje de error
+                    this.messageService.add({
+                        severity: 'warning',
+                        summary: 'Sesión expirada',
+                        detail: 'Tu sesión ha expirado. Por favor, inicia sesión de nuevo.',
+                        life: 8000
+                    });
+                } else if (error.error && error.error.Errors) {
+                    // Manejo de otros errores
+                    error.error.Errors.forEach((errorMsg: string) => {
                         this.messageService.add({
                             severity: 'error',
                             summary: error.error.Message,
@@ -28,9 +49,9 @@ export class ErrorInterceptor implements HttpInterceptor {
                         life: 8000
                     });
                 }
-                return throwError(error);
+
+                return throwError(() => new Error(error.message));
             })
-            
         );
     }
 }

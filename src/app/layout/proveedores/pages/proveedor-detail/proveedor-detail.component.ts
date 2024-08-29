@@ -71,8 +71,6 @@ export class ProveedorDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(ProveedorDetailActions.GetProveedor({ id: id }));
           this.proveedorPorId$ = this.store.select(ProveedorSelector.selectedProveedorSelector);
         }
-      } else {
-        console.error('No hay id por parámetro');
       }
     });
     this.proveedorPorId$ = this.store.select(ProveedorSelector.selectedProveedorSelector);

@@ -130,8 +130,6 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(GastoDetailActions.GetGasto({ id: id }));
           this.gastoPorId$ = this.store.select(GastoSelector.selectedGastoSelector);
         }
-      } else {
-        console.error('No hay id por parámetro');
       }
     });
 

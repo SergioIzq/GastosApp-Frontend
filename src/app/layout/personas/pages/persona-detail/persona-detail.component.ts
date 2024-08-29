@@ -82,8 +82,6 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(PersonaDetailActions.GetPersona({ id: id }));
           this.personaPorId$ = this.store.select(PersonaSelector.selectedPersonaSelector);
         }
-      } else {
-        console.error('No hay id por parámetro');
       }
     });
     this.personaPorId$ = this.store.select(PersonaSelector.selectedPersonaSelector);

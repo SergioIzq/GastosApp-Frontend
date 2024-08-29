@@ -105,8 +105,6 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(TraspasoDetailActions.GetTraspaso({ id: id }));
           this.traspasoPorId$ = this.store.select(TraspasoSelector.selectedTraspasoSelector);
         }
-      } else {
-        console.error('No hay id por parámetro');
       }
     });
 

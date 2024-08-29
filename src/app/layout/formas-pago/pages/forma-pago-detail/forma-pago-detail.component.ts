@@ -71,8 +71,6 @@ export class FormaPagoDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(FormaPagoDetailActions.GetFormaPago({ id: id }));
           this.formaPorId$ = this.store.select(FormaPagoSelector.selectedFormaPagoSelector);
         }
-      } else {
-        console.error('No hay id por parámetro');
       }
     });
     this.formaPorId$ = this.store.select(FormaPagoSelector.selectedFormaPagoSelector);

@@ -70,9 +70,7 @@ export class CategoriaDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(CategoriaDetailActions.GetCategoria({ id: id }));
           this.categoriaPorId$ = this.store.select(CategoriaSelector.selectedCategoriaSelector);
         }
-      } else {
-        console.error('No hay id por parámetro');
-      }
+      } 
     });
 
     this.categoriaPorId$ = this.store.select(CategoriaSelector.selectedCategoriaSelector);

@@ -142,7 +142,7 @@ export class ResumenListComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
 
     this.limpiarFiltros()
-    
+
     this.showChart = false;
     this.destroy$.next(true);
     this.destroy$.complete()
@@ -212,14 +212,16 @@ export class ResumenListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.mostrarContenido = false;
     this.isButtonDisabled = true;
     this.showChart = false;
-    console.log('filtros l')
   }
 
   aplicarFiltrosFecha() {
     if (this.fechaInicio && this.fechaFin) {
 
-      this.fechaInicio = new Date(this.fechaInicio);
-      this.fechaFin = new Date(this.fechaFin);
+      this.fechaInicio = new Date(this.fechaInicio.getFullYear(), this.fechaInicio.getMonth(), this.fechaInicio.getDate());
+
+      // Normalizar fechaFin a las 23:59:59
+      this.fechaFin = new Date(this.fechaFin.getFullYear(), this.fechaFin.getMonth(), this.fechaFin.getDate(), 23, 59, 59);
+
       if (this.fechaInicio <= this.fechaFin) {
 
         this.store.dispatch(ResumenListActions.LoadIngresos({
@@ -432,11 +434,7 @@ export class ResumenListComponent implements OnInit, OnDestroy, AfterViewInit {
             }
           }
         });
-      } else {
-        console.error('No se pudo obtener el contexto 2D del canvas.');
-      }
-    } else {
-      console.error('No se encontró el elemento canvas con ID pieChart.');
+      } 
     }
   }
 

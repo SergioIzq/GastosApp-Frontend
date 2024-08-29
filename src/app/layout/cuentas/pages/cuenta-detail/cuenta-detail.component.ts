@@ -71,8 +71,6 @@ export class CuentaDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(CuentaDetailActions.GetCuenta({ id: id }));
           this.cuentaPorId$ = this.store.select(CuentaSelector.selectedCuentaSelector);
         }
-      } else {
-        console.error('No hay id por parámetro');
       }
     });
     this.cuentaPorId$ = this.store.select(CuentaSelector.selectedCuentaSelector);
