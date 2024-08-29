@@ -11,7 +11,6 @@ import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
 import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
 import { MessageService } from 'primeng/api';
 import { Traspaso } from 'src/app/shared/models/entidades/traspaso.model';
-import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import { Usuario } from 'src/app/shared/models/entidades/usuario.model';
 

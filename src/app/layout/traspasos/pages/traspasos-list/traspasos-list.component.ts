@@ -14,8 +14,6 @@ import { Traspaso } from 'src/app/shared/models/entidades/traspaso.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
-import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
-import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -46,8 +44,6 @@ export class TraspasosListComponent implements OnInit, OnDestroy {
   first = 0;
   totalPages: number = 1;
   idUsuario!: number;
-  dirPath: string = "";
-  res: Excel = new Excel();
 
   constructor(
     private store: Store<AppState>,
@@ -61,10 +57,6 @@ export class TraspasosListComponent implements OnInit, OnDestroy {
 
     this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
-    });
-
-    this.store.select(selectUsuarioPorId).pipe(takeUntil(this.destroy$)).subscribe((usuario: any) => {
-      this.dirPath = usuario.DirectorioExcel;
     });
 
     this.loadTraspasos()

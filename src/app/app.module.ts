@@ -20,7 +20,6 @@ import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { AuthInterceptor } from './shared/auth/auth.interceptor';
 import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
-import { UsuariosModule } from './layout/usuario/usuario.module';
 
 // Register the locale data
 registerLocaleData(localeEs);
