@@ -32,6 +32,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
                     // Cierra la sesión y redirige al usuario
                     this.store.dispatch(logout());
+                    this.router.navigate(['/home']);
 
                     // Muestra un mensaje de error
                     this.messageService.add({
