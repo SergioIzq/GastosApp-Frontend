@@ -102,12 +102,20 @@ export class ConceptoDetailComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((concepto: Concepto | null) => {
         if (concepto) {
+          // Encuentra la categoría seleccionada
+          const selectedCategoria = this.categorias.Items.find(categoria => categoria.Id === concepto.Categoria.Id);
+
+          // Actualiza el formulario con el concepto y la categoría seleccionada
           this.detailConceptoForm.patchValue({
             ...concepto,
+            Categoria: selectedCategoria
           });
+
+          // Guarda el dato original del concepto
           this.originalConceptoData = { ...concepto };
         }
       });
+
 
     this.store.select(ConceptoSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe(loading => {
       this.loading = loading;
@@ -149,15 +157,6 @@ export class ConceptoDetailComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this.router.navigate(['conceptos/conceptos-list']);
-  }
-
-  onCategoriaChange(event: any) {
-    const selectedCategory = event.value;
-    this.newConceptoForm.get('Categoria')?.patchValue({
-      Id: selectedCategory?.Id || '',
-      Nombre: selectedCategory?.Nombre || '',
-      Descripcion: selectedCategory?.Descripcion || ''
-    });
   }
 
 }
