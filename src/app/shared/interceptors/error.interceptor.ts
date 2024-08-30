@@ -20,10 +20,15 @@ export class ErrorInterceptor implements HttpInterceptor {
         return next.handle(req).pipe(
             catchError((error: HttpErrorResponse) => {
 
-                const authHeader = error.headers.get('WWW-Authenticate');
-                const isTokenInvalid = authHeader && authHeader.includes('Bearer error="invalid_token"');
+                if (error.status === 0 && error.error instanceof ProgressEvent && error.error.type === 'timeout') {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Timeout',
+                        detail: 'La solicitud ha tardado demasiado en responder. Por favor, inténtelo de nuevo más tarde.',
+                        life: 8000
+                    });
 
-                if (error.status === 401 && isTokenInvalid) {
+                } else if (error.status === 401) {
 
                     // Cierra la sesión y redirige al usuario
                     this.store.dispatch(logout());

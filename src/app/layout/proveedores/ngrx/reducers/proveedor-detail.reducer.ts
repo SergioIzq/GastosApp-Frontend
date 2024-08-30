@@ -10,54 +10,45 @@ const proveedorDetailReducer = createReducer(
         ...state,
         loading: true,
         errorCarga: false,
-        createdSuccess: false
     })),
     on(ProveedorDetailActions.GetProveedorSuccess, (state, { proveedorPorId }) => ({
         ...state,
         loading: false,
         proveedorPorId: proveedorPorId,
         errorCarga: false,
-        createdSuccess: false
     })),
     on(ProveedorDetailActions.GetProveedorFail, (state) => ({
         ...state,
         loading: false,
         proveedorPorId: null,
         errorCarga: true,
-        createdSuccess: false
     })),
 
     on(ProveedorDetailActions.CreateProveedor, (state) => ({
         ...state,
         loading: true,
-        createdSuccess: false
     })),
     on(ProveedorDetailActions.CreateProveedorSuccess, (state, { proveedor }) => ({
         ...state,
         loading: false,
-        createdSuccess: true,
         proveedor: proveedor
     })),
     on(ProveedorDetailActions.CreateProveedorFailure, (state) => ({
         ...state,
         loading: false,
         proveedor: null,
-        createdSuccess: false
     })),
     on(ProveedorDetailActions.UpdateProveedor, (state) => ({
         ...state,
         loading: true,
-        createdSuccess: false
     })),
     on(ProveedorDetailActions.UpdateProveedorSuccess, (state) => ({
         ...state,
         loading: false,
-        createdSuccess: false
     })),
     on(ProveedorDetailActions.UpdateProveedorFailure, (state, action) => ({
         ...state,
         loading: false,
-        createdSuccess: false
     }))
 );
 
