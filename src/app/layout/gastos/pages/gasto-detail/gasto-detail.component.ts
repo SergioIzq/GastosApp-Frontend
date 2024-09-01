@@ -17,6 +17,7 @@ import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { Concepto } from 'src/app/shared/models/entidades/concepto.model';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { Cliente } from 'src/app/shared/models/entidades/cliente.model';
+import { minAmountValidator } from 'src/app/shared/models/entidades/minAmountValidator.model';
 
 @Component({
   selector: 'app-gasto-detail',
@@ -62,7 +63,7 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
 
     this.newGastoForm = this.fb.group({
       IdUsuario: [''],
-      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), Validators.min(0.01)]],
+      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Fecha: ['', [Validators.required]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
@@ -75,7 +76,7 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
     this.detailGastoForm = this.fb.group({
       Id: [''],
       IdUsuario: [''],
-      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), Validators.min(0.01)]],
+      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Fecha: ['', [Validators.required]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],

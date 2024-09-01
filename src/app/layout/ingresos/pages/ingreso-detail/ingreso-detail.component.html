@@ -15,7 +15,8 @@
                             <!-- Primera fila de inputs -->
                             <div class="field col-12 md:col-6">
                                 <span class="p-float-label euro-input-container">
-                                    <input type="text" id="Monto" style="text-align: right;" pInputText formControlName="Monto" appNumberFormatter>
+                                    <input type="text" id="Monto" style="text-align: right;" pInputText
+                                        formControlName="Monto" appNumberFormatter>
                                     <label for="Monto">Importe</label>
                                     <div *ngIf="newIngresoForm.get('Monto')?.invalid && (newIngresoForm.get('Monto')?.['dirty'] || newIngresoForm.get('Monto')?.['touched'])"
                                         class="text-danger">
@@ -26,6 +27,9 @@
                                             ser
                                             un
                                             número válido. Ej: 22.22</div>
+                                        <div *ngIf="newIngresoForm.get('Monto')?.errors?.['minAmount']">
+                                            El Importe mínimo es de 0,01 €
+                                        </div>
                                     </div>
                                 </span>
                             </div>
@@ -90,9 +94,8 @@
                                 <span class="p-float-label">
                                     <p-dropdown [options]="categorias" optionLabel="Nombre" [filter]="true"
                                         emptyMessage="No se encontraron resultados" formControlName="Concepto"
-                                        emptyFilterMessage="No se encontraron resultados"
-                                         filterBy="Nombre" [showClear]="true"
-                                        (onChange)="onCategoriaChange($event)">
+                                        emptyFilterMessage="No se encontraron resultados" filterBy="Nombre"
+                                        [showClear]="true" (onChange)="onCategoriaChange($event)">
 
                                         <ng-template pTemplate="selectedItem" let-selectedOption>
                                             <div class="flex align-items-center gap-2">
@@ -202,8 +205,8 @@
 
                             <div class="field col-6 md:col-6" style="text-align: center;">
                                 <p-button label="Crear" icon="pi pi-check" severity="success" iconPos="right"
-                                    [disabled]="newIngresoForm.invalid || newIngresoForm.pristine || deshabilitarBoton" type="submit" [raised]="true"
-                                    [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                    [disabled]="newIngresoForm.invalid || newIngresoForm.pristine || deshabilitarBoton"
+                                    type="submit" [raised]="true" [style]="{'width': '140px', 'margin-top': '1rem'}">
                                 </p-button>
                             </div>
                         </div>
@@ -218,7 +221,8 @@
                             <!-- Primera fila de inputs -->
                             <div class="field col-12 md:col-6">
                                 <span class="p-float-label euro-input-container">
-                                    <input type="text" id="Monto" style="text-align: right;" pInputText formControlName="Monto" appNumberFormatter>
+                                    <input type="text" id="Monto" style="text-align: right;" pInputText
+                                        formControlName="Monto" appNumberFormatter>
                                     <label for="Monto">Importe</label>
                                     <div *ngIf="detailIngresoForm.get('Monto')?.invalid && (detailIngresoForm.get('Monto')?.['dirty'] || detailIngresoForm.get('Monto')?.['touched'])"
                                         class="text-danger">
@@ -230,6 +234,9 @@
                                             ser
                                             un
                                             número válido. Ej: 22.22</div>
+                                        <div *ngIf="detailIngresoForm.get('Monto')?.errors?.['minAmount']">
+                                            El Importe mínimo es de 0,01 €
+                                        </div>
                                     </div>
                                 </span>
                             </div>
@@ -293,8 +300,8 @@
                                 <span class="p-float-label">
                                     <p-dropdown [options]="categorias" optionLabel="Nombre" [filter]="true"
                                         emptyMessage="No se encontraron resultados" formControlName="Categoria"
-                                        emptyFilterMessage="No se encontraron resultados"
-                                        filterBy="Nombre" [showClear]="true" (onChange)="onCategoriaChange($event)">
+                                        emptyFilterMessage="No se encontraron resultados" filterBy="Nombre"
+                                        [showClear]="true" (onChange)="onCategoriaChange($event)">
 
                                         <ng-template pTemplate="selectedItem" let-selectedOption>
                                             <div class="flex align-items-center gap-2">
@@ -403,8 +410,8 @@
 
                             <div class="field col-6 md:col-6" style="text-align: center;">
                                 <p-button label="Guardar" icon="pi pi-check" severity="success" iconPos="right"
-                                    [disabled]="detailIngresoForm.invalid || detailIngresoForm.pristine || deshabilitarBoton" type="submit"
-                                    [raised]="true" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                    [disabled]="detailIngresoForm.invalid || detailIngresoForm.pristine || deshabilitarBoton"
+                                    type="submit" [raised]="true" [style]="{'width': '140px', 'margin-top': '1rem'}">
                                 </p-button>
                             </div>
                         </div>

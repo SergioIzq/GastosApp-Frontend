@@ -13,6 +13,7 @@ import { MessageService } from 'primeng/api';
 import { Traspaso } from 'src/app/shared/models/entidades/traspaso.model';
 import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import { Usuario } from 'src/app/shared/models/entidades/usuario.model';
+import { minAmountValidator } from 'src/app/shared/models/entidades/minAmountValidator.model';
 
 @Component({
   selector: 'app-traspaso-detail',
@@ -50,7 +51,7 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
       IdUsuario: [''],
       CuentaOrigen: ['', [Validators.required]],
       CuentaDestino: ['', [Validators.required]],
-      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), Validators.min(0.01)]],
+      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Fecha: ['', [Validators.required]],
       Descripcion: ['', [Validators.maxLength(100)]],
     });
@@ -59,7 +60,7 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
       IdUsuario: [''],
       CuentaOrigen: ['', [Validators.required]],
       CuentaDestino: ['', [Validators.required]],
-      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), Validators.min(0.01)]],
+      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Fecha: ['', [Validators.required]],
       Descripcion: ['', [Validators.maxLength(100)]],
     });
