@@ -91,19 +91,26 @@ export class ConceptoDetailComponent implements OnInit, OnDestroy {
 
     this.categorias$ = this.store.select(ConceptoSelector.selectCategorias);
     this.categorias$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((categorias: ResponseData<Categoria> | null) => {
-        if (categorias) {
-          this.categorias = categorias;
-        }
-      });
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((categorias: ResponseData<Categoria> | null) => {
+      if (categorias && categorias.Items) {
+        const sortedItems = [...categorias.Items].sort((a: Categoria, b: Categoria) =>
+          a.Nombre.localeCompare(b.Nombre)
+        );
+  
+        this.categorias = {
+          ...categorias,      
+          Items: sortedItems 
+        };
+      }
+    });  
 
     this.conceptoPorId$
       .pipe(takeUntil(this.destroy$))
       .subscribe((concepto: Concepto | null) => {
         if (concepto) {
           // Encuentra la categoría seleccionada
-          const selectedCategoria = this.categorias.Items.find(categoria => categoria.Id === concepto.Categoria.Id);
+          const selectedCategoria = this.categorias?.Items.find(categoria => categoria.Id === concepto.Categoria.Id);
 
           // Actualiza el formulario con el concepto y la categoría seleccionada
           this.detailConceptoForm.patchValue({
@@ -115,7 +122,6 @@ export class ConceptoDetailComponent implements OnInit, OnDestroy {
           this.originalConceptoData = { ...concepto };
         }
       });
-
 
     this.store.select(ConceptoSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe(loading => {
       this.loading = loading;

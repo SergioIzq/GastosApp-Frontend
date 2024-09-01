@@ -16,6 +16,7 @@ import { FormaPago } from 'src/app/shared/models/entidades/formaPago.model';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { Concepto } from 'src/app/shared/models/entidades/concepto.model';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
+import { Cliente } from 'src/app/shared/models/entidades/cliente.model';
 
 @Component({
   selector: 'app-gasto-detail',
@@ -137,9 +138,15 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
     this.cuentas$
       .pipe(takeUntil(this.destroy$))
       .subscribe((cuentas: ResponseData<Cuenta> | null) => {
-        if (cuentas) {
-          this.cuentas = cuentas;
+        if (cuentas && cuentas.Items) {
+          const sortedItems = [...cuentas.Items].sort((a: Cuenta, b: Cuenta) =>
+            a.Nombre.localeCompare(b.Nombre)
+          );
 
+          this.cuentas = {
+            ...cuentas,
+            Items: sortedItems
+          };
         }
       });
 
@@ -147,8 +154,15 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
     this.formasPago$
       .pipe(takeUntil(this.destroy$))
       .subscribe((formasPago: ResponseData<FormaPago> | null) => {
-        if (formasPago) {
-          this.formasPago = formasPago;
+        if (formasPago && formasPago.Items) {
+          const sortedItems = [...formasPago.Items].sort((a: FormaPago, b: FormaPago) =>
+            a.Nombre.localeCompare(b.Nombre)
+          );
+
+          this.formasPago = {
+            ...formasPago,
+            Items: sortedItems
+          };
         }
       });
 
@@ -156,8 +170,15 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
     this.personas$
       .pipe(takeUntil(this.destroy$))
       .subscribe((personas: ResponseData<Persona> | null) => {
-        if (personas) {
-          this.personas = personas;
+        if (personas && personas.Items) {
+          const sortedItems = [...personas.Items].sort((a: Persona, b: Persona) =>
+            a.Nombre.localeCompare(b.Nombre)
+          );
+
+          this.personas = {
+            ...personas,
+            Items: sortedItems
+          };
         }
       });
 
@@ -165,12 +186,21 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
     this.proveedores$
       .pipe(takeUntil(this.destroy$))
       .subscribe((proveedores: ResponseData<Proveedor> | null) => {
-        if (proveedores) {
-          this.proveedores = proveedores;
+        if (proveedores && proveedores.Items) {
+          const sortedItems = [...proveedores.Items].sort((a: Proveedor, b: Proveedor) =>
+            a.Nombre.localeCompare(b.Nombre)
+          );
+
+          this.proveedores = {
+            ...proveedores,
+            Items: sortedItems
+          };
         }
       });
 
-    this.store.select(GastoSelector.selectConceptos).pipe(takeUntil(this.destroy$))
+    this.conceptos$ = this.store.select(GastoSelector.selectConceptos);
+    this.conceptos$
+      .pipe(takeUntil(this.destroy$))
       .subscribe((conceptos: any) => {
         if (conceptos) {
           this.conceptos = conceptos;
@@ -291,7 +321,6 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
   }
 
   private extractCategorias(conceptos: Concepto[]): void {
-
     const categoriasSet = new Set<number>(); // Usamos Set para mantener ids únicos
     const categoriasMap = new Map<number, Categoria>(); // Map para mantener un mapa de id a objeto Categoria
 
@@ -304,8 +333,12 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.categorias = Array.from(categoriasMap.values());
+    // Convierte el Map en un array y ordénalo alfabéticamente
+    this.categorias = Array.from(categoriasMap.values()).sort((a: Categoria, b: Categoria) =>
+      a.Nombre.localeCompare(b.Nombre)
+    );
   }
+
 
   onCategoriaChange(event: any): void {
     this.extractCategorias(this.conceptos.Items)
@@ -315,25 +348,21 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
   }
 
   private filterConceptos(): void {
-
     if (this.selectedCategoria !== null && this.conceptos) {
-      this.selectedCategoria;
-
-      // Verifica el tipo de categoriaId y los Ids en conceptos.Categoria
-
       // Filtra los conceptos por la categoría seleccionada
       this.filteredConceptos = this.conceptos.Items.filter(concepto => {
         const conceptoCategoriaId = concepto.Categoria.Id;
         return conceptoCategoriaId === this.selectedCategoria;
-      });
+      }).sort((a: Concepto, b: Concepto) =>
+        a.Nombre.localeCompare(b.Nombre)
+      );
 
     } else {
       // Si no hay categoría seleccionada, mostrar todos los conceptos
-      this.filteredConceptos = this.conceptos ? this.conceptos.Items : [];
+      this.filteredConceptos = this.conceptos ? this.conceptos.Items.sort((a: Concepto, b: Concepto) =>
+        a.Nombre.localeCompare(b.Nombre)
+      ) : [];
     }
-
   }
-
-
 
 }

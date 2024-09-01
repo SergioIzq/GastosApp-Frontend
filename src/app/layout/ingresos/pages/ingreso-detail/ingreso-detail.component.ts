@@ -137,8 +137,15 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
     this.cuentas$
       .pipe(takeUntil(this.destroy$))
       .subscribe((cuentas: ResponseData<Cuenta> | null) => {
-        if (cuentas) {
-          this.cuentas = cuentas;
+        if (cuentas && cuentas.Items) {
+          const sortedItems = [...cuentas.Items].sort((a: Cuenta, b: Cuenta) =>
+            a.Nombre.localeCompare(b.Nombre)
+          );
+    
+          this.cuentas = {
+            ...cuentas,      
+            Items: sortedItems 
+          };
         }
       });
 
@@ -146,8 +153,15 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
     this.formasPago$
       .pipe(takeUntil(this.destroy$))
       .subscribe((formasPago: ResponseData<FormaPago> | null) => {
-        if (formasPago) {
-          this.formasPago = formasPago;
+        if (formasPago && formasPago.Items) {
+          const sortedItems = [...formasPago.Items].sort((a: FormaPago, b: FormaPago) =>
+            a.Nombre.localeCompare(b.Nombre)
+          );
+    
+          this.formasPago = {
+            ...formasPago,      
+            Items: sortedItems 
+          };
         }
       });
 
@@ -155,8 +169,15 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
     this.personas$
       .pipe(takeUntil(this.destroy$))
       .subscribe((personas: ResponseData<Persona> | null) => {
-        if (personas) {
-          this.personas = personas;
+        if (personas && personas.Items) {
+          const sortedItems = [...personas.Items].sort((a: Persona, b: Persona) =>
+            a.Nombre.localeCompare(b.Nombre)
+          );
+    
+          this.personas = {
+            ...personas,      
+            Items: sortedItems 
+          };
         }
       });
 
@@ -164,8 +185,15 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
     this.clientes$
       .pipe(takeUntil(this.destroy$))
       .subscribe((clientes: ResponseData<Cliente> | null) => {
-        if (clientes) {
-          this.clientes = clientes;
+        if (clientes && clientes.Items) {
+          const sortedItems = [...clientes.Items].sort((a: Cliente, b: Cliente) =>
+            a.Nombre.localeCompare(b.Nombre)
+          );
+    
+          this.clientes = {
+            ...clientes,      
+            Items: sortedItems 
+          };
         }
       });
 
@@ -288,10 +316,9 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
   }
 
   private extractCategorias(conceptos: Concepto[]): void {
-
     const categoriasSet = new Set<number>(); // Usamos Set para mantener ids únicos
     const categoriasMap = new Map<number, Categoria>(); // Map para mantener un mapa de id a objeto Categoria
-
+  
     conceptos.forEach(concepto => {
       if (concepto.Categoria) {
         if (!categoriasSet.has(concepto.Categoria.Id)) {
@@ -300,9 +327,13 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
         }
       }
     });
-
-    this.categorias = Array.from(categoriasMap.values());
+  
+    // Convierte el Map en un array y ordénalo alfabéticamente
+    this.categorias = Array.from(categoriasMap.values()).sort((a: Categoria, b: Categoria) =>
+      a.Nombre.localeCompare(b.Nombre)
+    );
   }
+  
 
   onCategoriaChange(event: any): void {
     this.extractCategorias(this.conceptos.Items)
@@ -312,25 +343,21 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
   }
 
   private filterConceptos(): void {
-
     if (this.selectedCategoria !== null && this.conceptos) {
-      this.selectedCategoria;
-
-      // Verifica el tipo de categoriaId y los Ids en conceptos.Categoria
-
       // Filtra los conceptos por la categoría seleccionada
       this.filteredConceptos = this.conceptos.Items.filter(concepto => {
         const conceptoCategoriaId = concepto.Categoria.Id;
         return conceptoCategoriaId === this.selectedCategoria;
-      });
-
+      }).sort((a: Concepto, b: Concepto) => 
+        a.Nombre.localeCompare(b.Nombre)
+      );
+  
     } else {
       // Si no hay categoría seleccionada, mostrar todos los conceptos
-      this.filteredConceptos = this.conceptos ? this.conceptos.Items : [];
+      this.filteredConceptos = this.conceptos ? this.conceptos.Items.sort((a: Concepto, b: Concepto) => 
+        a.Nombre.localeCompare(b.Nombre)
+      ) : [];
     }
-
   }
-
-
 
 }
