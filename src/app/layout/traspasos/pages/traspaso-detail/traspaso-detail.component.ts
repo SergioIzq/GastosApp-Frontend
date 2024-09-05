@@ -13,6 +13,7 @@ import { MessageService } from 'primeng/api';
 import { Traspaso } from 'src/app/shared/models/entidades/traspaso.model';
 import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import { Usuario } from 'src/app/shared/models/entidades/usuario.model';
+import { minAmountValidator } from 'src/app/shared/models/entidades/minAmountValidator.model';
 
 @Component({
   selector: 'app-traspaso-detail',
@@ -50,7 +51,7 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
       IdUsuario: [''],
       CuentaOrigen: ['', [Validators.required]],
       CuentaDestino: ['', [Validators.required]],
-      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), Validators.min(0.01)]],
+      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Fecha: ['', [Validators.required]],
       Descripcion: ['', [Validators.maxLength(100)]],
     });
@@ -59,7 +60,7 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
       IdUsuario: [''],
       CuentaOrigen: ['', [Validators.required]],
       CuentaDestino: ['', [Validators.required]],
-      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), Validators.min(0.01)]],
+      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Fecha: ['', [Validators.required]],
       Descripcion: ['', [Validators.maxLength(100)]],
     });
@@ -79,8 +80,9 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
           .subscribe((cuentas: ResponseData<Cuenta> | null) => {
             if (cuentas) {
               this.cuentas = cuentas;
-              this.filteredCuentasDestinos = cuentas.Items;
-              this.filteredCuentasOrigen = cuentas.Items;
+
+              this.filteredCuentasDestinos = cuentas.Items.slice().sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+              this.filteredCuentasOrigen = cuentas.Items.slice().sort((a, b) => a.Nombre.localeCompare(b.Nombre));
 
               if (!this.isNewTraspaso) {
                 this.filterInitialCuentas();
@@ -230,16 +232,19 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
 
   }
 
-
   private filterCuentasDestinos(cuentaOrigen: Cuenta): void {
     if (this.cuentas) {
-      this.filteredCuentasDestinos = this.cuentas.Items.filter(cuenta => cuenta.Id !== cuentaOrigen.Id);
+      this.filteredCuentasDestinos = this.cuentas.Items
+        .filter(cuenta => cuenta.Id !== cuentaOrigen.Id)
+        .sort((a, b) => a.Nombre.localeCompare(b.Nombre)); // Ordena alfabéticamente por 'Nombre'
     }
   }
 
   private filterCuentasOrigen(cuentaDestino: Cuenta): void {
     if (this.cuentas) {
-      this.filteredCuentasOrigen = this.cuentas.Items.filter(cuenta => cuenta.Id !== cuentaDestino.Id);
+      this.filteredCuentasOrigen = this.cuentas.Items
+        .filter(cuenta => cuenta.Id !== cuentaDestino.Id)
+        .sort((a, b) => a.Nombre.localeCompare(b.Nombre)); // Ordena alfabéticamente por 'Nombre'
     }
   }
 
@@ -254,12 +259,6 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
     if (cuentaDestino) {
       this.filterCuentasOrigen(cuentaDestino);
     }
-
-  }
-
-  private isValidTraspaso(importe: number, cuentaOrigenId: number): boolean {
-    const cuentaOrigen = this.cuentas.Items.find(cuenta => cuenta.Id === cuentaOrigenId);
-    return cuentaOrigen ? cuentaOrigen.Saldo >= importe : false;
   }
 
   private replaceDotsWithCommas(value: any): any {

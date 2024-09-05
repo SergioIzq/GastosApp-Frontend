@@ -71,8 +71,8 @@
                             </div>
                             <div class="field col-12 md:col-6">
                                 <span class="p-float-label euro-input-container">
-                                    <input type="text" id="Importe" style="text-align: right;" pInputText formControlName="Importe"
-                                        appNumberFormatter>
+                                    <input type="text" id="Importe" style="text-align: right;" pInputText
+                                        formControlName="Importe" appNumberFormatter>
                                     <label for="Importe">Importe</label>
                                     <div *ngIf="newTraspasoForm.get('Importe')?.invalid && (newTraspasoForm.get('Importe')?.['dirty'] || newTraspasoForm.get('Importe')?.['touched'])"
                                         class="text-danger">
@@ -82,8 +82,9 @@
                                             obligatorio.</div>
                                         <div *ngIf="newTraspasoForm.get('Importe')?.errors?.['pattern']">Formato
                                             incorrecto. Ej: 123456,23</div>
-                                        <div *ngIf="newTraspasoForm.get('Importe')?.errors?.['min']">El Importe
-                                            mínimo es 1 €</div>
+                                        <div *ngIf="newTraspasoForm.get('Importe')?.errors?.['minAmount']">
+                                            El Importe mínimo es de 0,01 €
+                                        </div>
 
                                     </div>
                                 </span>
@@ -114,12 +115,13 @@
                                     (click)="goBack()">
                                 </p-button>
                             </div>
-                                <div class="field col-6 md:col-6" style="text-align: center;">
-                                    <p-button label="Realizar traspaso" icon="pi pi-check" severity="success"
-                                        [raised]="true" iconPos="right" [disabled]="newTraspasoForm.invalid || !newTraspasoForm.dirty || deshabilitarBoton" type="submit"
-                                        [style]="{'width': '140px', 'margin-top': '1rem'}">
-                                    </p-button>
-                                </div>
+                            <div class="field col-6 md:col-6" style="text-align: center;">
+                                <p-button label="Realizar traspaso" icon="pi pi-check" severity="success"
+                                    [raised]="true" iconPos="right"
+                                    [disabled]="newTraspasoForm.invalid || !newTraspasoForm.dirty || deshabilitarBoton"
+                                    type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                </p-button>
+                            </div>
                         </div>
                     </p-fieldset>
                 </form>
@@ -186,8 +188,8 @@
                             </div>
                             <div class="field col-12 md:col-6">
                                 <span class="p-float-label euro-input-container">
-                                    <input type="text" id="Importe" style="text-align: right;" pInputText formControlName="Importe"
-                                        appNumberFormatter>
+                                    <input type="text" id="Importe" style="text-align: right;" pInputText
+                                        formControlName="Importe" appNumberFormatter>
                                     <label for="Importe">Importe</label>
                                     <div *ngIf="detailTraspasoForm.get('Importe')?.invalid && (detailTraspasoForm.get('Importe')?.['dirty'] || detailTraspasoForm.get('Importe')?.['touched'])"
                                         class="text-danger">
@@ -197,8 +199,9 @@
                                             obligatorio.</div>
                                         <div *ngIf="detailTraspasoForm.get('Importe')?.errors?.['pattern']">Formato
                                             incorrecto. Ej: 123456,23</div>
-                                        <div *ngIf="detailTraspasoForm.get('Importe')?.errors?.['min']">El Importe
-                                            mínimo es 1 €</div>
+                                        <div *ngIf="detailTraspasoForm.get('Importe')?.errors?.['minAmount']">
+                                            El Importe mínimo es de 0,01 €
+                                        </div>
                                     </div>
                                 </span>
                             </div>
@@ -232,7 +235,8 @@
 
                             <div class="field col-6 md:col-6" style="text-align: center;">
                                 <p-button label="Guardar" icon="pi pi-check" severity="success" [raised]="true"
-                                    iconPos="right" [disabled]="detailTraspasoForm.invalid || !detailTraspasoForm.dirty || deshabilitarBoton"
+                                    iconPos="right"
+                                    [disabled]="detailTraspasoForm.invalid || !detailTraspasoForm.dirty || deshabilitarBoton"
                                     type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}">
                                 </p-button>
                             </div>
