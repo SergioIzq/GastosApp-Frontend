@@ -44,7 +44,6 @@ export class ProveedorDetailComponent implements OnInit, OnDestroy {
       Nombre: ['', [Validators.required, Validators.maxLength(100)]],
     });
 
-
     this.detailProveedorForm = this.fb.group({
       Id: [''],
       IdUsuario: [''],
@@ -83,20 +82,24 @@ export class ProveedorDetailComponent implements OnInit, OnDestroy {
             ...proveedor,
           });
           this.originalProveedorData = { ...proveedor };
+          this.loading = false;
         }
       });
 
     this.store.select(ProveedorSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
       this.loading = loading;
+      console.log(loading)
     });
 
     this.error$ = this.store.select(ProveedorSelector.selectErrorCarga);
 
     this.actionsSubject.pipe(filter(action => action.type === 'CreateProveedorSuccess'), takeUntil(this.destroy$))
       .subscribe((action: any) => {
+        this.loading = true;
         this.router.navigate(['proveedores/proveedor-detail', action.proveedor.Item.Id])
         this.isNewProveedor = false;
         this.detailProveedorForm.patchValue(action.Item);
+        
       });
     this.detailProveedorForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.deshabilitarBoton = false;

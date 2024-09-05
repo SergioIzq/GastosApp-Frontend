@@ -23,9 +23,7 @@ export class CategoriaDetailEffects {
       .pipe(
         map(categoria => CategoriaDetailActions.GetCategoriaSuccess({ categoria })),
         catchError((error) => {
-          const errorMessage = this.getErrorMessage(error);
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: errorMessage, life: 5000 });
-          return of(CategoriaDetailActions.GetCategoriaFail({ errorMessage }));
+          return of(CategoriaDetailActions.GetCategoriaFail({ errorMessage: error }));
         })
       )
     )
@@ -40,9 +38,7 @@ export class CategoriaDetailEffects {
           return CategoriaDetailActions.UpdateCategoriaSuccess({ categoria: updatedCategoria });
         }),
         catchError((error) => {
-          const errorMessage = this.getErrorMessage(error);
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: errorMessage, life: 5000 });
-          return of(CategoriaDetailActions.UpdateCategoriaFailure({ errorMessage }));
+          return of(CategoriaDetailActions.UpdateCategoriaFailure({ errorMessage: error }));
         })
       )
     )
@@ -64,39 +60,12 @@ export class CategoriaDetailEffects {
           return CategoriaDetailActions.CreateCategoriaSuccess({ categoria });
         }),
         catchError((error) => {
-          const errorMessage = this.getErrorMessage(error);
 
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: errorMessage,
-            life: 5000
-          });
 
-          return of(CategoriaDetailActions.CreateCategoriaFailure({ errorMessage }));
+          return of(CategoriaDetailActions.CreateCategoriaFailure({ errorMessage: error }));
         })
       )
     ))
   );
 
-
-
-  // Método para obtener el mensaje de error
-  private getErrorMessage(error: any): string {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side or network error
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Backend error
-      if (error.error && typeof error.error === 'string') {
-        errorMessage = error.error;
-      } else if (error.error.message) {
-        errorMessage = error.error.message;
-      } else {
-        errorMessage = `Server returned code: ${error.status}, error message is: ${error.message}`;
-      }
-    }
-    return errorMessage;
-  }
 }

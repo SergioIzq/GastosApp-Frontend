@@ -28,12 +28,16 @@ import { ChartModule } from 'primeng/chart';
 import { PaginatorModule } from 'primeng/paginator';
 import { PasswordModule } from 'primeng/password';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 
 @NgModule({
   exports: [    
     ButtonModule,
     CardModule,
+    SelectButtonModule,
+    ToggleButtonModule,
     PasswordModule,
     DialogModule,
     InputTextModule,

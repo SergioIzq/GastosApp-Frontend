@@ -26,4 +26,4 @@ export const CreateProveedor = createAction('CreateProveedor', props<{ payload: 
 
 export const CreateProveedorSuccess = createAction('CreateProveedorSuccess', props<{ proveedor: ResponseOne<Proveedor> }>());
 
-export const CreateProveedorFailure = createAction('CreateProveedorFail', props<{ errorMessage: string }>());
+export const CreateProveedorFailure = createAction('CreateProveedorFailure', props<{ errorMessage: string }>());

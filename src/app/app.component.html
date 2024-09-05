@@ -1,10 +1,15 @@
-<!-- app.component.html -->
-
 <div class="app">
+    <p-toggleButton 
+        [ngModel]="isDarkMode" 
+        [onLabel]="'Nocturno'" 
+        [offLabel]="'Diurno'" 
+        [onIcon]="isDarkMode ? 'pi pi-moon' : 'pi pi-sun'" 
+        [offIcon]="!isDarkMode ? 'pi pi-sun' : 'pi pi-moon'"
+        (click)="toggleMode()">
+    </p-toggleButton>
+
     <app-menu></app-menu>
-
-    <router-outlet>
-    </router-outlet>
-
+    <router-outlet></router-outlet>
 </div>
+
 <p-toast></p-toast>

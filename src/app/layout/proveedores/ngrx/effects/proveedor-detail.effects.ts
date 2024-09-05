@@ -66,37 +66,11 @@ export class ProveedorDetailEffects extends BaseService {
           return ProveedorDetailActions.CreateProveedorSuccess({ proveedor });
         }),
         catchError((error) => {
-          const errorMessage = this.getErrorMessage(error);
 
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: errorMessage,
-            life: 5000
-          });
-
-          return of(ProveedorDetailActions.CreateProveedorFailure({ errorMessage }));
+          return of(ProveedorDetailActions.CreateProveedorFailure({ errorMessage: error }));
         })
       )
     ))
   );
 
-  // Método para obtener el mensaje de error
-  private getErrorMessage(error: any): string {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side or network error
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Backend error
-      if (error.error && typeof error.error === 'string') {
-        errorMessage = error.error;
-      } else if (error.error.message) {
-        errorMessage = error.error.message;
-      } else {
-        errorMessage = `Server returned code: ${error.status}, error message is: ${error.message}`;
-      }
-    }
-    return errorMessage;
-  }
 }

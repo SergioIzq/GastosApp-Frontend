@@ -2,7 +2,6 @@
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
 
-
 app-menu {
     margin: 20px;
     width: 300px;
@@ -79,37 +78,35 @@ app-menu {
 
 @media screen and (max-width: 960px) {
     :host ::ng-deep {
-        .p-datatable {
-            &.p-datatable-customers {
+        .p-datatable.p-datatable-customers {
 
-                .p-datatable-thead>tr>th,
-                .p-datatable-tfoot>tr>td {
-                    display: none !important;
-                }
+            .p-datatable-thead>tr>th,
+            .p-datatable-tfoot>tr>td {
+                display: none !important;
+            }
 
-                .p-datatable-tbody>tr {
-                    border-bottom: 1px solid var(--layer-2);
+            .p-datatable-tbody>tr {
+                border-bottom: 1px solid var(--layer-2);
 
-                    >td {
-                        text-align: left;
+                >td {
+                    text-align: left;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    border: 0 none;
+
+                    .p-column-title {
+                        min-width: 30%;
+                        display: inline-block;
+                        font-weight: bold;
+                    }
+
+                    p-progressbar {
                         width: 100%;
-                        display: flex;
-                        align-items: center;
-                        border: 0 none;
+                    }
 
-                        .p-column-title {
-                            min-width: 30%;
-                            display: inline-block;
-                            font-weight: bold;
-                        }
-
-                        p-progressbar {
-                            width: 100%;
-                        }
-
-                        &:last-child {
-                            border-bottom: 1px solid var(--surface-d);
-                        }
+                    &:last-child {
+                        border-bottom: 1px solid var(--surface-d);
                     }
                 }
             }
@@ -120,9 +117,7 @@ app-menu {
     .p-button {
         margin-bottom: 10px;
     }
-
 }
-
 
 .text-danger {
     font-size: 13px;
@@ -137,10 +132,205 @@ app-menu {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    background: rgba(0, 0, 0, 0.5);
+    /* Fondo semitransparente */
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
-  }
-  
+    z-index: 1000;
+    /* Asegúrate de que esté por encima de otros elementos */
+}
+
+/* Estilos generales */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Estilos por defecto (modo diurno) */
+body {
+    background-color: white;
+    color: black;
+}
+
+body .table {
+    background-color: white;
+    color: black;
+    border-collapse: collapse;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body .table th,
+body .table td {
+    border: 1px solid #ddd;
+    transition: border 0.3s ease;
+}
+
+/* Estilos por defecto para el menú */
+.p-menubar {
+    background-color: #ffffff;
+    transition: background-color 0.3s ease;
+}
+
+.p-menuitem-link {
+    color: #000000;
+    transition: color 0.3s ease;
+}
+
+.p-menuitem-link:hover {
+    background-color: #f0f0f0;
+    transition: background-color 0.3s ease;
+}
+
+.p-badge {
+    background-color: #007ad9;
+    color: #ffffff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Estilos para el modo nocturno */
+/* Estilos para el modo nocturno */
+body.dark-mode {
+    background-color: black !important;
+    color: white !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode .table {
+    background-color: #333 !important;
+    color: white !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode .table th,
+body.dark-mode .table td {
+    border: 1px solid #555 !important;
+    transition: border 0.3s ease;
+}
+
+/* Estilos para el modo nocturno */
+body.dark-mode {
+    background-color: black !important;
+    color: white !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Estilos para .p-datatable-header, .ng-star-inserted y .p-datatable-wrapper en modo nocturno */
+body.dark-mode .p-datatable-header,
+body.dark-mode,
+body.dark-mode .p-datatable-wrapper,
+body.dark-mode thead,
+body.dark-mode .p-datatable-thead {
+    background-color: #333 !important;
+    /* Fondo oscuro */
+    color: white !important;
+    /* Texto blanco */
+    border-color: #555 !important;
+    /* Borde oscuro */
+}
+
+/* Estilos para las tablas en modo nocturno */
+body.dark-mode table {
+    background-color: #333 !important;
+    color: white !important;
+    border-collapse: collapse;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Estilos específicos para las celdas en modo nocturno */
+body.dark-mode table th,
+body.dark-mode table td {
+    border: 1px solid #555 !important;
+    transition: border 0.3s ease;
+}
+
+body.dark-mode table td,th{
+    background-color: #222 !important;
+    /* Fondo más oscuro para las celdas */
+    color: white !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Estilos para p-paginator en modo nocturno */
+body.dark-mode .p-paginator {
+    background-color: #333 !important;
+    color: white !important;
+
+}
+
+/* Estilos para la barra de menú y otros componentes en modo nocturno */
+body.dark-mode .p-menubar {
+    background-color: #333 !important;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .p-menuitem-link {
+    color: #ffffff !important;
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .p-menuitem-link:hover {
+    background-color: #444 !important;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .p-badge {
+    background-color: #555 !important;
+    color: #ffffff !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Estilos para la barra de menú en modo nocturno */
+body.dark-mode .p-menubar .p-submenu,
+body.dark-mode .p-menubar .p-menuitem {
+    background-color: #333 !important;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .p-menubar .p-menuitem-link {
+    color: #ffffff !important;
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .p-menubar .p-menuitem-link:hover {
+    background-color: #444 !important;
+    transition: background-color 0.3s ease;
+}
+
+/* Estilos para labels en modo nocturno */
+body.dark-mode label {
+    color: white !important;
+    /* Texto blanco */
+}
+
+/* Estilos para el modo nocturno */
+body.dark-mode {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Estilos para el contenedor de la tarjeta */
+body.dark-mode .card .p-fieldset{
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #333 !important;
+}
+
+/* Estilos para el alert de error */
+body.dark-mode .alert.alert-danger {
+    background-color: #b71c1c !important;
+    color: white !important;
+    border-color: #d32f2f !important;
+}
+
+/* Estilos para los campos del formulario */
+body.dark-mode .p-float-label input {
+    background-color: #333 !important;
+    color: #e0e0e0 !important;
+    border-color: #555 !important;
+}
+
+/* Estilos para los mensajes de error */
+body.dark-mode .text-danger {
+    color: #f44336 !important;
+}

@@ -66,37 +66,12 @@ export class ClienteDetailEffects extends BaseService {
           return ClienteDetailActions.CreateClienteSuccess({ cliente });
         }),
         catchError((error) => {
-          const errorMessage = this.getErrorMessage(error);
 
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: errorMessage,
-            life: 5000
-          });
-
-          return of(ClienteDetailActions.CreateClienteFailure({ errorMessage }));
+          return of(ClienteDetailActions.CreateClienteFailure({ errorMessage:error }));
         })
       )
     ))
   );
 
-  // Método para obtener el mensaje de error
-  private getErrorMessage(error: any): string {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side or network error
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Backend error
-      if (error.error && typeof error.error === 'string') {
-        errorMessage = error.error;
-      } else if (error.error.message) {
-        errorMessage = error.error.message;
-      } else {
-        errorMessage = `Server returned code: ${error.status}, error message is: ${error.message}`;
-      }
-    }
-    return errorMessage;
-  }
+
 }
