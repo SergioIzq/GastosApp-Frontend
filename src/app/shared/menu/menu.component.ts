@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { ActionsSubject, Store } from '@ngrx/store';
 import { selectIsAuthenticated, selectUserId } from '../auth/ngrx/auth.selectors';
 import * as MenuActions from '../menu/ngrx/actions/menu.actions';
@@ -17,7 +17,9 @@ import { Usuario } from '../models/entidades/usuario.model';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit, OnDestroy {
-
+  private isDarkModeSubject = new BehaviorSubject<boolean>(false);
+  isDarkMode$ = this.isDarkModeSubject.asObservable();
+  isDarkMode: boolean = false;
   isSidebarOpen$!: Observable<boolean>;
   items!: MenuItem[];
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -65,6 +67,15 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.logout();
       });
 
+    // Recuperar el modo guardado en localStorage
+    const savedMode = localStorage.getItem('selectedMode');
+    this.isDarkMode = savedMode === 'night';
+    this.isDarkModeSubject.next(this.isDarkMode);
+
+    // Suscribirse a los cambios en el estado del modo
+    this.isDarkMode$.subscribe(isDark => {
+      this.applyMode(isDark);
+    });
   }
 
   ngOnDestroy(): void {
@@ -120,5 +131,25 @@ export class MenuComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(AuthActions.logout());
     this.router.navigate(['auth/login']);
+  }
+
+  // Método que se llama cuando se cambia el modo
+  toggleMode() {
+    this.isDarkMode = !this.isDarkMode;
+    this.isDarkModeSubject.next(this.isDarkMode);
+    // Guardar el modo en localStorage
+    localStorage.setItem('selectedMode', this.isDarkMode ? 'night' : 'day');
+  }
+
+  // Método que aplica el modo diurno o nocturno
+  applyMode(isDark: boolean) {
+    if (isDark) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+      document.body.offsetHeight; // Forzar repaint
+
+
+    }
   }
 }

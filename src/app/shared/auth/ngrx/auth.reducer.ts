@@ -16,8 +16,7 @@ const authReducer = createReducer(
     ...state,
     loading: true
   })),
-  on(AuthActions.loginSuccess, (state, { token }) => {
-    localStorage.setItem('token', token.token);
+  on(AuthActions.loginSuccess, (state, { token }) => {    
     return {
       ...state,
       token: token.token,

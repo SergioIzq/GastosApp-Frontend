@@ -16,5 +16,5 @@ export class Ingreso {
     Fecha!: Date;
     Descripcion!:string;
     IdUsuario!: number;
-
+    FechaCreacion!: Date;
 }

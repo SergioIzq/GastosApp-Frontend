@@ -3,7 +3,6 @@ import { CanActivate, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { AuthState } from '../models/entidades/estados/authState.model';
 import { selectIsAuthenticated } from '../auth/ngrx/auth.selectors';
 import { AppState } from '../../app.state';
 

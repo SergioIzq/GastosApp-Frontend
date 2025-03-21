@@ -1,49 +1,11 @@
+/* Estilos generales para la app */
 .app {
     max-width: 1500px;
     margin: 0 auto;
 }
 
-
-
-/* Estilos adicionales para otros elementos si es necesario */
+/* Contenedor */
 .container {
     padding: 20px;
     text-align: center;
-}
-
-/* Estilos para el botón de alternancia del modo diurno/nocturno */
-.p-togglebutton {
-    margin: 1rem;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.p-togglebutton .p-button {
-    border-radius: 5px;
-    font-size: 0.875rem;
-    padding: 0.5rem 1rem;
-}
-
-.p-togglebutton .p-button-on {
-    background-color: #333 !important; /* Fondo oscuro cuando está activado */
-    color: #fff !important; /* Texto blanco cuando está activado */
-}
-
-.p-togglebutton .p-button-off {
-    background-color: #fff !important; /* Fondo claro cuando está desactivado */
-    color: #333 !important; /* Texto oscuro cuando está desactivado */
-}
-
-.p-togglebutton .p-button-on .p-button-icon {
-    color: #fff !important; /* Iconos blancos cuando está activado */
-}
-
-.p-togglebutton .p-button-off .p-button-icon {
-    color: #333 !important; /* Iconos oscuros cuando está desactivado */
-}
-
-.p-togglebutton .p-button:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    transition: box-shadow 0.3s ease;
 }

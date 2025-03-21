@@ -7,7 +7,7 @@
             <p-table #dt [value]="transformedData" dataKey="Id" [rowHover]="true" [rows]="10"
                 [totalRecords]="totalRecords" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
                 [loading]="loading" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} gastos"
-                [filterDelay]="0"
+                [filterDelay]="0" [sortField]="'Fecha'" [sortOrder]="-1"
                 [globalFilterFields]="['Importe', 'FormaPago','Concepto','CategoriaNombre','Proveedor','Descripcion','Fecha','Cuenta','Persona']">
 
                 <ng-template pTemplate="caption">
@@ -200,7 +200,7 @@
                         <td>{{ gasto.CategoriaNombre }}</td>
                         <td>{{ gasto.Concepto }}</td>
                         <td>{{ gasto.Cuenta }}</td>
-                        <td style="color: red;">-{{ gasto.Importe | currency: 'EUR'}}</td>
+                        <td style="color: red !important;">-{{ gasto.Importe | currency: 'EUR'}}</td>
                         <td>
                             <p-button pRipple icon="pi pi-pencil" class="mr-2 rounded-button" [rounded]="true"
                                 [outlined]="true" severity="success"

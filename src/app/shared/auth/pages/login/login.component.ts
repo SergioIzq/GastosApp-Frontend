@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActionsSubject, Store, select } from '@ngrx/store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,13 +6,14 @@ import { filter, Observable, Subject, takeUntil } from 'rxjs';
 import * as AuthActions from '../../ngrx/auth.actions';
 import { selectAuthError, selectAuthLoading } from '../../ngrx/auth.selectors';
 import { AppState } from 'src/app/app.state';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   loading: boolean = false;
   error$: Observable<string | null>;
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private store: Store<AppState>,
     private router: Router,
-    private actionsSubject: ActionsSubject
+    private actionsSubject: ActionsSubject,
+    private authService: AuthService // Inyectamos AuthService para manejar el token
   ) {
     this.loginForm = this.fb.group({
       Correo: ['', [Validators.required, Validators.email]],
@@ -34,14 +36,13 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.actionsSubject.pipe(filter(action => action.type == '[Auth] Login Success'))
+    this.actionsSubject.pipe(filter(action => action.type === '[Auth] Login Success'))
       .subscribe((action: any) => {
-        this.router.navigate(['/home'])
+        if (action.token) {
+          this.authService.setToken(action.token.token); // Guarda el token y activa el temporizador
+        }
+        this.router.navigate(['/home']);
       });
-
-    this.loginForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.deshabilitarBoton = false;
-    });
 
     this.loginForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.deshabilitarBoton = false;
@@ -51,7 +52,6 @@ export class LoginComponent implements OnInit {
       this.loading = loading;
     });
   }
-
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
@@ -65,6 +65,4 @@ export class LoginComponent implements OnInit {
       this.deshabilitarBoton = true;
     }
   }
-
-
 }

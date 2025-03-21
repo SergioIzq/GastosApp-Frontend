@@ -88,7 +88,6 @@ export class ProveedorDetailComponent implements OnInit, OnDestroy {
 
     this.store.select(ProveedorSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
       this.loading = loading;
-      console.log(loading)
     });
 
     this.error$ = this.store.select(ProveedorSelector.selectErrorCarga);

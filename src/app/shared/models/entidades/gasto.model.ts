@@ -16,4 +16,5 @@ export class Gasto {
     Fecha!: Date;
     Descripcion!:string;
     IdUsuario!: number;
+    FechaCreacion!: Date;
 }

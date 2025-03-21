@@ -3,4 +3,5 @@ export class Categoria {
     Nombre!: string;
     Descripcion!: string;
     IdUsuario!: number;
+    FechaCreacion!: Date;
 }

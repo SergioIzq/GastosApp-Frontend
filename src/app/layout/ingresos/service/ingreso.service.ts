@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { Ingreso } from 'src/app/shared/models/entidades/ingreso.model';
 import { HttpParams } from '@angular/common/http';
 import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
-import { BaseService } from 'src/app/shared/service/base-service.service';
 import { ResponseOne } from 'src/app/shared/models/entidades/responseOne.model';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
 import { Persona } from 'src/app/shared/models/entidades/persona.model';
@@ -18,7 +17,7 @@ import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 })
 export class IngresoService {
 
-  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
+  apiUrl = 'https://gastosapp-backend.onrender.com/api/';  
 
   constructor(private http: HttpClient) { }
 

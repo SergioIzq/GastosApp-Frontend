@@ -5,4 +5,5 @@ export class Concepto {
     Nombre!: string;
     Categoria!: Categoria;
     IdUsuario!: number;
+    FechaCreacion!: Date;
 }

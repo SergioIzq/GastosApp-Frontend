@@ -113,7 +113,6 @@ app-menu {
         }
     }
 
-    /* Agrega espacio entre los botones en dispositivos móviles */
     .p-button {
         margin-bottom: 10px;
     }
@@ -133,12 +132,10 @@ app-menu {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    /* Fondo semitransparente */
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    /* Asegúrate de que esté por encima de otros elementos */
 }
 
 /* Estilos generales */
@@ -153,9 +150,9 @@ body {
 }
 
 body .table {
-    background-color: white;
-    color: black;
-    border-collapse: collapse;
+    background-color: #555 !important;
+    color: black !important;
+    border: none !important;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -176,11 +173,6 @@ body .table td {
     transition: color 0.3s ease;
 }
 
-.p-menuitem-link:hover {
-    background-color: #f0f0f0;
-    transition: background-color 0.3s ease;
-}
-
 .p-badge {
     background-color: #007ad9;
     color: #ffffff;
@@ -188,9 +180,8 @@ body .table td {
 }
 
 /* Estilos para el modo nocturno */
-/* Estilos para el modo nocturno */
 body.dark-mode {
-    background-color: black !important;
+    background-color: #555 !important;
     color: white !important;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -201,63 +192,55 @@ body.dark-mode .table {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-body.dark-mode .table th,
-body.dark-mode .table td {
-    border: 1px solid #555 !important;
-    transition: border 0.3s ease;
-}
-
-/* Estilos para el modo nocturno */
-body.dark-mode {
-    background-color: black !important;
+body.dark-mode table td,
+th {
+    background-color: #333 !important;
+    border-collapse: collapse;
     color: white !important;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Estilos para .p-datatable-header, .ng-star-inserted y .p-datatable-wrapper en modo nocturno */
+body:not(.dark-mode) table th {
+    background-color: #f8f9fa !important;
+    color: #343a40 !important;
+    font-weight: 700;
+}
+
+body:not(.dark-mode) table th {
+    background-color: #f8f9fa !important;
+    color: #343a40 !important;
+    font-weight: 700;
+}
+
+body:not(.dark-mode) .p-datepicker-calendar {
+    background-color: #f8f9fa !important;
+    color: #343a40 !important;
+    border-collapse: collapse;
+}
+
+body:not(.dark-mode) .p-datepicker-calendar-container {
+    background-color: #f8f9fa !important;
+    color: #343a40 !important;
+    border: none;
+}
+
 body.dark-mode .p-datatable-header,
 body.dark-mode,
 body.dark-mode .p-datatable-wrapper,
 body.dark-mode thead,
 body.dark-mode .p-datatable-thead {
     background-color: #333 !important;
-    /* Fondo oscuro */
     color: white !important;
-    /* Texto blanco */
     border-color: #555 !important;
-    /* Borde oscuro */
+    border-radius: 0px;
 }
 
-/* Estilos para las tablas en modo nocturno */
-body.dark-mode table {
-    background-color: #333 !important;
-    color: white !important;
-    border-collapse: collapse;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Estilos específicos para las celdas en modo nocturno */
-body.dark-mode table th,
-body.dark-mode table td {
-    border: 1px solid #555 !important;
-    transition: border 0.3s ease;
-}
-
-body.dark-mode table td,th{
-    background-color: #222 !important;
-    /* Fondo más oscuro para las celdas */
-    color: white !important;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Estilos para p-paginator en modo nocturno */
 body.dark-mode .p-paginator {
     background-color: #333 !important;
     color: white !important;
-
+    border-radius: 0px 0px 8px 8px;
 }
 
-/* Estilos para la barra de menú y otros componentes en modo nocturno */
 body.dark-mode .p-menubar {
     background-color: #333 !important;
     transition: background-color 0.3s ease;
@@ -266,11 +249,6 @@ body.dark-mode .p-menubar {
 body.dark-mode .p-menuitem-link {
     color: #ffffff !important;
     transition: color 0.3s ease;
-}
-
-body.dark-mode .p-menuitem-link:hover {
-    background-color: #444 !important;
-    transition: background-color 0.3s ease;
 }
 
 body.dark-mode .p-badge {
@@ -291,26 +269,18 @@ body.dark-mode .p-menubar .p-menuitem-link {
     transition: color 0.3s ease;
 }
 
-body.dark-mode .p-menubar .p-menuitem-link:hover {
-    background-color: #444 !important;
+/* body.dark-mode .p-menubar .p-menuitem-link:hover {
+    background-color: #2b2b2b !important;
     transition: background-color 0.3s ease;
-}
+} */
 
 /* Estilos para labels en modo nocturno */
 body.dark-mode label {
     color: white !important;
-    /* Texto blanco */
-}
-
-/* Estilos para el modo nocturno */
-body.dark-mode {
-    background-color: #121212 !important;
-    color: #e0e0e0 !important;
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Estilos para el contenedor de la tarjeta */
-body.dark-mode .card .p-fieldset{
+body.dark-mode .card .p-fieldset {
     background-color: #1e1e1e !important;
     color: #e0e0e0 !important;
     border: 1px solid #333 !important;
@@ -333,4 +303,105 @@ body.dark-mode .p-float-label input {
 /* Estilos para los mensajes de error */
 body.dark-mode .text-danger {
     color: #f44336 !important;
+}
+
+body.dark-mode .p-inputwrapper {
+    background-color: #333 !important;
+    border-color: #555 !important;
+}
+
+body.dark-mode .p-inputtext {
+    color: white;
+}
+
+body.dark-mode .p-fieldset-legend {
+    background-color: #333 !important;
+    border-color: #555 !important;
+    color: white;
+}
+
+body.dark-mode table td {
+    border: 1px solid #555 !important;
+    border-radius: 0px;
+}
+
+body.dark-mode table th {
+    border-radius: 0px;
+}
+
+table th {
+    border: none !important;
+}
+
+table td {
+    border: 1px solid #dee2e6 !important;
+}
+
+.p-datepicker-calendar th,
+.p-datepicker-calendar td {
+    border: none !important;
+}
+
+body.dark-mode .p-menubar ul .p-menuitem-link {
+    background-color: #333 !important;
+    color: white !important;
+}
+
+body.dark-mode .p-menubar ul .p-menuitem-link:focus,
+body.dark-mode .p-menubar ul .p-menuitem-link:active {
+    background-color: #333 !important;
+    color: #00bcd4 !important;    
+}
+
+body.dark-mode .p-menubar ul .p-menuitem-link:hover {
+    background-color: #444 !important;
+    color: #00bcd4 !important;    
+}
+
+body.dark-mode ul {
+    background-color: #333 !important;
+}
+
+body.dark-mode .p-card-body{
+    background-color: #444;
+}
+
+body.dark-mode .card h2{
+    color: white;
+}
+
+body.dark-mode .p-list-group li{
+    background-color: #444;
+    color: white;
+}
+
+body.dark-mode .p-datepicker{
+    background-color: #444 !important;
+    color: white !important;
+}
+
+body.dark-mode td span:focus,
+body.dark-mode td span:focus:active {
+    background-color: #333 !important;
+    color: #00bcd4 !important;    
+}
+
+body.dark-mode td span:hover {
+    background-color: #333;
+    background-color: #444 !important;
+    color: #00bcd4 !important;    
+}
+
+body.dark-mode .p-datepicker table td.p-datepicker-today > span{
+    background-color: #8b8b8b !important;
+}
+
+body.dark-mode .p-datepicker-header{
+    background-color: #444 !important;
+    color: white !important;
+}
+
+body.dark-mode .p-datepicker-title > button{
+    background-color: #444 !important;
+    color: white !important;
 }

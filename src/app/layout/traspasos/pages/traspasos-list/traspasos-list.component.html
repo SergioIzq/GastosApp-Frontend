@@ -4,10 +4,10 @@
     </div>
     <div class="p-col-12 p-sm-6">
         <div class="card">
-            <p-table #dt [value]="transformedData" dataKey="id" [pageLinks]="5" [rowHover]="true" [rows]="10"
+            <p-table #dt [value]="transformedData" dataKey="Fecha" [pageLinks]="5" [rowHover]="true" [rows]="10"
                 [totalRecords]="totalRecords" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
                 [loading]="loading" [filterDelay]="0"
-                [globalFilterFields]="['Fecha','CuentaOrigen', 'CuentaDestino','SaldoCuentaOrigen','SaldoCuentaDestino','Importe','Descripcion']">
+                [globalFilterFields]="['Fecha','CuentaOrigen', 'CuentaDestino','SaldoCuentaOrigen','SaldoCuentaDestino','Importe','Descripcion']" [sortField]="'FechaCreacion'" [sortOrder]="-1">
 
                 <ng-template pTemplate="caption">
                     <div class="grid datatable-header"

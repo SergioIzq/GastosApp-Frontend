@@ -3,4 +3,5 @@ export class Cuenta {
     Nombre!: string;
     Saldo!: number;
     IdUsuario!: number;
+    FechaCreacion!: Date;
 }

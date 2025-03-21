@@ -6,7 +6,7 @@
         <div class="card">
             <p-table #dt [value]="respuesta.Items" dataKey="id" [rowHover]="true" [rows]="10"
                 [totalRecords]="respuesta.TotalRecords" [showCurrentPageReport]="true"
-                [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
+                [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [sortField]="'FechaCreacion'" [sortOrder]="-1"
                 [globalFilterFields]="['Nombre', 'Descripcion']">
 
                 <ng-template pTemplate="caption">

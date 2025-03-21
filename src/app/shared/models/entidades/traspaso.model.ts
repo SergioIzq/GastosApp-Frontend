@@ -10,4 +10,5 @@ export class Traspaso {
     SaldoCuentaOrigen!: number;
     SaldoCuentaDestino!: number;
     IdUsuario!: number;
+    FechaCreacion!: Date;
 }
