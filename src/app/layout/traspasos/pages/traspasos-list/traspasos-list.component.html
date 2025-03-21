@@ -168,14 +168,14 @@
                     <tr>
                         <td>{{ traspaso.Fecha }}</td>
                         <td>{{ traspaso.CuentaOrigen }}</td>
-                        <td [style.color]="traspaso.SaldoCuentaOrigen > 0 ? 'green' : 'red'">
+                        <td [style.color]="traspaso.SaldoCuentaOrigen > 0 ? 'green !important' : 'red !important'">
                             {{ traspaso.SaldoCuentaOrigen | currency:'EUR'}}
                         </td>
                         <td>{{ traspaso.CuentaDestino }}</td>
-                        <td [style.color]="traspaso.SaldoCuentaDestino > 0 ? 'green' : 'red'">
+                        <td [style.color]="traspaso.SaldoCuentaDestino > 0 ? 'green !important' : 'red !important'">
                             {{ traspaso.SaldoCuentaDestino | currency:'EUR'}}
                         </td>
-                        <td [style.color]="traspaso.Importe >= 0 ? 'green' : 'red'">
+                        <td [style.color]="traspaso.Importe >= 0 ? 'green !important' : 'red !important'">
                             {{ traspaso.Importe > 0 ? '+' : '' }}{{ traspaso.Importe | currency:'EUR'}}
                         </td>
                         <td>{{ traspaso.Descripcion }}</td>

@@ -350,32 +350,32 @@ body.dark-mode .p-menubar ul .p-menuitem-link {
 body.dark-mode .p-menubar ul .p-menuitem-link:focus,
 body.dark-mode .p-menubar ul .p-menuitem-link:active {
     background-color: #333 !important;
-    color: #00bcd4 !important;    
+    color: #00bcd4 !important;
 }
 
 body.dark-mode .p-menubar ul .p-menuitem-link:hover {
     background-color: #444 !important;
-    color: #00bcd4 !important;    
+    color: #00bcd4 !important;
 }
 
 body.dark-mode ul {
     background-color: #333 !important;
 }
 
-body.dark-mode .p-card-body{
+body.dark-mode .p-card-body {
     background-color: #444;
 }
 
-body.dark-mode .card h2{
+body.dark-mode .card h2 {
     color: white;
 }
 
-body.dark-mode .p-list-group li{
+body.dark-mode .p-list-group li {
     background-color: #444;
     color: white;
 }
 
-body.dark-mode .p-datepicker{
+body.dark-mode .p-datepicker {
     background-color: #444 !important;
     color: white !important;
 }
@@ -383,25 +383,58 @@ body.dark-mode .p-datepicker{
 body.dark-mode td span:focus,
 body.dark-mode td span:focus:active {
     background-color: #333 !important;
-    color: #00bcd4 !important;    
+    color: #00bcd4 !important;
 }
 
 body.dark-mode td span:hover {
     background-color: #333;
     background-color: #444 !important;
-    color: #00bcd4 !important;    
+    color: #00bcd4 !important;
 }
 
-body.dark-mode .p-datepicker table td.p-datepicker-today > span{
+body.dark-mode .p-datepicker table td.p-datepicker-today>span {
     background-color: #8b8b8b !important;
 }
 
-body.dark-mode .p-datepicker-header{
+body.dark-mode .p-datepicker-header {
     background-color: #444 !important;
     color: white !important;
 }
 
-body.dark-mode .p-datepicker-title > button{
+body.dark-mode .p-datepicker-title>button {
+    background-color: #444 !important;
+    color: white !important;
+}
+
+
+body.dark-mode .p-dropdown li:focus,
+body.dark-mode .p-dropdown li:focus:active body.dark-mode .p-dropdown li .p-highlight,
+body.dark-mode .p-dropdown li:focus-within {
+    color: #00bcd4 !important;
+    background-color: #444 !important;
+}
+
+body.dark-mode .p-dropdown li:hover {
+    color: #00bcd4 !important;
+    background-color: #444 !important;
+}
+
+body.dark-mode .p-dropdown-item div {
+    color: white !important;
+}
+
+body.dark-mode .p-dropdown-header {
+    background-color: #444 !important;
+    color: white !important;
+    border-bottom: 0 !important;
+}
+
+body.dark-mode ul li {
+    background-color: #333 !important;
+    color: white !important;
+}
+
+body.dark-mode ul .p-highlight {
     background-color: #444 !important;
     color: white !important;
 }
