@@ -59,7 +59,7 @@ export class ProveedorDetailEffects extends BaseService {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Proveedor creada correctamente',
+            detail: 'Proveedor creado correctamente',
             life: 5000
           });
 
