@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Observable, takeUntil, of, switchMap } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
@@ -10,11 +10,13 @@ import * as CategoriaSelector from '../../ngrx/selectors/categoria-detail.select
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-categoria-detail',
   templateUrl: './categoria-detail.component.html',
-  styleUrls: ['./categoria-detail.component.css']
+  styleUrls: ['./categoria-detail.component.css'],
+  providers: [MessageService, ConfirmationService]
 })
 export class CategoriaDetailComponent implements OnInit, OnDestroy {
 
@@ -29,6 +31,7 @@ export class CategoriaDetailComponent implements OnInit, OnDestroy {
   newCategoriaForm!: FormGroup;
   IdUsuario!: number;
   deshabilitarBoton: boolean = false;
+  private _confirmationService: ConfirmationService = inject(ConfirmationService);
 
   constructor(
     private store: Store<AppState>,
@@ -113,20 +116,55 @@ export class CategoriaDetailComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  onSubmit() {
+onSubmit() {
     const formValue = this.isNewCategoria ? this.newCategoriaForm.value : this.detailCategoriaForm.value;
     formValue.IdUsuario = this.IdUsuario;
+
     if (this.isNewCategoria) {
-      const newCategoriaData = { ...formValue };
-      this.store.dispatch(CategoriaDetailActions.CreateCategoria({ payload: newCategoriaData }));
-      this.deshabilitarBoton = true;
+      this.showConfirmation('create', formValue);
     } else {
-      const updatedCategoriaData = { ...formValue };
-      updatedCategoriaData.Id = this.originalCategoriaData.Id;
-      this.store.dispatch(CategoriaDetailActions.UpdateCategoria({ categoria: updatedCategoriaData }));
-      this.detailCategoriaForm.markAsPristine();
-      this.deshabilitarBoton = true;
+      this.showConfirmation('edit', formValue);
     }
+  }
+
+  // Método privado para mostrar el modal de confirmación
+  private showConfirmation(actionType: string, formValue: any) {
+    const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
+    const detailMessage = actionType === 'create'
+      ? '¿Está seguro que desea crear este registro?'
+      : '¿Está seguro que desea editar este registro?';
+
+    this._confirmationService.confirm({
+      message: detailMessage,
+      header: headerMessage,
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        // Acción confirmada, proceder con el envío del formulario
+        if (actionType === 'create') {
+          this.createCategoria(formValue);
+        } else {
+          this.updateCategoria(formValue);
+        }
+      }
+    });
+  }
+
+  private createCategoria(formValue: any) {
+    const newCategoriaData = { ...formValue };
+    this.store.dispatch(CategoriaDetailActions.CreateCategoria({ payload: newCategoriaData }));
+    this.deshabilitarBoton = true;
+  }
+
+  private updateCategoria(formValue: any) {
+    const updatedCategoriaData = { ...formValue };
+    updatedCategoriaData.Id = this.originalCategoriaData.Id;
+    this.store.dispatch(CategoriaDetailActions.UpdateCategoria({ categoria: updatedCategoriaData }));
+    this.detailCategoriaForm.markAsPristine();
+    this.deshabilitarBoton = true;
   }
 
   goBack(): void {

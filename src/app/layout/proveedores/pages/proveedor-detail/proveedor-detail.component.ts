@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Observable, takeUntil, of, switchMap } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Proveedor } from 'src/app/shared/models/entidades/proveedor.model';
@@ -10,11 +10,13 @@ import * as ProveedorSelector from '../../ngrx/selectors/proveedor-detail.select
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-proveedor-detail',
   templateUrl: './proveedor-detail.component.html',
-  styleUrls: ['./proveedor-detail.component.css']
+  styleUrls: ['./proveedor-detail.component.css'],
+  providers: [ConfirmationService, MessageService]
 })
 export class ProveedorDetailComponent implements OnInit, OnDestroy {
 
@@ -30,6 +32,7 @@ export class ProveedorDetailComponent implements OnInit, OnDestroy {
   selectedOption!: string;
   idUsuario!: number;
   deshabilitarBoton: boolean = false;
+  private _confirmationService: ConfirmationService = inject(ConfirmationService);
 
   constructor(
     private store: Store<AppState>,
@@ -119,16 +122,52 @@ export class ProveedorDetailComponent implements OnInit, OnDestroy {
     formValue.IdUsuario = this.idUsuario;
 
     if (this.isNewProveedor) {
-      const newProveedorData = { ...formValue };
-      this.store.dispatch(ProveedorDetailActions.CreateProveedor({ payload: newProveedorData }));
-      this.deshabilitarBoton = true;
+      this.showConfirmation('create', formValue);
     } else {
-      const updatedProveedorData = { ...formValue };
-      updatedProveedorData.Id = this.originalProveedorData.Id;
-      this.store.dispatch(ProveedorDetailActions.UpdateProveedor({ proveedor: updatedProveedorData }));
-      this.detailProveedorForm.markAsPristine();
-      this.deshabilitarBoton = true;
+      this.showConfirmation('edit', formValue);
     }
+  }
+
+  // Método privado para mostrar el modal de confirmación
+  private showConfirmation(actionType: string, formValue: any) {    
+    const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
+    const detailMessage = actionType === 'create'
+      ? '¿Está seguro que desea crear este registro?'
+      : '¿Está seguro que desea editar este registro?';
+
+    this._confirmationService.confirm({
+      message: detailMessage,
+      header: headerMessage,
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        // Acción confirmada, proceder con el envío del formulario
+        if (actionType === 'create') {
+          this.createProveedor(formValue);
+        } else {
+          this.updateProveedor(formValue);
+        }
+      }
+    });
+  }
+
+  // Método privado para crear el proveedor
+  private createProveedor(formValue: any) {
+    const newProveedorData = { ...formValue };
+    this.store.dispatch(ProveedorDetailActions.CreateProveedor({ payload: newProveedorData }));
+    this.deshabilitarBoton = true;
+  }
+
+  // Método privado para actualizar el proveedor
+  private updateProveedor(formValue: any) {
+    const updatedProveedorData = { ...formValue };
+    updatedProveedorData.Id = this.originalProveedorData.Id;
+    this.store.dispatch(ProveedorDetailActions.UpdateProveedor({ proveedor: updatedProveedorData }));
+    this.detailProveedorForm.markAsPristine();
+    this.deshabilitarBoton = true;
   }
 
   goBack(): void {

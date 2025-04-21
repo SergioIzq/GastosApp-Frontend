@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Observable, takeUntil, of, switchMap } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
@@ -10,11 +10,13 @@ import * as CuentaSelector from '../../ngrx/selectors/cuenta-detail.selectors';
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-cuenta-detail',
   templateUrl: './cuenta-detail.component.html',
-  styleUrls: ['./cuenta-detail.component.css']
+  styleUrls: ['./cuenta-detail.component.css'],
+  providers: [MessageService, ConfirmationService]
 })
 export class CuentaDetailComponent implements OnInit, OnDestroy {
 
@@ -30,6 +32,7 @@ export class CuentaDetailComponent implements OnInit, OnDestroy {
   selectedOption!: string;
   idUsuario!: number;
   deshabilitarBoton: boolean = false;
+  private _confirmationService: ConfirmationService = inject(ConfirmationService);
 
   constructor(
     private store: Store<AppState>,
@@ -113,37 +116,58 @@ export class CuentaDetailComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    // Obtén el valor del formulario basado en si es una nueva cuenta o una cuenta existente
     const formValue = this.isNewCuenta ? this.newCuentaForm.value : this.detailCuentaForm.value;
     formValue.IdUsuario = this.idUsuario;
 
-    // Crea un nuevo objeto con el Saldo formateado
-    const formattedFormValue = {
-      ...formValue,
-    };
-
     if (this.isNewCuenta) {
-      const newCuentaData = { ...formattedFormValue };
-      this.store.dispatch(CuentaDetailActions.CreateCuenta({ payload: newCuentaData }));
-      this.deshabilitarBoton = true;
+      this.showConfirmation('create', formValue);
     } else {
-      const updatedCuentaData = { ...formattedFormValue, Id: this.originalCuentaData.Id };
-      this.store.dispatch(CuentaDetailActions.UpdateCuenta({ cuenta: updatedCuentaData }));
-      this.detailCuentaForm.markAsPristine();
-      this.deshabilitarBoton = true;
+      this.showConfirmation('edit', formValue);
     }
+  }
+
+  // Método privado para mostrar el modal de confirmación
+  private showConfirmation(actionType: string, formValue: any) {
+    const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
+    const detailMessage = actionType === 'create'
+      ? '¿Está seguro que desea crear este registro?'
+      : '¿Está seguro que desea editar este registro?';
+
+    this._confirmationService.confirm({
+      message: detailMessage,
+      header: headerMessage,
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        // Acción confirmada, proceder con el envío del formulario
+        if (actionType === 'create') {
+          this.createCuenta(formValue);
+        } else {
+          this.updateCuenta(formValue);
+        }
+      }
+    });
+  }
+
+  private createCuenta(formValue: any) {
+    const newCuentaData = { ...formValue };
+    this.store.dispatch(CuentaDetailActions.CreateCuenta({ payload: newCuentaData }));
+    this.deshabilitarBoton = true;
+  }
+
+  private updateCuenta(formValue: any) {
+    const updatedCuentaData = { ...formValue };
+    updatedCuentaData.Id = this.originalCuentaData.Id;
+    this.store.dispatch(CuentaDetailActions.UpdateCuenta({ cuenta: updatedCuentaData }));
+    this.detailCuentaForm.markAsPristine();
+    this.deshabilitarBoton = true;
   }
 
   goBack(): void {
     this.router.navigate(['cuentas/cuentas-list']);
-  }
-
-  private replaceCommasWithDots(value: any): any {
-    if (typeof value === 'string') {
-      value = value.replace(/,/g, '.');
-      return value.replace(/\.(?=.*\.)/g, '');
-    }
-    return value;
   }
 
 }

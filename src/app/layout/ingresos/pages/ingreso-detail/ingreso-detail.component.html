@@ -206,7 +206,7 @@
                             <div class="field col-6 md:col-6" style="text-align: center;">
                                 <p-button label="Crear" icon="pi pi-check" severity="success" iconPos="right"
                                     [disabled]="newIngresoForm.invalid || newIngresoForm.pristine || deshabilitarBoton"
-                                    type="submit" [raised]="true" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                    (onClick)="onSubmit()" [raised]="true" [style]="{'width': '140px', 'margin-top': '1rem'}">
                                 </p-button>
                             </div>
                         </div>
@@ -411,7 +411,7 @@
                             <div class="field col-6 md:col-6" style="text-align: center;">
                                 <p-button label="Guardar" icon="pi pi-check" severity="success" iconPos="right"
                                     [disabled]="detailIngresoForm.invalid || detailIngresoForm.pristine || deshabilitarBoton"
-                                    type="submit" [raised]="true" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                    (onClick)="onSubmit()" [raised]="true" [style]="{'width': '140px', 'margin-top': '1rem'}">
                                 </p-button>
                             </div>
                         </div>
@@ -426,3 +426,5 @@
 <div *ngIf="loading" class="overlay">
     <p-progressSpinner ariaLabel="loading" />
 </div>
+
+<p-confirmDialog></p-confirmDialog>

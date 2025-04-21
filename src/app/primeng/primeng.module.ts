@@ -30,6 +30,7 @@ import { PasswordModule } from 'primeng/password';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 @NgModule({
@@ -63,7 +64,8 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     BadgeModule, 
     TagModule,
     ChartModule,
-    PaginatorModule
+    PaginatorModule,
+    ConfirmDialogModule
   ]
 })
 export class PrimeNgModule { }

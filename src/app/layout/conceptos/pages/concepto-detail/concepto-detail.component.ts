@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Observable, takeUntil, of, switchMap } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Concepto } from 'src/app/shared/models/entidades/concepto.model';
@@ -12,11 +12,13 @@ import { filter } from 'rxjs/operators';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-concepto-detail',
   templateUrl: './concepto-detail.component.html',
-  styleUrls: ['./concepto-detail.component.css']
+  styleUrls: ['./concepto-detail.component.css'],
+  providers: [MessageService, ConfirmationService]
 })
 export class ConceptoDetailComponent implements OnInit, OnDestroy {
 
@@ -34,6 +36,7 @@ export class ConceptoDetailComponent implements OnInit, OnDestroy {
   selectedOption!: string;
   idUsuario!: number;
   deshabilitarBoton: boolean = true;
+  private _confirmationService: ConfirmationService = inject(ConfirmationService);
 
   constructor(
     private store: Store<AppState>,
@@ -91,19 +94,19 @@ export class ConceptoDetailComponent implements OnInit, OnDestroy {
 
     this.categorias$ = this.store.select(ConceptoSelector.selectCategorias);
     this.categorias$
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((categorias: ResponseData<Categoria> | null) => {
-      if (categorias && categorias.Items) {
-        const sortedItems = [...categorias.Items].sort((a: Categoria, b: Categoria) =>
-          a.Nombre.localeCompare(b.Nombre)
-        );
-  
-        this.categorias = {
-          ...categorias,      
-          Items: sortedItems 
-        };
-      }
-    });  
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((categorias: ResponseData<Categoria> | null) => {
+        if (categorias && categorias.Items) {
+          const sortedItems = [...categorias.Items].sort((a: Categoria, b: Categoria) =>
+            a.Nombre.localeCompare(b.Nombre)
+          );
+
+          this.categorias = {
+            ...categorias,
+            Items: sortedItems
+          };
+        }
+      });
 
     this.conceptoPorId$
       .pipe(takeUntil(this.destroy$))
@@ -148,17 +151,50 @@ export class ConceptoDetailComponent implements OnInit, OnDestroy {
     formValue.IdUsuario = this.idUsuario;
 
     if (this.isNewConcepto) {
-      const newConceptoData = { ...formValue };
-      this.store.dispatch(ConceptoDetailActions.CreateConcepto({ payload: newConceptoData }));
-      this.newConceptoForm.markAllAsTouched();
-      this.deshabilitarBoton = true;
+      this.showConfirmation('create', formValue);
     } else {
-      const updatedConceptoData = { ...formValue };
-      updatedConceptoData.Id = this.originalConceptoData.Id;
-      this.store.dispatch(ConceptoDetailActions.UpdateConcepto({ concepto: updatedConceptoData }));
-      this.detailConceptoForm.markAsPristine();
-      this.deshabilitarBoton = true;
+      this.showConfirmation('edit', formValue);
     }
+  }
+
+  // Método privado para mostrar el modal de confirmación
+  private showConfirmation(actionType: string, formValue: any) {
+    const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
+    const detailMessage = actionType === 'create'
+      ? '¿Está seguro que desea crear este registro?'
+      : '¿Está seguro que desea editar este registro?';
+
+    this._confirmationService.confirm({
+      message: detailMessage,
+      header: headerMessage,
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        // Acción confirmada, proceder con el envío del formulario
+        if (actionType === 'create') {
+          this.createConcepto(formValue);
+        } else {
+          this.updateConcepto(formValue);
+        }
+      }
+    });
+  }
+
+  private createConcepto(formValue: any) {
+    const newConceptoData = { ...formValue };
+    this.store.dispatch(ConceptoDetailActions.CreateConcepto({ payload: newConceptoData }));
+    this.deshabilitarBoton = true;
+  }
+
+  private updateConcepto(formValue: any) {
+    const updatedConceptoData = { ...formValue };
+    updatedConceptoData.Id = this.originalConceptoData.Id;
+    this.store.dispatch(ConceptoDetailActions.UpdateConcepto({ concepto: updatedConceptoData }));
+    this.detailConceptoForm.markAsPristine();
+    this.deshabilitarBoton = true;
   }
 
   goBack(): void {

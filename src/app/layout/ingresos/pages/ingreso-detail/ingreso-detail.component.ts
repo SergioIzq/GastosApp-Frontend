@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Observable, takeUntil, of, switchMap, filter, pipe, combineLatest } from 'rxjs';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Subject, Observable, takeUntil, of, filter } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Ingreso } from 'src/app/shared/models/entidades/ingreso.model';
 import { ActionsSubject, Store } from '@ngrx/store';
@@ -8,7 +8,6 @@ import { ActivatedRoute } from '@angular/router';
 import * as IngresoDetailActions from '../../ngrx/actions/ingreso-detail.actions'
 import * as IngresoSelector from '../../ngrx/selectors/ingreso-detail.selectors'
 import { Router } from '@angular/router';
-import { ResponseOne } from 'src/app/shared/models/entidades/responseOne.model';
 import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
 import { Persona } from 'src/app/shared/models/entidades/persona.model';
@@ -16,14 +15,15 @@ import { Cliente } from 'src/app/shared/models/entidades/cliente.model';
 import { FormaPago } from 'src/app/shared/models/entidades/formaPago.model';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { Concepto } from 'src/app/shared/models/entidades/concepto.model';
-import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import { minAmountValidator } from 'src/app/shared/models/entidades/minAmountValidator.model';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-ingreso-detail',
   templateUrl: './ingreso-detail.component.html',
-  styleUrls: ['./ingreso-detail.component.css']
+  styleUrls: ['./ingreso-detail.component.css'],
+  providers: [ConfirmationService, MessageService]
 })
 export class IngresoDetailComponent implements OnInit, OnDestroy {
 
@@ -53,6 +53,7 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
   selectedConceptoId!: number;
   idUsuario: any | null = null;
   deshabilitarBoton: boolean = false;
+  private _confirmationService: ConfirmationService = inject(ConfirmationService);
 
   constructor(
     private store: Store<AppState>,
@@ -142,10 +143,10 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
           const sortedItems = [...cuentas.Items].sort((a: Cuenta, b: Cuenta) =>
             a.Nombre.localeCompare(b.Nombre)
           );
-    
+
           this.cuentas = {
-            ...cuentas,      
-            Items: sortedItems 
+            ...cuentas,
+            Items: sortedItems
           };
         }
       });
@@ -158,10 +159,10 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
           const sortedItems = [...formasPago.Items].sort((a: FormaPago, b: FormaPago) =>
             a.Nombre.localeCompare(b.Nombre)
           );
-    
+
           this.formasPago = {
-            ...formasPago,      
-            Items: sortedItems 
+            ...formasPago,
+            Items: sortedItems
           };
         }
       });
@@ -174,10 +175,10 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
           const sortedItems = [...personas.Items].sort((a: Persona, b: Persona) =>
             a.Nombre.localeCompare(b.Nombre)
           );
-    
+
           this.personas = {
-            ...personas,      
-            Items: sortedItems 
+            ...personas,
+            Items: sortedItems
           };
         }
       });
@@ -190,10 +191,10 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
           const sortedItems = [...clientes.Items].sort((a: Cliente, b: Cliente) =>
             a.Nombre.localeCompare(b.Nombre)
           );
-    
+
           this.clientes = {
-            ...clientes,      
-            Items: sortedItems 
+            ...clientes,
+            Items: sortedItems
           };
         }
       });
@@ -279,16 +280,49 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
     };
 
     if (this.isNewIngreso) {
-      const newIngresoData = { ...formattedFormValue, Fecha: fechaUTC };
-      this.store.dispatch(IngresoDetailActions.CreateIngreso({ payload: newIngresoData }));
-      this.deshabilitarBoton = true;
+      this.showConfirmation('create', formattedFormValue, fechaUTC);
     } else {
-      const updatedIngresoData = { ...formattedFormValue, Fecha: fechaUTC };
-      updatedIngresoData.Id = this.originalIngresoData.Id;
-      this.store.dispatch(IngresoDetailActions.UpdateIngreso({ ingreso: updatedIngresoData }));
-      this.detailIngresoForm.markAsPristine();
-      this.deshabilitarBoton = true;
+      this.showConfirmation('edit', formattedFormValue, fechaUTC);
     }
+  }
+
+  private showConfirmation(actionType: string, formValue: any, fechaUTC: any) {
+    const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
+    const detailMessage = actionType === 'create'
+      ? '¿Está seguro que desea crear este registro?'
+      : '¿Está seguro que desea editar este registro?';
+
+    this._confirmationService.confirm({
+      message: detailMessage,
+      header: headerMessage,
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        // Acción confirmada, proceder con el envío del formulario
+        if (actionType === 'create') {
+          this.createIngreso(formValue, fechaUTC);
+        } else {
+          this.updateIngreso(formValue, fechaUTC);
+        }
+      }
+    });
+  }
+
+  private createIngreso(formattedFormValue: any, fechaUTC: any) {
+    const newIngresoData = { ...formattedFormValue, fechaUTC };
+    this.store.dispatch(IngresoDetailActions.CreateIngreso({ payload: newIngresoData }));
+    this.deshabilitarBoton = true;
+  }
+
+  private updateIngreso(formattedFormValue: any, fechaUTC: any) {
+    const updatedIngresoData = { ...formattedFormValue, Fecha: fechaUTC };
+    updatedIngresoData.Id = this.originalIngresoData.Id;
+    this.store.dispatch(IngresoDetailActions.UpdateIngreso({ ingreso: updatedIngresoData }));
+    this.detailIngresoForm.markAsPristine();
+    this.deshabilitarBoton = true;
   }
 
   private replaceCommasWithDots(value: any): any {
@@ -319,7 +353,7 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
   private extractCategorias(conceptos: Concepto[]): void {
     const categoriasSet = new Set<number>(); // Usamos Set para mantener ids únicos
     const categoriasMap = new Map<number, Categoria>(); // Map para mantener un mapa de id a objeto Categoria
-  
+
     conceptos.forEach(concepto => {
       if (concepto.Categoria) {
         if (!categoriasSet.has(concepto.Categoria.Id)) {
@@ -328,13 +362,13 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
         }
       }
     });
-  
+
     // Convierte el Map en un array y ordénalo alfabéticamente
     this.categorias = Array.from(categoriasMap.values()).sort((a: Categoria, b: Categoria) =>
       a.Nombre.localeCompare(b.Nombre)
     );
   }
-  
+
 
   onCategoriaChange(event: any): void {
     this.extractCategorias(this.conceptos.Items)
@@ -349,13 +383,13 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
       this.filteredConceptos = this.conceptos.Items.filter(concepto => {
         const conceptoCategoriaId = concepto.Categoria.Id;
         return conceptoCategoriaId === this.selectedCategoria;
-      }).sort((a: Concepto, b: Concepto) => 
+      }).sort((a: Concepto, b: Concepto) =>
         a.Nombre.localeCompare(b.Nombre)
       );
-  
+
     } else {
       // Si no hay categoría seleccionada, mostrar todos los conceptos
-      this.filteredConceptos = this.conceptos ? this.conceptos.Items.sort((a: Concepto, b: Concepto) => 
+      this.filteredConceptos = this.conceptos ? this.conceptos.Items.sort((a: Concepto, b: Concepto) =>
         a.Nombre.localeCompare(b.Nombre)
       ) : [];
     }

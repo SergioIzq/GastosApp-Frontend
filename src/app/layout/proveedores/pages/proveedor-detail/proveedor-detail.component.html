@@ -41,8 +41,8 @@
 
                             <div class="field col-6 md:col-6" style="text-align: center;">
                                 <p-button label="Crear" icon="pi pi-check" severity="success" [raised]="true"
-                                    iconPos="right" [disabled]="newProveedorForm.invalid || !newProveedorForm.dirty || deshabilitarBoton" type="submit"
-                                    [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                    iconPos="right" [disabled]="newProveedorForm.invalid || !newProveedorForm.dirty || deshabilitarBoton"
+                                    [style]="{'width': '140px', 'margin-top': '1rem'}" (onClick)="onSubmit()">
                                 </p-button>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                             <div class="field col-6 md:col-6" style="text-align: center;">
                                 <p-button label="Guardar" icon="pi pi-check" severity="success" [raised]="true"
                                     iconPos="right" [disabled]="detailProveedorForm.invalid || !detailProveedorForm.dirty || deshabilitarBoton"
-                                    type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                    type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}" (onClick)="onSubmit()">
                                 </p-button>
                             </div>
                         </div>
@@ -98,3 +98,4 @@
 <div *ngIf="loading" class="overlay">
     <p-progressSpinner ariaLabel="loading" />
 </div>
+<p-confirmDialog></p-confirmDialog>

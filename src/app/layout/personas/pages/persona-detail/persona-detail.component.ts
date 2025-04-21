@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Observable, takeUntil, of, switchMap } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Persona } from 'src/app/shared/models/entidades/persona.model';
@@ -11,11 +11,13 @@ import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { ResponseOne } from 'src/app/shared/models/entidades/responseOne.model';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-persona-detail',
   templateUrl: './persona-detail.component.html',
-  styleUrls: ['./persona-detail.component.css']
+  styleUrls: ['./persona-detail.component.css'],
+  providers: [ConfirmationService, MessageService]
 })
 export class PersonaDetailComponent implements OnInit, OnDestroy {
 
@@ -33,6 +35,7 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
   selectedOption!: string;
   idUsuario!: number;
   deshabilitarBoton: boolean = false;
+  private _confirmationService: ConfirmationService = inject(ConfirmationService);
 
   constructor(
     private store: Store<AppState>,
@@ -100,7 +103,7 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
     this.store.select(PersonaSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
       this.loading = loading;
     });
-    
+
     this.error$ = this.store.select(PersonaSelector.selectErrorCarga);
 
     this.detailPersonaForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
@@ -122,16 +125,50 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
     formValue.IdUsuario = this.idUsuario;
 
     if (this.isNewPersona) {
-      const newPersonaData = { ...formValue };
-      this.store.dispatch(PersonaDetailActions.CreatePersona({ payload: newPersonaData }));
-      this.deshabilitarBoton = true;
+      this.showConfirmation('create', formValue);
     } else {
-      const updatedPersonaData = { ...formValue };
-      updatedPersonaData.Id = this.originalPersonaData.Id;
-      this.store.dispatch(PersonaDetailActions.UpdatePersona({ persona: updatedPersonaData }));
-      this.detailPersonaForm.markAsPristine();
-      this.deshabilitarBoton = true;
+      this.showConfirmation('edit', formValue);
     }
+  }
+
+  // Método privado para mostrar el modal de confirmación
+  private showConfirmation(actionType: string, formValue: any) {
+    const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
+    const detailMessage = actionType === 'create'
+      ? '¿Está seguro que desea crear este registro?'
+      : '¿Está seguro que desea editar este registro?';
+
+    this._confirmationService.confirm({
+      message: detailMessage,
+      header: headerMessage,
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        // Acción confirmada, proceder con el envío del formulario
+        if (actionType === 'create') {
+          this.createPersona(formValue);
+        } else {
+          this.updatePersona(formValue);
+        }
+      }
+    });
+  }
+
+  private createPersona(formValue: any) {
+    const newPersonaData = { ...formValue };
+    this.store.dispatch(PersonaDetailActions.CreatePersona({ payload: newPersonaData }));
+    this.deshabilitarBoton = true;
+  }
+
+  private updatePersona(formValue: any) {
+    const updatedPersonaData = { ...formValue };
+    updatedPersonaData.Id = this.originalPersonaData.Id;
+    this.store.dispatch(PersonaDetailActions.UpdatePersona({ persona: updatedPersonaData }));
+    this.detailPersonaForm.markAsPristine();
+    this.deshabilitarBoton = true;
   }
 
   goBack(): void {

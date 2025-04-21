@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Observable, takeUntil, of, switchMap } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormaPago } from 'src/app/shared/models/entidades/formaPago.model';
@@ -10,11 +10,13 @@ import * as FormaPagoSelector from '../../ngrx/selectors/forma-pago-detail.selec
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-forma-pago-detail',
   templateUrl: './forma-pago-detail.component.html',
-  styleUrls: ['./forma-pago-detail.component.css']
+  styleUrls: ['./forma-pago-detail.component.css'],
+  providers: [MessageService, ConfirmationService]
 })
 export class FormaPagoDetailComponent implements OnInit, OnDestroy {
 
@@ -30,7 +32,8 @@ export class FormaPagoDetailComponent implements OnInit, OnDestroy {
   selectedOption!: string;
   idUsuario!: number;
   deshabilitarBoton: boolean = false;
-
+  private _confirmationService:ConfirmationService = inject(ConfirmationService);
+  
   constructor(
     private store: Store<AppState>,
     private fb: FormBuilder,
@@ -117,16 +120,50 @@ export class FormaPagoDetailComponent implements OnInit, OnDestroy {
     formValue.IdUsuario = this.idUsuario;
 
     if (this.isNewFormaPago) {
-      const newFormaPagoData = { ...formValue };
-      this.store.dispatch(FormaPagoDetailActions.CreateFormaPago({ payload: newFormaPagoData }));
-      this.deshabilitarBoton = true;
+      this.showConfirmation('create', formValue);
     } else {
-      const updatedFormaPagoData = { ...formValue };
-      updatedFormaPagoData.Id = this.originalFormaPagoData.Id;
-      this.store.dispatch(FormaPagoDetailActions.UpdateFormaPago({ formaPago: updatedFormaPagoData }));
-      this.detailFormaPagoForm.markAsPristine();
-      this.deshabilitarBoton = true;
+      this.showConfirmation('edit', formValue);
     }
+  }
+
+  // Método privado para mostrar el modal de confirmación
+  private showConfirmation(actionType: string, formValue: any) {
+    const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
+    const detailMessage = actionType === 'create'
+      ? '¿Está seguro que desea crear este registro?'
+      : '¿Está seguro que desea editar este registro?';
+
+    this._confirmationService.confirm({
+      message: detailMessage,
+      header: headerMessage,
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        // Acción confirmada, proceder con el envío del formulario
+        if (actionType === 'create') {
+          this.createFormaPago(formValue);
+        } else {
+          this.updateFormaPago(formValue);
+        }
+      }
+    });
+  }
+
+  private createFormaPago(formValue: any) {
+    const newFormaPagoData = { ...formValue };
+    this.store.dispatch(FormaPagoDetailActions.CreateFormaPago({ payload: newFormaPagoData }));
+    this.deshabilitarBoton = true;
+  }
+
+  private updateFormaPago(formValue: any) {
+    const updatedFormaPagoData = { ...formValue };
+    updatedFormaPagoData.Id = this.originalFormaPagoData.Id;
+    this.store.dispatch(FormaPagoDetailActions.UpdateFormaPago({ formaPago: updatedFormaPagoData }));
+    this.detailFormaPagoForm.markAsPristine();
+    this.deshabilitarBoton = true;
   }
 
   goBack(): void {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Observable, takeUntil, of } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Cliente } from 'src/app/shared/models/entidades/cliente.model';
@@ -10,11 +10,13 @@ import * as ClienteSelector from '../../ngrx/selectors/cliente-detail.selectors'
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-cliente-detail',
   templateUrl: './cliente-detail.component.html',
-  styleUrls: ['./cliente-detail.component.css']
+  styleUrls: ['./cliente-detail.component.css'],
+  providers: [MessageService, ConfirmationService]
 })
 export class ClienteDetailComponent implements OnInit, OnDestroy {
 
@@ -30,6 +32,7 @@ export class ClienteDetailComponent implements OnInit, OnDestroy {
   selectedOption!: string;
   idUsuario!: number;
   deshabilitarBoton: boolean = false;
+  private _confirmationService: ConfirmationService = inject(ConfirmationService);
 
   constructor(
     private store: Store<AppState>,
@@ -114,17 +117,52 @@ export class ClienteDetailComponent implements OnInit, OnDestroy {
   onSubmit() {
     const formValue = this.isNewCliente ? this.newClienteForm.value : this.detailClienteForm.value;
     formValue.IdUsuario = this.idUsuario;
+
     if (this.isNewCliente) {
-      const newClienteData = { ...formValue };
-      this.store.dispatch(ClienteDetailActions.CreateCliente({ payload: newClienteData }));
-      this.deshabilitarBoton = true;
+      this.showConfirmation('create', formValue);
     } else {
-      const updatedClienteData = { ...formValue };
-      updatedClienteData.Id = this.originalClienteData.Id;
-      this.store.dispatch(ClienteDetailActions.UpdateCliente({ cliente: updatedClienteData }));
-      this.detailClienteForm.markAsPristine();
-      this.deshabilitarBoton = true;
+      this.showConfirmation('edit', formValue);
     }
+  }
+
+  // Método privado para mostrar el modal de confirmación
+  private showConfirmation(actionType: string, formValue: any) {
+    const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
+    const detailMessage = actionType === 'create'
+      ? '¿Está seguro que desea crear este registro?'
+      : '¿Está seguro que desea editar este registro?';
+
+    this._confirmationService.confirm({
+      message: detailMessage,
+      header: headerMessage,
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        // Acción confirmada, proceder con el envío del formulario
+        if (actionType === 'create') {
+          this.createCliente(formValue);
+        } else {
+          this.updateCliente(formValue);
+        }
+      }
+    });
+  }
+
+  private createCliente(formValue: any) {
+    const newClienteData = { ...formValue };
+    this.store.dispatch(ClienteDetailActions.CreateCliente({ payload: newClienteData }));
+    this.deshabilitarBoton = true;
+  }
+
+  private updateCliente(formValue: any) {
+    const updatedClienteData = { ...formValue };
+    updatedClienteData.Id = this.originalClienteData.Id;
+    this.store.dispatch(ClienteDetailActions.UpdateCliente({ cliente: updatedClienteData }));
+    this.detailClienteForm.markAsPristine();
+    this.deshabilitarBoton = true;
   }
 
   goBack(): void {

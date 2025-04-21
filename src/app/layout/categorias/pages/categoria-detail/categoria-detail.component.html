@@ -54,7 +54,7 @@
                                 <p-button label="Crear" icon="pi pi-check" severity="success" [raised]="true"
                                     iconPos="right"
                                     [disabled]="newCategoriaForm.invalid || !newCategoriaForm.dirty || deshabilitarBoton"
-                                    type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                    (onClick)="onSubmit()" [style]="{'width': '140px', 'margin-top': '1rem'}">
                                 </p-button>
                             </div>
                         </div>
@@ -107,7 +107,7 @@
                                 <p-button label="Guardar" icon="pi pi-check" severity="success" [raised]="true"
                                     iconPos="right"
                                     [disabled]="detailCategoriaForm.invalid || !detailCategoriaForm.dirty || deshabilitarBoton"
-                                    type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                    (onClick)="onSubmit()" [style]="{'width': '140px', 'margin-top': '1rem'}">
                                 </p-button>
                             </div>
                         </div>
@@ -123,3 +123,4 @@
 <div *ngIf="loading" class="overlay">
     <p-progressSpinner ariaLabel="loading" />
 </div>
+<p-confirmDialog></p-confirmDialog>

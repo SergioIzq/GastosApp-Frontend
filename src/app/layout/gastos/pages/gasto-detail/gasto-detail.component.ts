@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Observable, takeUntil, of, switchMap, filter, pipe } from 'rxjs';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Subject, Observable, takeUntil, of, filter } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Gasto } from 'src/app/shared/models/entidades/gasto.model';
 import { ActionsSubject, Store } from '@ngrx/store';
@@ -16,13 +16,14 @@ import { FormaPago } from 'src/app/shared/models/entidades/formaPago.model';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { Concepto } from 'src/app/shared/models/entidades/concepto.model';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
-import { Cliente } from 'src/app/shared/models/entidades/cliente.model';
 import { minAmountValidator } from 'src/app/shared/models/entidades/minAmountValidator.model';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-gasto-detail',
   templateUrl: './gasto-detail.component.html',
-  styleUrls: ['./gasto-detail.component.css']
+  styleUrls: ['./gasto-detail.component.css'],
+  providers: [ConfirmationService, MessageService]
 })
 export class GastoDetailComponent implements OnInit, OnDestroy {
 
@@ -52,6 +53,7 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
   selectedConceptoId!: number;
   idUsuario: number | null = null;
   deshabilitarBoton: boolean = false;
+  private _confirmationService: ConfirmationService = inject(ConfirmationService);
 
   constructor(
     private store: Store<AppState>,
@@ -284,16 +286,49 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
     };
 
     if (this.isNewGasto) {
-      const newGastoData = { ...formattedFormValue, Fecha: fechaUTC };
-      this.store.dispatch(GastoDetailActions.CreateGasto({ payload: newGastoData }));
-      this.deshabilitarBoton = true;
+      this.showConfirmation('create', formattedFormValue, fechaUTC);
     } else {
-      const updatedGastoData = { ...formattedFormValue, Fecha: fechaUTC };
-      updatedGastoData.Id = this.originalGastoData.Id;
-      this.store.dispatch(GastoDetailActions.UpdateGasto({ gasto: updatedGastoData }));
-      this.detailGastoForm.markAsPristine();
-      this.deshabilitarBoton = true;
+      this.showConfirmation('edit', formattedFormValue, fechaUTC);
     }
+  }
+
+  private showConfirmation(actionType: string, formValue: any, fechaUTC: any) {
+    const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
+    const detailMessage = actionType === 'create'
+      ? '¿Está seguro que desea crear este registro?'
+      : '¿Está seguro que desea editar este registro?';
+
+    this._confirmationService.confirm({
+      message: detailMessage,
+      header: headerMessage,
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        // Acción confirmada, proceder con el envío del formulario
+        if (actionType === 'create') {
+          this.createGasto(formValue, fechaUTC);
+        } else {
+          this.updateGasto(formValue, fechaUTC);
+        }
+      }
+    });
+  }
+
+  private createGasto(formattedFormValue: any, fechaUTC: any) {
+    const newGastoData = { ...formattedFormValue, fechaUTC };
+    this.store.dispatch(GastoDetailActions.CreateGasto({ payload: newGastoData }));
+    this.deshabilitarBoton = true;
+  }
+
+  private updateGasto(formattedFormValue: any, fechaUTC: any) {
+    const updatedGastoData = { ...formattedFormValue, Fecha: fechaUTC };
+    updatedGastoData.Id = this.originalGastoData.Id;
+    this.store.dispatch(GastoDetailActions.UpdateGasto({ gasto: updatedGastoData }));
+    this.detailGastoForm.markAsPristine();
+    this.deshabilitarBoton = true;
   }
 
   private replaceCommasWithDots(value: any): any {
