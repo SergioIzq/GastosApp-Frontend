@@ -5,13 +5,14 @@ import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
 import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoriaService {
 
-  apiUrl = 'https://gastosapp-backend.onrender.com/api/';  
+  apiUrl = environment.apiUrl;  
   constructor(private http: HttpClient) { }
 
   private getHeaders(): HttpHeaders {

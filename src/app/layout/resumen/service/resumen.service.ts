@@ -6,13 +6,14 @@ import { HttpParams } from '@angular/common/http';
 import { ResumenIngresosResponse } from 'src/app/shared/models/entidades/respuestas/resumenIngresosResponse.model'; 
 import { ResumenGastosResponse } from 'src/app/shared/models/entidades/respuestas/ResumenGastosResumen.model';
 import { ResumenDatos } from 'src/app/shared/models/entidades/respuestas/resumenDatos.model'; 
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ResumenService {
 
-  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
+  apiUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<Resumen[]> {

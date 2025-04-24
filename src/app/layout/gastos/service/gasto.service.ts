@@ -8,13 +8,14 @@ import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/response
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoRespuesta.model';
 import { GastoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoByIdRespuesta.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GastoService {
 
-  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
+  apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 

@@ -2,16 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Usuario } from 'src/app/shared/models/entidades/usuario.model';
-import { HttpParams } from '@angular/common/http';
 import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
-import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
 
-  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
+  apiUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
   getAll(idUsuario: number): Observable<ResponseData<Usuario>> {

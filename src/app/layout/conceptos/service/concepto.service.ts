@@ -7,13 +7,14 @@ import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respons
 import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConceptoService {
 
-  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
+  apiUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<ResponseData<Concepto>> {

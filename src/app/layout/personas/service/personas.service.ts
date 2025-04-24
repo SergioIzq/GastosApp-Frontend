@@ -6,13 +6,14 @@ import { HttpParams } from '@angular/common/http';
 import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
 import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PersonaService {
 
-  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
+  apiUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<ResponseData<Persona>> {

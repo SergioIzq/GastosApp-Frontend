@@ -6,13 +6,14 @@ import { Traspaso } from '../../../shared/models/entidades/traspaso.model';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
 import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TraspasoService {
 
-  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
+  apiUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
   realizarTraspaso(traspaso: Traspaso): Observable<ResponseOne<Traspaso>> {
