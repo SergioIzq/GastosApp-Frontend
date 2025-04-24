@@ -80,7 +80,7 @@
                 <ng-template pTemplate="body" let-cuenta>
                     <tr>
                         <td>{{ cuenta.Nombre }}</td>
-                        <td [ngClass]="{'text-success': cuenta.Saldo > 0, 'text-dangerPerso': cuenta.Saldo <= 0}">
+                        <td [ngClass]="cuenta.Saldo > 0 ? 'text-success' : 'text-dangerPerso'">
                             {{(cuenta.Saldo | numberFormatter) }} €
                         </td>
 

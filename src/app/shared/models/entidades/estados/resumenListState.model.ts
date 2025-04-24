@@ -1,5 +1,5 @@
-import { ResumenGastosResponse } from "../ResumenGastosResumen.model";
-import { ResumenIngresosResponse } from "../resumenIngresosResponse.model";
+import { ResumenGastosResponse } from "../respuestas/ResumenGastosResumen.model";
+import { ResumenIngresosResponse } from "../respuestas/resumenIngresosResponse.model";
 
 export interface ResumenListState {
   loading: boolean;

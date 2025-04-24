@@ -5,8 +5,8 @@ import { map, catchError, tap } from "rxjs/operators";
 import * as ResumenListActions from 'src/app/layout/resumen/ngrx/actions/resumen-list.actions';
 import { ResumenService } from '../../service/resumen.service';;
 import { MessageService } from 'primeng/api';
-import { ResumenIngresosResponse } from "src/app/shared/models/entidades/resumenIngresosResponse.model";
-import { ResumenGastosResponse } from "src/app/shared/models/entidades/ResumenGastosResumen.model";
+import { ResumenIngresosResponse } from "src/app/shared/models/entidades/respuestas/resumenIngresosResponse.model";
+import { ResumenGastosResponse } from "src/app/shared/models/entidades/respuestas/ResumenGastosResumen.model";
 
 @Injectable()
 export class ResumenListEffects {

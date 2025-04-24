@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
-import { ResumenDatos } from 'src/app/shared/models/entidades/resumenDatos.model';
-import { ResumenGastosResponse } from 'src/app/shared/models/entidades/ResumenGastosResumen.model';
-import { ResumenIngresosResponse } from 'src/app/shared/models/entidades/resumenIngresosResponse.model';
+import { ResumenDatos } from 'src/app/shared/models/entidades/respuestas/resumenDatos.model';
+import { ResumenGastosResponse } from 'src/app/shared/models/entidades/respuestas/ResumenGastosResumen.model';
+import { ResumenIngresosResponse } from 'src/app/shared/models/entidades/respuestas/resumenIngresosResponse.model';
 
 // Acciones para ingresos
 export const LoadIngresos = createAction(

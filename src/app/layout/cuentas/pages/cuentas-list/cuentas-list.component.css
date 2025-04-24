@@ -82,10 +82,10 @@
   background-color: #e0e0e0;
 }
 
-.text-success {
-  color: green;
+td.text-success {
+  color: rgb(0, 161, 0) !important;
 }
 
-.text-dangerPerso {
-  color: red;
+td.text-dangerPerso {
+  color: red !important;
 }

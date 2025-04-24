@@ -9,7 +9,7 @@ import { Location } from '@angular/common';
 import * as SelectClientesList from '../../ngrx/selectors/clientes-list.selectors'
 import * as ClientesListActions from 'src/app/layout/clientes/ngrx/actions/clientes-list.actions';
 import { Table } from 'primeng/table';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
 import { Cliente } from 'src/app/shared/models/entidades/cliente.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';

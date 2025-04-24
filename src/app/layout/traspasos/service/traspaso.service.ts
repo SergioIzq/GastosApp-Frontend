@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
 import { Traspaso } from '../../../shared/models/entidades/traspaso.model';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
-import { ResponseOne } from 'src/app/shared/models/entidades/responseOne.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 
 @Injectable({

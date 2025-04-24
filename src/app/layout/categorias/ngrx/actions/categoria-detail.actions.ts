@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
-import { ResponseOne } from 'src/app/shared/models/entidades/responseOne.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
 
 
 export const GetCategoria = createAction('GetCategoria', props<{ id: number }>());

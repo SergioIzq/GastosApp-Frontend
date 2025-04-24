@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FormaPago } from 'src/app/shared/models/entidades/formaPago.model';
 import { HttpParams } from '@angular/common/http';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
-import { ResponseOne } from 'src/app/shared/models/entidades/responseOne.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 
 @Injectable({

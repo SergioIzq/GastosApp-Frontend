@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
 
 export const LoadingCategorias = createAction('LoadingCategorias', props<{ page: number, size: number, idUsuario: number }>());
 

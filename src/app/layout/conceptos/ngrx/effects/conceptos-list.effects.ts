@@ -4,7 +4,7 @@ import { of, mergeMap } from "rxjs";
 import { map, catchError, tap } from "rxjs/operators";
 import * as ConceptosListActions from 'src/app/layout/conceptos/ngrx/actions/conceptos-list.actions';
 import { ConceptoService } from '../../service/concepto.service';
-import { ResponseData } from '../../../../shared/models/entidades/responseData.model';
+import { ResponseData } from '../../../../shared/models/entidades/respuestas/responseData.model';
 import { Concepto } from 'src/app/shared/models/entidades/concepto.model';
 import { MessageService } from 'primeng/api';
 

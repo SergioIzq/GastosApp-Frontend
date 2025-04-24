@@ -438,3 +438,40 @@ body.dark-mode ul .p-highlight {
     background-color: #444 !important;
     color: white !important;
 }
+
+body.dark-mode .p-column-filter-overlay {
+    background-color: #444 !important;
+}
+
+body.dark-mode .p-column-filter-operator {
+    background-color: #444 !important;
+
+}
+
+body.dark-mode p-columnfilterformelement>.p-inputtext {
+    background-color: #444 !important;
+
+}
+
+body.dark-mode .euro-input-container::after {
+    content: '€';
+    position: absolute;
+    right: 1em;
+    /* Ajusta la posición del símbolo */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1em;
+    /* Ajusta el tamaño del símbolo según sea necesario */
+    color: #ffffff;
+    /* Ajusta el color del símbolo según sea necesario */
+    pointer-events: none;
+    /* Asegura que el símbolo no interfiera con la interacción del usuario */
+}
+
+.text-success {
+    color: green !important;
+}
+
+.text-dangerPerso {
+    color: red !important;
+}

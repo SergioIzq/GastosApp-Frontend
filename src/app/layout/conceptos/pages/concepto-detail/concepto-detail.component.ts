@@ -10,7 +10,7 @@ import * as ConceptoSelector from '../../ngrx/selectors/concepto-detail.selector
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 

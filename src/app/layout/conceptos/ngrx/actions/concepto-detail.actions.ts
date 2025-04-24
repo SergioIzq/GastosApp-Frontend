@@ -2,8 +2,8 @@ import { createAction, props } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { Concepto } from 'src/app/shared/models/entidades/concepto.model';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
-import { ResponseOne } from 'src/app/shared/models/entidades/responseOne.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
 
 
 export const GetConcepto = createAction('GetConcepto', props<{ id: number }>());

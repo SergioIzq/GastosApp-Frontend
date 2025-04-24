@@ -1,23 +1,25 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Observable, takeUntil, of, filter } from 'rxjs';
+import { Subject, Observable, takeUntil, of, filter, switchMap, map, combineLatest } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Ingreso } from 'src/app/shared/models/entidades/ingreso.model';
 import { ActionsSubject, Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import * as IngresoDetailActions from '../../ngrx/actions/ingreso-detail.actions'
 import * as IngresoSelector from '../../ngrx/selectors/ingreso-detail.selectors'
 import { Router } from '@angular/router';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
 import { Persona } from 'src/app/shared/models/entidades/persona.model';
 import { Cliente } from 'src/app/shared/models/entidades/cliente.model';
 import { FormaPago } from 'src/app/shared/models/entidades/formaPago.model';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { Concepto } from 'src/app/shared/models/entidades/concepto.model';
-import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import { minAmountValidator } from 'src/app/shared/models/entidades/minAmountValidator.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { IngresoRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresoRespuesta.model';
+import { ChangeDetectorRef } from '@angular/core';
+import { IngresoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresoByIdRespuesta.model';
+import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 
 @Component({
   selector: 'app-ingreso-detail',
@@ -29,23 +31,18 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
   ingresoId: number = 0;
-  ingresoPorId$!: Observable<Ingreso | null>;
+  ingresoPorId$!: Observable<IngresoByIdRespuesta | null>;
   loading: boolean = false;
   error$!: Observable<boolean>;
   detailIngresoForm: FormGroup;
   originalIngresoData!: Ingreso;
   isNewIngreso: boolean = false;
   newIngresoForm!: FormGroup;
-  cuentas$!: Observable<ResponseData<Cuenta> | null>;
-  cuentas!: ResponseData<Cuenta>;
-  personas$!: Observable<ResponseData<Persona> | null>;
-  personas!: ResponseData<Persona>;
-  clientes$!: Observable<ResponseData<Cliente> | null>;
-  clientes!: ResponseData<Cliente>;
-  formasPago$!: Observable<ResponseData<FormaPago> | null>;
-  formasPago!: ResponseData<FormaPago>;
-  conceptos$!: Observable<ResponseData<Concepto> | null>;
-  conceptos!: ResponseData<Concepto>;
+  cuentas: Cuenta[] = [];
+  personas: Persona[] = [];
+  clientes: Cliente[] = [];
+  formasPago: FormaPago[] = [];
+  conceptos: Concepto[] = [];
   categorias: Categoria[] = [];
   filteredConceptos: Concepto[] = [];
   categoriaSeleccionada: Categoria | null = null;
@@ -54,6 +51,8 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
   idUsuario: any | null = null;
   deshabilitarBoton: boolean = false;
   private _confirmationService: ConfirmationService = inject(ConfirmationService);
+  ingresoRespuesta: IngresoRespuesta = new IngresoRespuesta();
+  private cdRef: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   constructor(
     private store: Store<AppState>,
@@ -73,6 +72,7 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
       Persona: ['', [Validators.required]],
       FormaPago: ['', [Validators.required]],
       Cuenta: ['', [Validators.required]],
+      Categoria: ['', [Validators.required]]
     });
 
     this.detailIngresoForm = this.fb.group({
@@ -92,131 +92,77 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.newIngresoForm.get('Concepto')?.disable();
 
-    this.store.select(selectUsuarioPorId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: any) => {
-      this.idUsuario = idUsuario?.Id;
-      if (this.idUsuario) {
-        this.store.dispatch(IngresoDetailActions.GetPersonasIngreso({ idUsuario: this.idUsuario }));
-        this.store.dispatch(IngresoDetailActions.GetClientesIngreso({ idUsuario: this.idUsuario }));
-        this.store.dispatch(IngresoDetailActions.GetFormasPagoIngreso({ idUsuario: this.idUsuario }));
-        this.store.dispatch(IngresoDetailActions.GetConceptosIngreso({ idUsuario: this.idUsuario }));
-        this.store.dispatch(IngresoDetailActions.GetCuentasIngreso({ idUsuario: this.idUsuario }));
+    combineLatest([
+      this.route.paramMap,
+      this.store.select(selectUserId).pipe(filter(id => id > 0))
+    ])
+    .pipe(
+      takeUntil(this.destroy$),
+    )
+    .subscribe(([params, idUsuario]) => {
+      this.idUsuario = idUsuario;
+    
+      const idString = params.get('id');
+      const id = parseInt(idString!, 10);
+      this.ingresoId = id;
+    
+      if (id === 0) {
+        this.isNewIngreso = true;
+        this.ingresoPorId$ = of(null);
+        this.newIngresoForm.patchValue({
+          Fecha: new Date().toLocaleDateString('es-ES')
+        });
+    
+        this.store.dispatch(IngresoDetailActions.GetNewIngreso({ payload: idUsuario }));
+      } else {
+        this.isNewIngreso = false;
+        this.store.dispatch(IngresoDetailActions.GetIngreso({ id }));
+        this.ingresoPorId$ = this.store.select(IngresoSelector.selectedIngresoSelector);
       }
     });
+    
 
     this.actionsSubject.pipe(filter(action => action.type === 'CreateIngresoSuccess'), takeUntil(this.destroy$))
       .subscribe((action: any) => {
         if (this.idUsuario) {
           this.router.navigate(['ingresos/ingreso-detail', action.ingreso.Item.Id])
-          this.store.dispatch(IngresoDetailActions.GetCuentasIngreso({ idUsuario: this.idUsuario }));
+          this.ingresoId = action.ingreso.Item.Id;
           this.isNewIngreso = false;
+          this.detailIngresoForm.patchValue(this.newIngresoForm.value);
           this.detailIngresoForm.markAsPristine();
         }
       });
 
-    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
-      const idString = params.get('id');
-      if (idString !== null) {
-        const id = parseInt(idString, 10);
-        this.ingresoId = id;
-        if (id === 0) {
-          // Si el ID es 0, significa que es una nueva visita
-          this.isNewIngreso = true;
-          this.ingresoPorId$ = of(null);
-          this.newIngresoForm.patchValue({
-            Fecha: new Date().toLocaleDateString('es-ES')
-          })
-        } else {
-          // Si el ID no es 0, obtener el ingreso por el ID
-          this.isNewIngreso = false;
-          this.store.dispatch(IngresoDetailActions.GetIngreso({ id: id }));
-          this.ingresoPorId$ = this.store.select(IngresoSelector.selectedIngresoSelector);
+    this.actionsSubject.pipe(filter(action => action.type === 'GetNewIngresoSuccess'), takeUntil(this.destroy$))
+      .subscribe((action: any) => {
+        this.ingresoRespuesta = action.payload;
+
+        if (this.ingresoRespuesta) {
+          this.cuentas = [...this.ingresoRespuesta.ListaCuentas];
+          this.formasPago = [...this.ingresoRespuesta.ListaFormasPago];
+          this.personas = [...this.ingresoRespuesta.ListaPersonas];
+          this.clientes = [...this.ingresoRespuesta.ListaClientes];
+          this.conceptos = [...this.ingresoRespuesta.ListaConceptos];
+          this.categorias = [...this.ingresoRespuesta.ListaCategorias];
+          this.cdRef.detectChanges();
         }
-      }
-    });
-
-    this.cuentas$ = this.store.select(IngresoSelector.selectCuentas);
-    this.cuentas$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((cuentas: ResponseData<Cuenta> | null) => {
-        if (cuentas && cuentas.Items) {
-          const sortedItems = [...cuentas.Items].sort((a: Cuenta, b: Cuenta) =>
-            a.Nombre.localeCompare(b.Nombre)
-          );
-
-          this.cuentas = {
-            ...cuentas,
-            Items: sortedItems
-          };
-        }
-      });
-
-    this.formasPago$ = this.store.select(IngresoSelector.selectFormasPago);
-    this.formasPago$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((formasPago: ResponseData<FormaPago> | null) => {
-        if (formasPago && formasPago.Items) {
-          const sortedItems = [...formasPago.Items].sort((a: FormaPago, b: FormaPago) =>
-            a.Nombre.localeCompare(b.Nombre)
-          );
-
-          this.formasPago = {
-            ...formasPago,
-            Items: sortedItems
-          };
-        }
-      });
-
-    this.personas$ = this.store.select(IngresoSelector.selectPersonas);
-    this.personas$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((personas: ResponseData<Persona> | null) => {
-        if (personas && personas.Items) {
-          const sortedItems = [...personas.Items].sort((a: Persona, b: Persona) =>
-            a.Nombre.localeCompare(b.Nombre)
-          );
-
-          this.personas = {
-            ...personas,
-            Items: sortedItems
-          };
-        }
-      });
-
-    this.clientes$ = this.store.select(IngresoSelector.selectClientes);
-    this.clientes$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((clientes: ResponseData<Cliente> | null) => {
-        if (clientes && clientes.Items) {
-          const sortedItems = [...clientes.Items].sort((a: Cliente, b: Cliente) =>
-            a.Nombre.localeCompare(b.Nombre)
-          );
-
-          this.clientes = {
-            ...clientes,
-            Items: sortedItems
-          };
-        }
-      });
-
-    this.conceptos$ = this.store.select(IngresoSelector.selectConceptos);
-    this.conceptos$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((conceptos: any) => {
-        if (conceptos) {
-          this.conceptos = conceptos;
-          if (!this.selectedCategoria) {
-            this.extractCategorias(conceptos.Items);
-          }
-        }
-      });
-
-    this.ingresoPorId$ = this.store.select(IngresoSelector.selectedIngresoSelector);
+      })
 
     this.ingresoPorId$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((ingreso: Ingreso | null) => {
-        if (ingreso) {
+      .subscribe((ingresoByIdRespuesta: IngresoByIdRespuesta | null) => {
+        if (ingresoByIdRespuesta) {
+          let ingreso = ingresoByIdRespuesta.IngresoById;
+          this.cuentas = [...ingresoByIdRespuesta.IngresoRespuesta.ListaCuentas];
+          this.formasPago = [...ingresoByIdRespuesta.IngresoRespuesta.ListaFormasPago];
+          this.personas = [...ingresoByIdRespuesta.IngresoRespuesta.ListaPersonas];
+          this.clientes = [...ingresoByIdRespuesta.IngresoRespuesta.ListaClientes];
+          this.conceptos = [...ingresoByIdRespuesta.IngresoRespuesta.ListaConceptos];
+          this.categorias = [...ingresoByIdRespuesta.IngresoRespuesta.ListaCategorias];
+          this.cdRef.detectChanges();
+
           // Convierte la fecha de UTC a local
           const fechaUTC = new Date(ingreso.Fecha);
           const fechaLocal = new Date(fechaUTC.getTime() - fechaUTC.getTimezoneOffset() * 60000);
@@ -229,10 +175,9 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
             Fecha: fechaLocal,
             Monto: monto,
             Categoria: ingreso.Concepto.Categoria,
-            Concepto: ingreso.Concepto,
           });
-          this.originalIngresoData = { ...ingreso };
-          this.categorias.push(ingreso.Concepto.Categoria);
+
+          this.originalIngresoData = { ...ingreso }
 
           this.filteredConceptos.push(ingreso.Concepto);
           this.detailIngresoForm.markAsPristine();
@@ -312,14 +257,14 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
   }
 
   private createIngreso(formattedFormValue: any, fechaUTC: any) {
-    const newIngresoData = { ...formattedFormValue, fechaUTC };
+    const newIngresoData = { ...formattedFormValue, Fecha: fechaUTC };
     this.store.dispatch(IngresoDetailActions.CreateIngreso({ payload: newIngresoData }));
     this.deshabilitarBoton = true;
   }
 
   private updateIngreso(formattedFormValue: any, fechaUTC: any) {
     const updatedIngresoData = { ...formattedFormValue, Fecha: fechaUTC };
-    updatedIngresoData.Id = this.originalIngresoData.Id;
+    updatedIngresoData.Id = this.ingresoId;
     this.store.dispatch(IngresoDetailActions.UpdateIngreso({ ingreso: updatedIngresoData }));
     this.detailIngresoForm.markAsPristine();
     this.deshabilitarBoton = true;
@@ -350,37 +295,34 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['ingresos/ingresos-list'])
   }
 
-  private extractCategorias(conceptos: Concepto[]): void {
-    const categoriasSet = new Set<number>(); // Usamos Set para mantener ids únicos
-    const categoriasMap = new Map<number, Categoria>(); // Map para mantener un mapa de id a objeto Categoria
-
-    conceptos.forEach(concepto => {
-      if (concepto.Categoria) {
-        if (!categoriasSet.has(concepto.Categoria.Id)) {
-          categoriasSet.add(concepto.Categoria.Id);
-          categoriasMap.set(concepto.Categoria.Id, concepto.Categoria);
-        }
-      }
-    });
-
-    // Convierte el Map en un array y ordénalo alfabéticamente
-    this.categorias = Array.from(categoriasMap.values()).sort((a: Categoria, b: Categoria) =>
-      a.Nombre.localeCompare(b.Nombre)
-    );
-  }
-
-
   onCategoriaChange(event: any): void {
-    this.extractCategorias(this.conceptos.Items)
-    this.selectedCategoria = event.value ? event.value.Id : null;
-    this.detailIngresoForm.patchValue({ Concepto: null })
-    this.filterConceptos();
+    const selectedCategoria = event.value;
+
+    if (selectedCategoria) {
+      this.selectedCategoria = selectedCategoria.Id;
+      if (this.isNewIngreso) {
+        this.newIngresoForm.get('Concepto')?.enable();
+      } else {
+        this.detailIngresoForm.get('Concepto')?.enable();
+      }
+      this.filterConceptos();
+    } else {
+      this.selectedCategoria = null;
+      this.filteredConceptos = [];
+      if (this.isNewIngreso) {
+        this.newIngresoForm.get('Concepto')?.disable();
+        this.newIngresoForm.patchValue({ Concepto: null });
+      } else {
+        this.detailIngresoForm.patchValue({ Concepto: null });
+        this.detailIngresoForm.get('Concepto')?.disable();
+      }
+    }
   }
 
   private filterConceptos(): void {
     if (this.selectedCategoria !== null && this.conceptos) {
       // Filtra los conceptos por la categoría seleccionada
-      this.filteredConceptos = this.conceptos.Items.filter(concepto => {
+      this.filteredConceptos = this.conceptos.filter(concepto => {
         const conceptoCategoriaId = concepto.Categoria.Id;
         return conceptoCategoriaId === this.selectedCategoria;
       }).sort((a: Concepto, b: Concepto) =>
@@ -389,7 +331,7 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
 
     } else {
       // Si no hay categoría seleccionada, mostrar todos los conceptos
-      this.filteredConceptos = this.conceptos ? this.conceptos.Items.sort((a: Concepto, b: Concepto) =>
+      this.filteredConceptos = this.conceptos ? this.conceptos.sort((a: Concepto, b: Concepto) =>
         a.Nombre.localeCompare(b.Nombre)
       ) : [];
     }

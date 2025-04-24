@@ -5,10 +5,11 @@ import { IngresoService } from "../../service/ingreso.service";
 import * as IngresoDetailActions from "../actions/ingreso-detail.actions";
 import { Router } from "@angular/router";
 import { MessageService } from 'primeng/api';
-import { ResponseOne } from "src/app/shared/models/entidades/responseOne.model";
+import { ResponseOne } from "src/app/shared/models/entidades/respuestas/responseOne.model";
 import { Ingreso } from "src/app/shared/models/entidades/ingreso.model";
 import { BaseService } from "src/app/shared/service/base-service.service";
 import { HttpClient } from "@angular/common/http";
+import { IngresoByIdRespuesta } from "src/app/shared/models/entidades/respuestas/ingresoByIdRespuesta.model";
 
 @Injectable()
 export class IngresoDetailEffects extends BaseService {
@@ -34,6 +35,18 @@ export class IngresoDetailEffects extends BaseService {
     )
   ));
 
+  getNewIngreso$ = createEffect(() => this.actions$.pipe(
+    ofType(IngresoDetailActions.GetNewIngreso),
+    mergeMap(({ payload }) => this.ingresoDetailService.getNewIngreso(payload)
+      .pipe(
+        map(payload => IngresoDetailActions.GetNewIngresoSuccess({ payload })),
+        catchError((error) => {
+          return of(IngresoDetailActions.GetNewIngresoFail());
+        })
+      )
+    )
+  ));
+
   updateIngreso$ = createEffect(() => this.actions$.pipe(
     ofType(IngresoDetailActions.UpdateIngreso),
     mergeMap(({ ingreso }) => this.ingresoDetailService.update(ingreso)
@@ -53,7 +66,7 @@ export class IngresoDetailEffects extends BaseService {
     ofType(IngresoDetailActions.CreateIngreso),
     mergeMap(({ payload }) => this.ingresoDetailService.create(payload)
       .pipe(
-        map((ingreso: ResponseOne<Ingreso>) => {
+        map((ingreso: ResponseOne<IngresoByIdRespuesta>) => {
 
           this.messageService.add({
             severity: 'success',
@@ -71,64 +84,4 @@ export class IngresoDetailEffects extends BaseService {
       )
     ))
   );
-
-  getCuentas$ = createEffect(() => this.actions$.pipe(
-    ofType(IngresoDetailActions.GetCuentasIngreso),
-    mergeMap(({ idUsuario }) => this.ingresoDetailService.getCuentas(idUsuario)
-      .pipe(
-        map(cuentas => IngresoDetailActions.GetCuentasIngresoSuccess({ cuentas })),
-        catchError((error) => {
-          return of(IngresoDetailActions.GetCuentasIngresoFailure({ errorMessage: error }));
-        })
-      )
-    )
-  ));
-
-  getClientes$ = createEffect(() => this.actions$.pipe(
-    ofType(IngresoDetailActions.GetClientesIngreso),
-    mergeMap(({ idUsuario }) => this.ingresoDetailService.getClientes(idUsuario)
-      .pipe(
-        map(clientes => IngresoDetailActions.GetClientesIngresoSuccess({ clientes })),
-        catchError((error) => {
-          return of(IngresoDetailActions.GetClientesIngresoFailure({ errorMessage: error }));
-        })
-      )
-    )
-  ));
-
-  getFormasPago$ = createEffect(() => this.actions$.pipe(
-    ofType(IngresoDetailActions.GetFormasPagoIngreso),
-    mergeMap(({ idUsuario }) => this.ingresoDetailService.getFormasPago(idUsuario)
-      .pipe(
-        map(formasPago => IngresoDetailActions.GetFormasPagoIngresoSuccess({ formasPago })),
-        catchError((error) => {
-          return of(IngresoDetailActions.GetFormasPagoIngresoFailure({ errorMessage: error }));
-        })
-      )
-    )
-  ));
-
-  getPersonas$ = createEffect(() => this.actions$.pipe(
-    ofType(IngresoDetailActions.GetPersonasIngreso),
-    mergeMap(({ idUsuario }) => this.ingresoDetailService.getPersonas(idUsuario)
-      .pipe(
-        map(personas => IngresoDetailActions.GetPersonasIngresoSuccess({ personas })),
-        catchError((error) => {
-          return of(IngresoDetailActions.GetPersonasIngresoFailure({ errorMessage: error }));
-        })
-      )
-    )
-  ));
-
-  getConceptos$ = createEffect(() => this.actions$.pipe(
-    ofType(IngresoDetailActions.GetConceptosIngreso),
-    mergeMap(({ idUsuario }) => this.ingresoDetailService.getConceptos(idUsuario)
-      .pipe(
-        map(conceptos => IngresoDetailActions.GetConceptosIngresoSuccess({ conceptos })),
-        catchError((error) => {
-          return of(IngresoDetailActions.GetConceptosIngresoFailure({ errorMessage: error }));
-        })
-      )
-    )
-  ));
-}
+}  

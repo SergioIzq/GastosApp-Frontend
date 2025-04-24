@@ -1,5 +1,7 @@
 {
   "/api": {
-
+    "target": "https://gastosapp-backend.onrender.com",
+    "secure": false,
+    "changeOrigin": true
   }
 }

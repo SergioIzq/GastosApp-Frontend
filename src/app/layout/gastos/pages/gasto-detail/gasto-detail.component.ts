@@ -1,14 +1,13 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Observable, takeUntil, of, filter } from 'rxjs';
+import { Subject, Observable, takeUntil, of, filter, map, switchMap, combineLatest } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Gasto } from 'src/app/shared/models/entidades/gasto.model';
 import { ActionsSubject, Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import * as GastoDetailActions from '../../ngrx/actions/gasto-detail.actions'
 import * as GastoSelector from '../../ngrx/selectors/gasto-detail.selectors'
 import { Router } from '@angular/router';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
 import { Persona } from 'src/app/shared/models/entidades/persona.model';
 import { Proveedor } from 'src/app/shared/models/entidades/proveedor.model';
@@ -18,6 +17,9 @@ import { Concepto } from 'src/app/shared/models/entidades/concepto.model';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { minAmountValidator } from 'src/app/shared/models/entidades/minAmountValidator.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoRespuesta.model';
+import { ChangeDetectorRef } from '@angular/core';
+import { GastoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoByIdRespuesta.model';
 
 @Component({
   selector: 'app-gasto-detail',
@@ -29,23 +31,18 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
   gastoId: number = 0;
-  gastoPorId$!: Observable<Gasto | null>;
+  gastoPorId$!: Observable<GastoByIdRespuesta | null>;
   loading: boolean = false;
   error$!: Observable<boolean>;
   detailGastoForm: FormGroup;
   originalGastoData!: Gasto;
   isNewGasto: boolean = false;
   newGastoForm!: FormGroup;
-  cuentas$!: Observable<ResponseData<Cuenta> | null>;
-  cuentas!: ResponseData<Cuenta>;
-  personas$!: Observable<ResponseData<Persona> | null>;
-  personas!: ResponseData<Persona>;
-  proveedores$!: Observable<ResponseData<Proveedor> | null>;
-  proveedores!: ResponseData<Proveedor>;
-  formasPago$!: Observable<ResponseData<FormaPago> | null>;
-  formasPago!: ResponseData<FormaPago>;
-  conceptos$!: Observable<ResponseData<Concepto> | null>;
-  conceptos!: ResponseData<Concepto>;
+  cuentas: Cuenta[] = [];
+  personas: Persona[] = [];
+  proveedores: Proveedor[] = [];
+  formasPago: FormaPago[] = [];
+  conceptos: Concepto[] = [];
   categorias: Categoria[] = [];
   filteredConceptos: Concepto[] = [];
   categoriaSeleccionada: Categoria | null = null;
@@ -53,7 +50,9 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
   selectedConceptoId!: number;
   idUsuario: number | null = null;
   deshabilitarBoton: boolean = false;
+  gastoRespuesta: GastoRespuesta = new GastoRespuesta();
   private _confirmationService: ConfirmationService = inject(ConfirmationService);
+  private cdRef: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   constructor(
     private store: Store<AppState>,
@@ -73,6 +72,7 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
       Persona: ['', [Validators.required]],
       FormaPago: ['', [Validators.required]],
       Cuenta: ['', [Validators.required]],
+      Categoria: ['', [Validators.required]]
     });
 
     this.detailGastoForm = this.fb.group({
@@ -92,133 +92,76 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.newGastoForm.get('Concepto')?.disable();
 
-    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
-      if (idUsuario) {
+    combineLatest([
+      this.route.paramMap,
+      this.store.select(selectUserId).pipe(filter(id => id > 0))
+    ])
+      .pipe(
+        takeUntil(this.destroy$),
+      )
+      .subscribe(([params, idUsuario]) => {
         this.idUsuario = idUsuario;
 
-        this.store.dispatch(GastoDetailActions.GetCuentasGasto({ idUsuario: this.idUsuario }));
-        this.store.dispatch(GastoDetailActions.GetPersonasGasto({ idUsuario: this.idUsuario }));
-        this.store.dispatch(GastoDetailActions.GetProveedoresGasto({ idUsuario: this.idUsuario }));
-        this.store.dispatch(GastoDetailActions.GetFormasPagoGasto({ idUsuario: this.idUsuario }));
-        this.store.dispatch(GastoDetailActions.GetConceptosGasto({ idUsuario: this.idUsuario }));
-      }
-    });
+        const idString = params.get('id');
+        const id = parseInt(idString!, 10);
+        this.gastoId = id;
 
+        if (id === 0) {
+          this.isNewGasto = true;
+          this.gastoPorId$ = of(null);
+          this.newGastoForm.patchValue({
+            Fecha: new Date().toLocaleDateString('es-ES')
+          });
+
+          this.store.dispatch(GastoDetailActions.GetNewGasto({ payload: idUsuario }));
+        } else {
+          this.isNewGasto = false;
+          this.store.dispatch(GastoDetailActions.GetGasto({ id }));
+          this.gastoPorId$ = this.store.select(GastoSelector.selectedGastoSelector);
+        }
+      });
 
     this.actionsSubject.pipe(filter(action => action.type === 'CreateGastoSuccess'), takeUntil(this.destroy$))
       .subscribe((action: any) => {
         if (this.idUsuario) {
           this.router.navigate(['gastos/gasto-detail', action.gasto.Item.Id])
-          this.store.dispatch(GastoDetailActions.GetCuentasGasto({ idUsuario: this.idUsuario }));
+          this.gastoId = action.gasto.Item.Id;
           this.isNewGasto = false;
+          this.detailGastoForm.patchValue(this.newGastoForm.value);
           this.detailGastoForm.markAsPristine();
         }
       });
 
-    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
-      const idString = params.get('id');
-      if (idString !== null) {
-        const id = parseInt(idString, 10);
-        this.gastoId = id;
-        if (id === 0) {
-          // Si el ID es 0, significa que es una nueva visita
-          this.isNewGasto = true;
-          this.gastoPorId$ = of(null);
-          this.newGastoForm.patchValue({
-            Fecha: new Date().toLocaleDateString('es-ES')
-          })
-        } else {
-          // Si el ID no es 0, obtener el gasto por el ID
-          this.isNewGasto = false;
-          this.store.dispatch(GastoDetailActions.GetGasto({ id: id }));
-          this.gastoPorId$ = this.store.select(GastoSelector.selectedGastoSelector);
+    this.actionsSubject.pipe(filter(action => action.type === 'GetNewGastoSuccess'), takeUntil(this.destroy$))
+      .subscribe((action: any) => {
+        this.gastoRespuesta = action.payload;
+
+        if (this.gastoRespuesta) {
+          this.cuentas = [...this.gastoRespuesta.ListaCuentas];
+          this.formasPago = [...this.gastoRespuesta.ListaFormasPago];
+          this.personas = [...this.gastoRespuesta.ListaPersonas];
+          this.proveedores = [...this.gastoRespuesta.ListaProveedores];
+          this.conceptos = [...this.gastoRespuesta.ListaConceptos];
+          this.categorias = [...this.gastoRespuesta.ListaCategorias];
+          this.cdRef.detectChanges();
         }
-      }
-    });
-
-    this.cuentas$ = this.store.select(GastoSelector.selectCuentas);
-    this.cuentas$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((cuentas: ResponseData<Cuenta> | null) => {
-        if (cuentas && cuentas.Items) {
-          const sortedItems = [...cuentas.Items].sort((a: Cuenta, b: Cuenta) =>
-            a.Nombre.localeCompare(b.Nombre)
-          );
-
-          this.cuentas = {
-            ...cuentas,
-            Items: sortedItems
-          };
-        }
-      });
-
-    this.formasPago$ = this.store.select(GastoSelector.selectFormasPago);
-    this.formasPago$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((formasPago: ResponseData<FormaPago> | null) => {
-        if (formasPago && formasPago.Items) {
-          const sortedItems = [...formasPago.Items].sort((a: FormaPago, b: FormaPago) =>
-            a.Nombre.localeCompare(b.Nombre)
-          );
-
-          this.formasPago = {
-            ...formasPago,
-            Items: sortedItems
-          };
-        }
-      });
-
-    this.personas$ = this.store.select(GastoSelector.selectPersonas);
-    this.personas$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((personas: ResponseData<Persona> | null) => {
-        if (personas && personas.Items) {
-          const sortedItems = [...personas.Items].sort((a: Persona, b: Persona) =>
-            a.Nombre.localeCompare(b.Nombre)
-          );
-
-          this.personas = {
-            ...personas,
-            Items: sortedItems
-          };
-        }
-      });
-
-    this.proveedores$ = this.store.select(GastoSelector.selectProveedores);
-    this.proveedores$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((proveedores: ResponseData<Proveedor> | null) => {
-        if (proveedores && proveedores.Items) {
-          const sortedItems = [...proveedores.Items].sort((a: Proveedor, b: Proveedor) =>
-            a.Nombre.localeCompare(b.Nombre)
-          );
-
-          this.proveedores = {
-            ...proveedores,
-            Items: sortedItems
-          };
-        }
-      });
-
-    this.conceptos$ = this.store.select(GastoSelector.selectConceptos);
-    this.conceptos$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((conceptos: any) => {
-        if (conceptos) {
-          this.conceptos = conceptos;
-          if (!this.selectedCategoria) {
-            this.extractCategorias(conceptos.Items);
-          }
-        }
-      });
-
-    this.gastoPorId$ = this.store.select(GastoSelector.selectedGastoSelector);
+      })
 
     this.gastoPorId$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((gasto: Gasto | null) => {
-        if (gasto) {
+      .subscribe((gastoByIdRespuesta: GastoByIdRespuesta | null) => {
+        if (gastoByIdRespuesta) {
+          let gasto = gastoByIdRespuesta.GastoById;
+          this.cuentas = [...gastoByIdRespuesta.GastoRespuesta.ListaCuentas];
+          this.formasPago = [...gastoByIdRespuesta.GastoRespuesta.ListaFormasPago];
+          this.personas = [...gastoByIdRespuesta.GastoRespuesta.ListaPersonas];
+          this.proveedores = [...gastoByIdRespuesta.GastoRespuesta.ListaProveedores];
+          this.conceptos = [...gastoByIdRespuesta.GastoRespuesta.ListaConceptos];
+          this.categorias = [...gastoByIdRespuesta.GastoRespuesta.ListaCategorias];
+          this.cdRef.detectChanges();
+
           // Convierte la fecha de UTC a local
           const fechaUTC = new Date(gasto.Fecha);
           const fechaLocal = new Date(fechaUTC.getTime() - fechaUTC.getTimezoneOffset() * 60000);
@@ -230,15 +173,13 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
             ...gasto,
             Fecha: fechaLocal,
             Monto: monto,
-            Categoria: gasto.Concepto.Categoria
+            Categoria: gasto.Concepto.Categoria,
           });
 
           this.originalGastoData = { ...gasto }
-          this.categorias.push(gasto.Concepto.Categoria);
 
           this.filteredConceptos.push(gasto.Concepto);
           this.detailGastoForm.markAsPristine();
-
         }
       });
 
@@ -318,14 +259,14 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
   }
 
   private createGasto(formattedFormValue: any, fechaUTC: any) {
-    const newGastoData = { ...formattedFormValue, fechaUTC };
+    const newGastoData = { ...formattedFormValue, Fecha: fechaUTC };
     this.store.dispatch(GastoDetailActions.CreateGasto({ payload: newGastoData }));
     this.deshabilitarBoton = true;
   }
 
   private updateGasto(formattedFormValue: any, fechaUTC: any) {
     const updatedGastoData = { ...formattedFormValue, Fecha: fechaUTC };
-    updatedGastoData.Id = this.originalGastoData.Id;
+    updatedGastoData.Id = this.gastoId;
     this.store.dispatch(GastoDetailActions.UpdateGasto({ gasto: updatedGastoData }));
     this.detailGastoForm.markAsPristine();
     this.deshabilitarBoton = true;
@@ -375,18 +316,34 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
     );
   }
 
-
   onCategoriaChange(event: any): void {
-    this.extractCategorias(this.conceptos.Items)
-    this.selectedCategoria = event.value ? event.value.Id : null;
-    this.detailGastoForm.patchValue({ Concepto: null })
-    this.filterConceptos();
+    const selectedCategoria = event.value;
+
+    if (selectedCategoria) {
+      this.selectedCategoria = selectedCategoria.Id;
+      if (this.isNewGasto) {
+        this.newGastoForm.get('Concepto')?.enable();
+      } else {
+        this.detailGastoForm.get('Concepto')?.enable();
+      }
+      this.filterConceptos();
+    } else {
+      this.selectedCategoria = null;
+      this.filteredConceptos = [];
+      if (this.isNewGasto) {
+        this.newGastoForm.get('Concepto')?.disable();
+        this.newGastoForm.patchValue({ Concepto: null });
+      } else {
+        this.detailGastoForm.patchValue({ Concepto: null });
+        this.detailGastoForm.get('Concepto')?.disable();
+      }
+    }
   }
 
   private filterConceptos(): void {
     if (this.selectedCategoria !== null && this.conceptos) {
       // Filtra los conceptos por la categoría seleccionada
-      this.filteredConceptos = this.conceptos.Items.filter(concepto => {
+      this.filteredConceptos = this.conceptos.filter(concepto => {
         const conceptoCategoriaId = concepto.Categoria.Id;
         return conceptoCategoriaId === this.selectedCategoria;
       }).sort((a: Concepto, b: Concepto) =>
@@ -395,7 +352,7 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
 
     } else {
       // Si no hay categoría seleccionada, mostrar todos los conceptos
-      this.filteredConceptos = this.conceptos ? this.conceptos.Items.sort((a: Concepto, b: Concepto) =>
+      this.filteredConceptos = this.conceptos ? this.conceptos.sort((a: Concepto, b: Concepto) =>
         a.Nombre.localeCompare(b.Nombre)
       ) : [];
     }

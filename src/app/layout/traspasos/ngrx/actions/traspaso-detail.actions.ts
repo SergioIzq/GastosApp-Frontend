@@ -1,8 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
-import { ResponseOne } from 'src/app/shared/models/entidades/responseOne.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
 import { Traspaso } from 'src/app/shared/models/entidades/traspaso.model';
 
 export const RealizarTraspaso = createAction('RealizarTraspaso', props<{ payload: Traspaso }>());

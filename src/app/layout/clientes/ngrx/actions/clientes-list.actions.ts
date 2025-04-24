@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Cliente } from 'src/app/shared/models/entidades/cliente.model';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
 
 export const LoadingClientes = createAction('LoadingClientes', props<{ page: number, size: number, idUsuario: number }>());
 

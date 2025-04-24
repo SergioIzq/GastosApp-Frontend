@@ -1,5 +1,5 @@
 import { Cuenta } from "../cuenta.model";
-import { ResponseData } from "../responseData.model";
+import { ResponseData } from "../respuestas/responseData.model";
 import { Traspaso } from "../traspaso.model";
 
 export interface TraspasoDetailState {

@@ -8,7 +8,7 @@ import * as TraspasoDetailActions from '../../ngrx/actions/traspaso-detail.actio
 import * as TraspasoSelector from '../../ngrx/selectors/traspaso-detail.selectors';
 import { Location } from '@angular/common';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
 import { MessageService } from 'primeng/api';
 import { Traspaso } from 'src/app/shared/models/entidades/traspaso.model';
 import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';

@@ -9,7 +9,7 @@ import { Location } from '@angular/common';
 import * as SelectTraspasosList from '../../ngrx/selectors/traspasos-list.selectors';
 import * as TraspasosListActions from 'src/app/layout/traspasos/ngrx/actions/traspasos-list.actions';
 import { Table } from 'primeng/table';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
 import { Traspaso } from 'src/app/shared/models/entidades/traspaso.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';

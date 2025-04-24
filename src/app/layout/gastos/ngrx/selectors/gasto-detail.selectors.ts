@@ -25,27 +25,7 @@ export const selectErrorMessage = createSelector(
     (state: GastoDetailState) => state.errorMessage
 );
 
-export const selectCuentas = createSelector(
+export const selectGastoRespuesta = createSelector(
     selectGastoDetailFeature,
-    (state: GastoDetailState) => state.cuentas
-);
-
-export const selectProveedores = createSelector(
-    selectGastoDetailFeature,
-    (state: GastoDetailState) => state.proveedores
-);
-
-export const selectFormasPago = createSelector(
-    selectGastoDetailFeature,
-    (state: GastoDetailState) => state.formasPago
-);
-
-export const selectConceptos = createSelector(
-    selectGastoDetailFeature,
-    (state: GastoDetailState) => state.conceptos
-);
-
-export const selectPersonas = createSelector(
-    selectGastoDetailFeature,
-    (state: GastoDetailState) => state.personas
+    (state: GastoDetailState) => state.gastoRespuesta
 );

@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 import { Gasto } from 'src/app/shared/models/entidades/gasto.model';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
 
 export const LoadingGastos = createAction('LoadingGastos', props<{ page: number, size: number, idUsuario:number }>());
 

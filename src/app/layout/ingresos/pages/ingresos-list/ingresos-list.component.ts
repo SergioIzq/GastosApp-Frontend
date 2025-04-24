@@ -7,7 +7,7 @@ import { Location } from '@angular/common';
 import * as SelectIngresosList from '../../ngrx/selectors/ingresos-list.selectors'
 import * as IngresosListActions from 'src/app/layout/ingresos/ngrx/actions/ingresos-list.actions';
 import { Table } from 'primeng/table';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
 import { Ingreso } from 'src/app/shared/models/entidades/ingreso.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';

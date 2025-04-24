@@ -1,5 +1,5 @@
 import { Persona } from "../persona.model";
-import { ResponseOne } from "../responseOne.model";
+import { ResponseOne } from "../respuestas/responseOne.model";
 
 export interface PersonaDetailState{
     loading: boolean;

@@ -3,14 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Gasto } from 'src/app/shared/models/entidades/gasto.model';
 import { HttpParams } from '@angular/common/http';
-import { ResponseData } from 'src/app/shared/models/entidades/responseData.model';
-import { ResponseOne } from 'src/app/shared/models/entidades/responseOne.model';
-import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
-import { Persona } from 'src/app/shared/models/entidades/persona.model';
-import { FormaPago } from 'src/app/shared/models/entidades/formaPago.model';
-import { Proveedor } from 'src/app/shared/models/entidades/proveedor.model';
-import { Concepto } from 'src/app/shared/models/entidades/concepto.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
+import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoRespuesta.model';
+import { GastoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoByIdRespuesta.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,9 +35,9 @@ export class GastoService {
 
   }
 
-  getById(id: number): Observable<Gasto> {
-    const url = `${this.apiUrl}gasto/${id}`;
-    return this.http.get<Gasto>(url);
+  getById(id: number): Observable<GastoByIdRespuesta> {
+    const url = `${this.apiUrl}gasto/getById/${id}`;
+    return this.http.get<GastoByIdRespuesta>(url);
   }
 
   update(gasto: Partial<Gasto>): Observable<Gasto> {
@@ -57,34 +54,14 @@ export class GastoService {
     return this.http.post<ResponseOne<Gasto>>(`${this.apiUrl}gasto`, gasto);
   }
 
-  getCuentas(idUsuario: number): Observable<ResponseData<Cuenta>> {
-    const url = `${this.apiUrl}cuenta/getCuentas/${idUsuario}`;
-    return this.http.get<ResponseData<Cuenta>>(url);
-  }
-
-  getPersonas(idUsuario: number): Observable<ResponseData<Persona>> {
-    const url = `${this.apiUrl}persona/getPersonas/${idUsuario}`;
-    return this.http.get<ResponseData<Persona>>(url);
-  }
-
-  getFormasPago(idUsuario: number): Observable<ResponseData<FormaPago>> {
-    const url = `${this.apiUrl}formapago/getFormaPago/${idUsuario}`;
-    return this.http.get<ResponseData<FormaPago>>(url);
-  }
-
-  getProveedores(idUsuario: number): Observable<ResponseData<Proveedor>> {
-    const url = `${this.apiUrl}proveedor/getProveedores/${idUsuario}`;
-    return this.http.get<ResponseData<Proveedor>>(url);
-  }
-
-  getConceptos(idUsuario: number): Observable<ResponseData<Concepto>> {
-    const url = `${this.apiUrl}concepto/getConceptos/${idUsuario}`;
-    return this.http.get<ResponseData<Concepto>>(url);
-  }
-
   exportExcel(res: Excel): Observable<any> {
     const url = `${this.apiUrl}gasto/exportExcel`;
 
     return this.http.post<Excel>(url, res);
+  }
+
+  getNewGasto(idUsuario: number): Observable<GastoRespuesta>{    
+    const url = `${this.apiUrl}gasto/getNewGasto/${idUsuario}`;
+    return this.http.get<GastoRespuesta>(url);
   }
 }

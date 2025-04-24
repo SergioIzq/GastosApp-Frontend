@@ -4,7 +4,7 @@ import { of, mergeMap } from "rxjs";
 import { map, catchError, tap } from "rxjs/operators";
 import * as IngresosListActions from 'src/app/layout/ingresos/ngrx/actions/ingresos-list.actions';
 import { IngresoService } from '../../service/ingreso.service';
-import { ResponseData } from '../../../../shared/models/entidades/responseData.model';
+import { ResponseData } from '../../../../shared/models/entidades/respuestas/responseData.model';
 import { Ingreso } from 'src/app/shared/models/entidades/ingreso.model';
 import { MessageService } from 'primeng/api';
 

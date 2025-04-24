@@ -4,7 +4,7 @@ import { of, mergeMap } from "rxjs";
 import { map, catchError, tap } from "rxjs/operators";
 import * as CuentasListActions from 'src/app/layout/cuentas/ngrx/actions/cuentas-list.actions';
 import { CuentaService } from '../../service/cuentas.service';
-import { ResponseData } from '../../../../shared/models/entidades/responseData.model';
+import { ResponseData } from '../../../../shared/models/entidades/respuestas/responseData.model';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
 import { MessageService } from 'primeng/api';
 

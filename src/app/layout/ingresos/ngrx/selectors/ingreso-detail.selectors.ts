@@ -24,28 +24,3 @@ export const selectErrorMessage = createSelector(
     selectIngresoDetailFeature,
     (state: IngresoDetailState) => state.errorMessage
 );
-
-export const selectCuentas = createSelector(
-    selectIngresoDetailFeature,
-    (state: IngresoDetailState) => state.cuentas
-);
-
-export const selectClientes = createSelector(
-    selectIngresoDetailFeature,
-    (state: IngresoDetailState) => state.clientes
-);
-
-export const selectFormasPago = createSelector(
-    selectIngresoDetailFeature,
-    (state: IngresoDetailState) => state.formasPago
-);
-
-export const selectConceptos = createSelector(
-    selectIngresoDetailFeature,
-    (state: IngresoDetailState) => state.conceptos
-);
-
-export const selectPersonas = createSelector(
-    selectIngresoDetailFeature,
-    (state: IngresoDetailState) => state.personas
-);

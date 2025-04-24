@@ -45,7 +45,7 @@
                             <!-- Segunda fila de inputs -->
                             <div class="field col-12 md:col-6">
                                 <span class="p-float-label">
-                                    <p-dropdown [options]="proveedores?.Items" optionLabel="Nombre" [filter]="true"
+                                    <p-dropdown [options]="proveedores" optionLabel="Nombre" [filter]="true"
                                         emptyMessage="No se encontraron resultados"
                                         emptyFilterMessage="No se encontraron resultados" formControlName="Proveedor"
                                         filterBy="Nombre" [showClear]="true">
@@ -69,7 +69,7 @@
 
                             <div class="field col-12 md:col-6">
                                 <span class="p-float-label">
-                                    <p-dropdown [options]="formasPago?.Items" optionLabel="Nombre" [filter]="true"
+                                    <p-dropdown [options]="formasPago" optionLabel="Nombre" [filter]="true"
                                         emptyMessage="No se encontraron resultados"
                                         emptyFilterMessage="No se encontraron resultados" formControlName="FormaPago"
                                         filterBy="Nombre" [showClear]="true">
@@ -138,7 +138,7 @@
 
                             <div class="field col-12 md:col-6">
                                 <span class="p-float-label">
-                                    <p-dropdown [options]="personas?.Items" optionLabel="Nombre" [filter]="true"
+                                    <p-dropdown [options]="personas" optionLabel="Nombre" [filter]="true"
                                         emptyMessage="No se encontraron resultados"
                                         emptyFilterMessage="No se encontraron resultados" formControlName="Persona"
                                         filterBy="Nombre" [showClear]="true">
@@ -161,8 +161,8 @@
 
                             <div class="field col-12 md:col-6">
                                 <span class="p-float-label">
-                                    <p-dropdown [options]="cuentas?.Items" optionLabel="Nombre" [filter]="true"
-                                        emptyMessage="No se encontraron resultados"
+                                    <p-dropdown [options]="cuentas" optionLabel="Nombre"
+                                        [filter]="true" emptyMessage="No se encontraron resultados"
                                         emptyFilterMessage="No se encontraron resultados" formControlName="Cuenta"
                                         filterBy="Nombre" [showClear]="true">
 
@@ -172,9 +172,9 @@
                                             </div>
                                         </ng-template>
 
-                                        <ng-template let-categoria pTemplate="item">
+                                        <ng-template let-cuenta pTemplate="item">
                                             <div class="flex align-items-center gap-2">
-                                                <div>{{ categoria.Nombre }}</div>
+                                                <div>{{ cuenta.Nombre }}</div>
                                             </div>
                                         </ng-template>
                                     </p-dropdown>
@@ -206,7 +206,8 @@
                             <div class="field col-6 md:col-6" style="text-align: center;">
                                 <p-button label="Crear" icon="pi pi-check" severity="success" iconPos="right"
                                     [disabled]="newGastoForm.invalid || newGastoForm.pristine || deshabilitarBoton"
-                                    (onClick)="onSubmit()" [raised]="true" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                    (onClick)="onSubmit()" [raised]="true"
+                                    [style]="{'width': '140px', 'margin-top': '1rem'}">
                                 </p-button>
                             </div>
                         </div>
@@ -252,7 +253,7 @@
                             <!-- Segunda fila de inputs -->
                             <div class="field col-12 md:col-6">
                                 <span class="p-float-label">
-                                    <p-dropdown [options]="proveedores?.Items" optionLabel="Nombre" [filter]="true"
+                                    <p-dropdown [options]="proveedores" optionLabel="Nombre" [filter]="true"
                                         emptyMessage="No se encontraron resultados"
                                         emptyFilterMessage="No se encontraron resultados" formControlName="Proveedor"
                                         filterBy="Nombre" [showClear]="true">
@@ -275,7 +276,7 @@
 
                             <div class="field col-12 md:col-6">
                                 <span class="p-float-label">
-                                    <p-dropdown [options]="formasPago?.Items" optionLabel="Nombre" [filter]="true"
+                                    <p-dropdown [options]="formasPago" optionLabel="Nombre" [filter]="true"
                                         emptyMessage="No se encontraron resultados"
                                         emptyFilterMessage="No se encontraron resultados" formControlName="FormaPago"
                                         filterBy="Nombre" [showClear]="true">
@@ -343,7 +344,7 @@
                             </div>
                             <div class="field col-12 md:col-6">
                                 <span class="p-float-label">
-                                    <p-dropdown [options]="personas?.Items" optionLabel="Nombre" [filter]="true"
+                                    <p-dropdown [options]="personas" optionLabel="Nombre" [filter]="true"
                                         emptyMessage="No se encontraron resultados"
                                         emptyFilterMessage="No se encontraron resultados" formControlName="Persona"
                                         filterBy="Nombre" [showClear]="true">
@@ -366,8 +367,8 @@
 
                             <div class="field col-12 md:col-6">
                                 <span class="p-float-label">
-                                    <p-dropdown [options]="cuentas?.Items" optionLabel="Nombre" [filter]="true"
-                                        emptyMessage="No se encontraron resultados"
+                                    <p-dropdown [options]="cuentas" optionLabel="Nombre"
+                                        [filter]="true" emptyMessage="No se encontraron resultados"
                                         emptyFilterMessage="No se encontraron resultados" formControlName="Cuenta"
                                         filterBy="Nombre" [showClear]="true">
 
@@ -377,9 +378,9 @@
                                             </div>
                                         </ng-template>
 
-                                        <ng-template let-categoria pTemplate="item">
+                                        <ng-template let-cuenta pTemplate="item">
                                             <div class="flex align-items-center gap-2">
-                                                <div>{{ categoria.Nombre }}</div>
+                                                <div>{{ cuenta.Nombre }}</div>
                                             </div>
                                         </ng-template>
                                     </p-dropdown>
@@ -411,7 +412,8 @@
                             <div class="field col-6 md:col-6" style="text-align: center;">
                                 <p-button label="Guardar" icon="pi pi-check" severity="success" iconPos="right"
                                     [disabled]="detailGastoForm.invalid || detailGastoForm.pristine || deshabilitarBoton"
-                                    (onClick)="onSubmit()" [raised]="true" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                    (onClick)="onSubmit()" [raised]="true"
+                                    [style]="{'width': '140px', 'margin-top': '1rem'}">
                                 </p-button>
                             </div>
                         </div>

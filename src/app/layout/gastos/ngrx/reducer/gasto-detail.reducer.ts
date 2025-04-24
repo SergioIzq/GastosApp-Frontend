@@ -2,7 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import { GastoDetailState } from "src/app/shared/models/entidades/estados/gastoDetailState.model";
 import * as GastoDetailActions from '../actions/gasto-detail.actions'
 
-export const estadoInicial: GastoDetailState = { loading: false, gastoPorId: null, errorCarga: false, errorMessage: '', personas: null, cuentas: null, formasPago: null, conceptos: null, proveedores: null };
+export const estadoInicial: GastoDetailState = { loading: false, gastoPorId: null, errorCarga: false, errorMessage: '', gastoRespuesta: null};
 
 const gastoDetailReducer = createReducer(
     estadoInicial,
@@ -34,8 +34,7 @@ const gastoDetailReducer = createReducer(
     on(GastoDetailActions.CreateGastoSuccess, (state, { gasto }) => ({
         ...state,
         loading: false,
-        createdSuccess: true,
-        gasto: gasto
+        createdSuccess: true,        
     })),
     on(GastoDetailActions.CreateGastoFailure, (state) => ({
         ...state,
@@ -57,82 +56,19 @@ const gastoDetailReducer = createReducer(
         createdSuccess: false,
         errorMessage: action.errorMessage
     })),
-    on(GastoDetailActions.GetCuentasGasto, (state) => ({
+
+    on(GastoDetailActions.GetNewGasto, (state) => ({
         ...state,
         loading: true,
-        errorCarga: false,
     })),
-    on(GastoDetailActions.GetCuentasGastoSuccess, (state, { cuentas }) => ({
+
+    on(GastoDetailActions.GetNewGastoSuccess, (state, { payload }) => ({
         ...state,
         loading: false,
-        cuentas: cuentas,
-        errorCarga: false,
+        gastoRespuesta: payload
     })),
-    on(GastoDetailActions.GetCuentasGastoFailure, (state) => ({
-        ...state,
-        loading: false,
-        errorCarga: true,
-    })),
-    on(GastoDetailActions.GetPersonasGasto, (state) => ({
-        ...state,
-        loading: true,
-        errorCarga: false,
-    })),
-    on(GastoDetailActions.GetPersonasGastoSuccess, (state, { personas }) => ({
-        ...state,
-        loading: false,
-        errorCarga: false,
-        personas: personas,
-    })),
-    on(GastoDetailActions.GetPersonasGastoFailure, (state) => ({
-        ...state,
-        loading: false,
-        errorCarga: true,
-    })),
-    on(GastoDetailActions.GetFormasPagoGasto, (state) => ({
-        ...state,
-        loading: true,
-        errorCarga: false,
-    })),
-    on(GastoDetailActions.GetFormasPagoGastoSuccess, (state, { formasPago }) => ({
-        ...state,
-        loading: false,
-        errorCarga: false,
-        formasPago: formasPago,
-    })),
-    on(GastoDetailActions.GetFormasPagoGastoFailure, (state) => ({
-        ...state,
-        loading: false,
-        errorCarga: true,
-    })),
-    on(GastoDetailActions.GetProveedoresGasto, (state) => ({
-        ...state,
-        loading: true,
-        errorCarga: false,
-    })),
-    on(GastoDetailActions.GetProveedoresGastoSuccess, (state, { proveedores }) => ({
-        ...state,
-        loading: false,
-        errorCarga: false,
-        proveedores: proveedores,
-    })),
-    on(GastoDetailActions.GetProveedoresGastoFailure, (state) => ({
-        ...state,
-        loading: false,
-        errorCarga: true,
-    })),
-    on(GastoDetailActions.GetConceptosGasto, (state) => ({
-        ...state,
-        loading: true,
-        errorCarga: false,
-    })),
-    on(GastoDetailActions.GetConceptosGastoSuccess, (state, { conceptos }) => ({
-        ...state,
-        loading: false,
-        errorCarga: false,
-        conceptos: conceptos,
-    })),
-    on(GastoDetailActions.GetConceptosGastoFailure, (state) => ({
+
+    on(GastoDetailActions.GetNewGastoFail, (state) => ({
         ...state,
         loading: false,
         errorCarga: true,
