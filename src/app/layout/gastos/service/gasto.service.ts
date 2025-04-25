@@ -9,6 +9,7 @@ import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoRespuesta.model';
 import { GastoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoByIdRespuesta.model';
 import { environment } from 'src/environments/environment';
+import { GastoProgramado } from 'src/app/shared/models/entidades/gastoProgramado.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,18 @@ export class GastoService {
 
   }
 
+  getCantidadGastosProgramados(page: number, size: number, idUsuario: number): Observable<ResponseData<GastoProgramado>> {
+    const url = `${this.apiUrl}gastoProgramado/getCantidad`;
+
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('idUsuario', idUsuario)
+
+    return this.http.get<ResponseData<GastoProgramado>>(url, { params });
+
+  }
+
   getById(id: number): Observable<GastoByIdRespuesta> {
     const url = `${this.apiUrl}gasto/getById/${id}`;
     return this.http.get<GastoByIdRespuesta>(url);
@@ -49,6 +62,11 @@ export class GastoService {
   delete(id: number): Observable<Gasto> {
     const url = `${this.apiUrl}gasto/${id}`;
     return this.http.delete<Gasto>(url);
+  }
+
+  deleteProgramado(id: number): Observable<GastoProgramado> {
+    const url = `${this.apiUrl}gastoProgramado/${id}`;
+    return this.http.delete<GastoProgramado>(url);
   }
 
   create(gasto: Gasto): Observable<ResponseOne<Gasto>> {

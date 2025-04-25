@@ -12,14 +12,20 @@ import { GastoDetailComponent } from './pages/gasto-detail/gasto-detail.componen
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { PrimeNgModule } from 'src/app/primeng/primeng.module';
 import { SharedModule } from 'src/app/shared/pipes/shared.module';
+import { GastoProgramadoDetailComponent } from './pages/gasto-programado-detail/gasto-programado-detail.component';
+import { GastosProgramadosListComponent } from './pages/gastos-programados-list/gastos-programados-list.component';
+import { GastosProgramadosListEffects } from './ngrx/effects/gastos-programados-list.effects';
 
 const GASTOS_COMPONENTS = [
   GastosListComponent,
-  GastoDetailComponent
+  GastoDetailComponent,
+  GastosProgramadosListComponent,
+  GastoProgramadoDetailComponent
 ];
 
 const GASTOS_EFFECTS = [
   GastosListEffects,
+  GastosProgramadosListEffects,
   GastoDetailEffects
 ];
 
@@ -29,7 +35,7 @@ const GASTOS_PROVIDERS = [
 
 @NgModule({
   declarations: [
-    ...GASTOS_COMPONENTS,    
+    ...GASTOS_COMPONENTS     
   ],
   imports: [
     CommonModule,

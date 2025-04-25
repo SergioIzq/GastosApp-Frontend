@@ -5,12 +5,13 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../ngrx/auth.actions';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  apiUrl = 'https://gastosapp-backend.onrender.com/api/';
+  apiUrl = environment.apiUrl;
   private tokenExpirationTimer: any;
 
   constructor(private http: HttpClient, private router: Router, private messageService: MessageService, private store: Store) { }

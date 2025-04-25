@@ -49,6 +49,8 @@ import { AuthState } from "./shared/models/entidades/estados/authState.model";
 import { AuthReducer } from "./shared/auth/ngrx/auth.reducer";
 import { UsuarioDetailState } from "./shared/models/entidades/estados/usuarioDetailState.model";
 import { UsuarioDetailReducer } from "./layout/usuario/ngrx/usuario-detail.reducer";
+import { GastoProgramado } from "./shared/models/entidades/gastoProgramado.model";
+import { gastosProgramadosListReducer } from "./layout/gastos/ngrx/reducer/gastos-programados-list.reducer";
 
 export interface AppState {
     listaCategorias: EntidadListState<Categoria>;
@@ -74,7 +76,8 @@ export interface AppState {
     listaFormasPago: EntidadListState<FormaPago>,
     formaPago: FormaPagoDetailState,
     auth: AuthState,
-    usuario: UsuarioDetailState
+    usuario: UsuarioDetailState,
+    listaGastosProgramados: EntidadListState<GastoProgramado>,
 }
 
 export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
@@ -101,5 +104,6 @@ export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
     listaFormasPago: formasPagoListReducer,
     formaPago: FormaPagoDetailReducer,
     auth: AuthReducer,
-    usuario: UsuarioDetailReducer
+    usuario: UsuarioDetailReducer,
+    listaGastosProgramados: gastosProgramadosListReducer
 }
