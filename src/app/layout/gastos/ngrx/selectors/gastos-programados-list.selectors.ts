@@ -1,21 +1,21 @@
-import { createSelector } from "@ngrx/store";
-import { AppState } from "src/app/app.state";
+import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { EntidadListState } from "src/app/shared/models/entidades/estados/entidadListState.model";
 import { GastoProgramado } from "src/app/shared/models/entidades/gastoProgramado.model";
+import { gastosProgramadosListFeatureKey } from "../reducer/gastos-programados-list.reducer";
 
-export const selectGastosProgrmadosFeature = (state: AppState) => state.listaGastosProgramados
+export const selectGastosProgramadosFeature = createFeatureSelector<EntidadListState<GastoProgramado>>(gastosProgramadosListFeatureKey);
 
 export const selectGastosList = createSelector(
-    selectGastosProgrmadosFeature,
+    selectGastosProgramadosFeature,
     (state: EntidadListState<any>) => state.lista
 );
 
 export const selectLoading = createSelector(
-    selectGastosProgrmadosFeature,
+    selectGastosProgramadosFeature,
     (state: EntidadListState<GastoProgramado>) => state.loading
 );
 
 export const selectErrorCarga = createSelector(
-    selectGastosProgrmadosFeature,
+    selectGastosProgramadosFeature,
     (state: EntidadListState<GastoProgramado>) => state.errorCarga
 );

@@ -3,6 +3,7 @@ import { UsuarioDetailState } from "src/app/shared/models/entidades/estados/usua
 import * as UsuarioDetailActions from './usuario-detail.actions'
 
 export const estadoInicial: UsuarioDetailState = { loading: false, errorCarga: false };
+export const usuarioDetailFeatureKey = 'usuarioDetailState';
 
 const usuarioDetailReducer = createReducer(
     estadoInicial,
@@ -35,6 +36,6 @@ const usuarioDetailReducer = createReducer(
     }))
 );
 
-export function UsuarioDetailReducer(state: UsuarioDetailState = estadoInicial, action: any): UsuarioDetailState {
+export function reducer(state: UsuarioDetailState = estadoInicial, action: any): UsuarioDetailState {
     return usuarioDetailReducer(state, action);
 }

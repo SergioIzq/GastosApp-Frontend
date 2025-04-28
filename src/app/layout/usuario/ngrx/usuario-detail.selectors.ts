@@ -1,9 +1,8 @@
-import { createSelector } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { UsuarioDetailState } from '../../../shared/models/entidades/estados/usuarioDetailState.model';
+import { usuarioDetailFeatureKey } from './usuario-detail.reducer';
 
-
-export const selectUsuarioDetailFeature = (state: AppState) => state.usuario;
+export const selectUsuarioDetailFeature = createFeatureSelector<UsuarioDetailState>(usuarioDetailFeatureKey);
 
 export const selectLoading = createSelector(
     selectUsuarioDetailFeature,

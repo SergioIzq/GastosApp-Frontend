@@ -3,6 +3,7 @@ import { IngresoDetailState } from "src/app/shared/models/entidades/estados/ingr
 import * as IngresoDetailActions from '../actions/ingreso-detail.actions'
 
 export const estadoInicial: IngresoDetailState = { loading: false, ingresoPorId: null, errorCarga: false, errorMessage: '', ingresoRespuesta: null };
+export const ingresoDetailFeatureKey = 'ingresoDetailState';
 
 const ingresoDetailReducer = createReducer(
     estadoInicial,
@@ -68,6 +69,6 @@ const ingresoDetailReducer = createReducer(
     })),
 );
 
-export function IngresoDetailReducer(state: IngresoDetailState = estadoInicial, action: any): IngresoDetailState {
+export function reducer(state: IngresoDetailState = estadoInicial, action: any): IngresoDetailState {
     return ingresoDetailReducer(state, action);
 }

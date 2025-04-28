@@ -10,7 +10,9 @@ import { PersonaService } from './service/personas.service';
 import { PersonaDetailEffects } from './ngrx/effects/persona-detail.effects';
 import { PersonasRoutingModule } from './personas.routing';
 import { PrimeNgModule } from 'src/app/primeng/primeng.module';
-
+import * as PersonasListReducers from './ngrx/reducers/personas-list.reducer';
+import * as PersonaDetailReducers from './ngrx/reducers/persona-detail.reducer';
+import { StoreModule } from '@ngrx/store';
 
 const PERSONAS_COMPONENTS = [
     PersonasListComponent,
@@ -37,6 +39,8 @@ const PERSONAS_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         PersonasRoutingModule,
+        StoreModule.forFeature(PersonasListReducers.personasListFeatureKey, PersonasListReducers.reducer),
+        StoreModule.forFeature(PersonaDetailReducers.personaDetailFeatureKey, PersonaDetailReducers.reducer),
         EffectsModule.forFeature(PERSONAS_EFFECTS),
     ],
     providers: [

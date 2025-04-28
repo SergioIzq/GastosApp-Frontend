@@ -9,7 +9,8 @@ import { UsuarioDetailEffects } from './ngrx/usuario-detail.effects';
 import { UsuarioRoutingModule } from './usuario.routing';
 import { PrimeNgModule } from 'src/app/primeng/primeng.module';
 import { SharedModule } from 'src/app/shared/pipes/shared.module';
-
+import { StoreModule } from '@ngrx/store';
+import { reducer, usuarioDetailFeatureKey } from './ngrx/usuario-detail.reducer';
 
 const USUARIOS_COMPONENTS = [
     UsuarioDetailComponent
@@ -35,6 +36,7 @@ const USUARIOS_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         UsuarioRoutingModule,
+        StoreModule.forFeature(usuarioDetailFeatureKey, reducer),
         EffectsModule.forFeature(USUARIOS_EFFECTS),
     ],
     providers: [

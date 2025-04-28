@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ActionsSubject, Store } from '@ngrx/store';
 import * as AuthActions from '../../ngrx/auth.actions';
-import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { selectAuthLoading } from '../../ngrx/auth.selectors';
 import { AppState } from 'src/app/app.state';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private store: Store<AppState>,
+    private store: Store<AuthState>,
     private actionsSubject: ActionsSubject
   ) { }
 

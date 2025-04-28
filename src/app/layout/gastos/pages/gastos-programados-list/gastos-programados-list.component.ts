@@ -15,6 +15,8 @@ import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { GastoProgramado } from 'src/app/shared/models/entidades/gastoProgramado.model';
+import { EntidadListState } from 'src/app/shared/models/entidades/estados/entidadListState.model';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 
 @Component({
   selector: 'app-gastos-programados-list',
@@ -47,7 +49,8 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
   idUsuario!: number;
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<EntidadListState<GastoProgramado>>,
+    private _store: Store<AuthState>,
     private router: Router,
     private location: Location,
     private actionsSubject: ActionsSubject,
@@ -56,7 +59,7 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
+    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
     });
 
@@ -196,7 +199,7 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
     const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
     // Guardar el archivo en la carpeta de descargas del usuario
-    saveAs(blob, 'gastos.xlsx');
+    saveAs(blob, 'gastos-programados.xlsx');
   }
 
   // Función para transformar el objeto

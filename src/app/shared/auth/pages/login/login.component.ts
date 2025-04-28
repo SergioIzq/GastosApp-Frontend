@@ -4,9 +4,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { filter, Observable, Subject, takeUntil } from 'rxjs';
 import * as AuthActions from '../../ngrx/auth.actions';
-import { selectAuthError, selectAuthLoading } from '../../ngrx/auth.selectors';
+import { selectAuthError, selectAuthLoading, selectAuthToken } from '../../ngrx/auth.selectors';
 import { AppState } from 'src/app/app.state';
 import { AuthService } from '../../service/auth.service';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private store: Store<AppState>,
+    private store: Store<AuthState>,
     private router: Router,
     private actionsSubject: ActionsSubject,
     private authService: AuthService // Inyectamos AuthService para manejar el token
@@ -37,13 +38,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.actionsSubject.pipe(filter(action => action.type === '[Auth] Login Success'))
-      .subscribe((action: any) => {
-        if (action.token) {
-          this.authService.setToken(action.token.token); // Guarda el token y activa el temporizador
-        }
+      .subscribe((action: any) => {        
+        if (action.respuesta.token) {
+          this.authService.setToken(action.respuesta.token);
+        }        
         this.router.navigate(['/home']);
       });
-
+      
     this.loginForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.deshabilitarBoton = false;
     });

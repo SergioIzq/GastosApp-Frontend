@@ -18,6 +18,9 @@ import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { EntidadListState } from 'src/app/shared/models/entidades/estados/entidadListState.model';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
+import { MenuState } from 'src/app/shared/models/entidades/estados/menustate.model';
 
 @Component({
   selector: 'app-cuentas-list',
@@ -49,7 +52,9 @@ export class CuentasListComponent implements OnInit, OnDestroy {
   res: Excel = new Excel();
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<EntidadListState<Cuenta>>,
+    private _store: Store<AuthState>,
+    private _mstore: Store<MenuState>,
     private router: Router,
     private location: Location,
     private actionsSubject: ActionsSubject,
@@ -58,11 +63,11 @@ export class CuentasListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
+    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
     });
 
-    this.store.select(selectUsuarioPorId).pipe(takeUntil(this.destroy$)).subscribe((usuario: any) => {
+    this._mstore.select(selectUsuarioPorId).pipe(takeUntil(this.destroy$)).subscribe((usuario: any) => {
       if(usuario)
         this.dirPath = usuario.DirectorioExcel;
     });

@@ -20,6 +20,8 @@ import { IngresoRespuesta } from 'src/app/shared/models/entidades/respuestas/ing
 import { ChangeDetectorRef } from '@angular/core';
 import { IngresoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresoByIdRespuesta.model';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
+import { IngresoDetailState } from 'src/app/shared/models/entidades/estados/ingresoDetailState.model';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 
 @Component({
   selector: 'app-ingreso-detail',
@@ -55,7 +57,8 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
   private cdRef: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<IngresoDetailState>,
+    private _store: Store<AuthState>,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -96,7 +99,7 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
 
     combineLatest([
       this.route.paramMap,
-      this.store.select(selectUserId).pipe(filter(id => id > 0))
+      this._store.select(selectUserId).pipe(filter(id => id > 0))
     ])
     .pipe(
       takeUntil(this.destroy$),

@@ -3,6 +3,7 @@ import { ProveedorDetailState } from "src/app/shared/models/entidades/estados/pr
 import * as ProveedorDetailActions from '../actions/proveedor-detail.actions'
 
 export const estadoInicial: ProveedorDetailState = { loading: false, proveedorPorId: null, errorCarga: false };
+export const proveedorFeatureKey = 'proveedorDetailState';
 
 const proveedorDetailReducer = createReducer(
     estadoInicial,
@@ -52,6 +53,6 @@ const proveedorDetailReducer = createReducer(
     }))
 );
 
-export function ProveedorDetailReducer(state: ProveedorDetailState = estadoInicial, action: any): ProveedorDetailState {
+export function reducer(state: ProveedorDetailState = estadoInicial, action: any): ProveedorDetailState {
     return proveedorDetailReducer(state, action);
 }

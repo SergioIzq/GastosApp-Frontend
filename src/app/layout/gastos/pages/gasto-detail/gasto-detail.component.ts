@@ -20,6 +20,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoRespuesta.model';
 import { ChangeDetectorRef } from '@angular/core';
 import { GastoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoByIdRespuesta.model';
+import { GastoDetailState } from 'src/app/shared/models/entidades/estados/gastoDetailState.model';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 
 @Component({
   selector: 'app-gasto-detail',
@@ -55,7 +57,8 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
   private cdRef: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<GastoDetailState>,
+    private _store: Store<AuthState>,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -96,7 +99,7 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
 
     combineLatest([
       this.route.paramMap,
-      this.store.select(selectUserId).pipe(filter(id => id > 0))
+      this._store.select(selectUserId).pipe(filter(id => id > 0))
     ])
       .pipe(
         takeUntil(this.destroy$),
@@ -295,25 +298,6 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this.router.navigate(['gastos/gastos-list'])
-  }
-
-  private extractCategorias(conceptos: Concepto[]): void {
-    const categoriasSet = new Set<number>(); // Usamos Set para mantener ids únicos
-    const categoriasMap = new Map<number, Categoria>(); // Map para mantener un mapa de id a objeto Categoria
-
-    conceptos.forEach(concepto => {
-      if (concepto.Categoria) {
-        if (!categoriasSet.has(concepto.Categoria.Id)) {
-          categoriasSet.add(concepto.Categoria.Id);
-          categoriasMap.set(concepto.Categoria.Id, concepto.Categoria);
-        }
-      }
-    });
-
-    // Convierte el Map en un array y ordénalo alfabéticamente
-    this.categorias = Array.from(categoriasMap.values()).sort((a: Categoria, b: Categoria) =>
-      a.Nombre.localeCompare(b.Nombre)
-    );
   }
 
   onCategoriaChange(event: any): void {

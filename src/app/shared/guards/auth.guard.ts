@@ -4,19 +4,19 @@ import { Store, select } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { selectIsAuthenticated } from '../auth/ngrx/auth.selectors';
-import { AppState } from '../../app.state';
+import { AuthState } from '../models/entidades/estados/authState.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private store: Store<AppState>, private router: Router) {}
+  constructor(private store: Store<AuthState>, private router: Router) {}
 
   canActivate(): Observable<boolean> {
     return this.store.pipe(
       select(selectIsAuthenticated),
-      map(isAuthenticated => {
+      map(isAuthenticated => {        
         if (isAuthenticated) {
           // logged in so return true
           return true;
@@ -26,9 +26,9 @@ export class AuthGuard implements CanActivate {
           return false;
         }
       }),
-      catchError(() => {
+      catchError((err) => {
         // Handle any error here
-        this.router.navigate(['auth//login']);
+        console.error(err)
         return of(false);
       })
     );

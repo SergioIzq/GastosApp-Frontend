@@ -15,6 +15,12 @@ import { SharedModule } from 'src/app/shared/pipes/shared.module';
 import { GastoProgramadoDetailComponent } from './pages/gasto-programado-detail/gasto-programado-detail.component';
 import { GastosProgramadosListComponent } from './pages/gastos-programados-list/gastos-programados-list.component';
 import { GastosProgramadosListEffects } from './ngrx/effects/gastos-programados-list.effects';
+import { StoreModule } from '@ngrx/store';
+import * as GastoDetailReducer from './ngrx/reducer/gasto-detail.reducer'
+import * as GastosListReducer from './ngrx/reducer/gastos-list.reducer'
+import * as GastosProgramadosListReducer from './ngrx/reducer/gastos-programados-list.reducer'
+import * as GastoProgramadoDetailReducer from './ngrx/reducer/gasto-programado-detail.reducer'
+
 
 const GASTOS_COMPONENTS = [
   GastosListComponent,
@@ -45,6 +51,10 @@ const GASTOS_PROVIDERS = [
     RouterModule,
     PrimeNgModule,
     GastosRoutingModule,
+    StoreModule.forFeature(GastosListReducer.gastosListFeatureKey, GastosListReducer.reducer),
+    StoreModule.forFeature(GastoDetailReducer.gastoDetailFeatureKey, GastoDetailReducer.reducer),
+    StoreModule.forFeature(GastosProgramadosListReducer.gastosProgramadosListFeatureKey, GastosProgramadosListReducer.reducer),
+    StoreModule.forFeature(GastoProgramadoDetailReducer.gastoProgramadoDetailFeatureKey, GastoProgramadoDetailReducer.reducer),
     EffectsModule.forFeature(GASTOS_EFFECTS),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -7,8 +7,8 @@
             <p-table #dt [value]="transformedData" dataKey="Id" [rowHover]="true" [rows]="10"
                 [totalRecords]="totalRecords" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
                 [loading]="loading" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} gastos"
-                [filterDelay]="0" [sortField]="'Fecha'" [sortOrder]="-1"
-                [globalFilterFields]="['Importe', 'FormaPago','Concepto','CategoriaNombre','Proveedor','Descripcion','Fecha','Cuenta','Persona', 'Frecuencia']">
+                [filterDelay]="0" [sortField]="'FechaInicio'" [sortOrder]="-1"
+                [globalFilterFields]="['Importe', 'FormaPago','Concepto','CategoriaNombre','Proveedor','Descripcion','Fecha','Cuenta','Persona', 'Frecuencia', 'FechaInicio']">
 
                 <ng-template pTemplate="caption">
                     <div class="grid datatable-header"
@@ -17,7 +17,7 @@
                         <div class="field col-12 md:col-4" style="width:150px">
                             <p-button pRipple severity="success" [raised]="true" label="Nuevo" icon="pi pi-plus"
                                 iconPos="right" class="mr-0 nuevo-button"
-                                [routerLink]="['/gastos/gasto-detail', 0]"></p-button>
+                                [routerLink]="['/gastos/gasto-programado-detail', 0]"></p-button>
                         </div>
 
                         <!-- Botón Limpiar -->
@@ -36,11 +36,11 @@
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="Fecha" style="min-width: 10rem">
+                        <th pSortableColumn="FechaInicio" style="min-width: 10rem">
                             <div class="flex justify-content-between align-items-center">
-                                Fecha
-                                <p-sortIcon field="Fecha" />
-                                <p-columnFilter type="text" field="Fecha" display="menu" class="ml-auto"
+                                Fecha de inicio
+                                <p-sortIcon field="FechaInicio" />
+                                <p-columnFilter type="text" field="FechaInicio" display="menu" class="ml-auto"
                                     [matchModeOptions]="[
                                     { label: 'Contiene', value: 'contains' },
                                     { label: 'No contiene', value: 'notContains' },
@@ -210,8 +210,9 @@
 
                 <ng-template pTemplate="body" let-gasto>
                     <tr>
-                        <td>{{ gasto.Fecha }}</td>
+                        <td>{{ gasto.FechaInicio }}</td>
                         <td>{{ gasto.Persona }}</td>
+                        <td>{{ gasto.Frecuencia }}</td>
                         <td>{{ gasto.FormaPago }}</td>
                         <td>{{ gasto.Proveedor }}</td>
                         <td>{{ gasto.CategoriaNombre }}</td>
@@ -222,7 +223,7 @@
                         <td>
                             <p-button pRipple icon="pi pi-pencil" class="mr-2 rounded-button" [rounded]="true"
                                 [outlined]="true" severity="success"
-                                [routerLink]="['/gastos/gasto-detail', gasto.Id]" />
+                                [routerLink]="['/gastos/gasto-programado-detail', gasto.Id]" />
                         </td>
                         <td>
                             <p-button pRipple icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"

@@ -10,6 +10,7 @@ import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gasto
 import { GastoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoByIdRespuesta.model';
 import { environment } from 'src/environments/environment';
 import { GastoProgramado } from 'src/app/shared/models/entidades/gastoProgramado.model';
+import { GastoProgramadoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoProgramadoByIdRespuesta.model';
 
 @Injectable({
   providedIn: 'root'
@@ -54,9 +55,19 @@ export class GastoService {
     return this.http.get<GastoByIdRespuesta>(url);
   }
 
+  getGastoProgramadoById(id: number): Observable<GastoProgramadoByIdRespuesta> {
+    const url = `${this.apiUrl}gastoProgramado/getById/${id}`;
+    return this.http.get<GastoProgramadoByIdRespuesta>(url);
+  }
+
   update(gasto: Partial<Gasto>): Observable<Gasto> {
     const url = `${this.apiUrl}gasto/${gasto.Id}`;
     return this.http.put<Gasto>(url, gasto);
+  }
+
+  updateGastoProgramado(gastoProgramado: Partial<GastoProgramado>): Observable<GastoProgramado> {
+    const url = `${this.apiUrl}gastoProgramado/${gastoProgramado.Id}`;
+    return this.http.put<GastoProgramado>(url, gastoProgramado);
   }
 
   delete(id: number): Observable<Gasto> {
@@ -71,6 +82,10 @@ export class GastoService {
 
   create(gasto: Gasto): Observable<ResponseOne<Gasto>> {
     return this.http.post<ResponseOne<Gasto>>(`${this.apiUrl}gasto`, gasto);
+  }
+
+  createGastoProgramado(gastoProgramado: GastoProgramado): Observable<ResponseOne<GastoProgramado>> {
+    return this.http.post<ResponseOne<GastoProgramado>>(`${this.apiUrl}gastoProgramado`, gastoProgramado);
   }
 
   exportExcel(res: Excel): Observable<any> {

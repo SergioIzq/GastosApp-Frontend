@@ -10,7 +10,9 @@ import { ConceptoService } from './service/concepto.service';
 import { ConceptoDetailEffects } from './ngrx/effects/concepto-detail.effects';
 import { ConceptosRoutingModule } from './conceptos.routing';
 import { PrimeNgModule } from 'src/app/primeng/primeng.module';
-
+import * as ConceptoDetailReducers from './ngrx/reducers/concepto-detail.reducer';
+import * as ConceptosListReducers from './ngrx/reducers/conceptos-list.reducer';
+import { StoreModule } from '@ngrx/store';
 
 const CONCEPTOS_COMPONENTS = [
     ConceptosListComponent,
@@ -37,6 +39,8 @@ const CONCEPTOS_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         ConceptosRoutingModule,
+        StoreModule.forFeature(ConceptoDetailReducers.conceptoDetailFeatureKey, ConceptoDetailReducers.reducer),
+        StoreModule.forFeature(ConceptosListReducers.conceptosListFeatureKey, ConceptosListReducers.reducer),
         EffectsModule.forFeature(CONCEPTOS_EFFECTS),
     ],
     providers: [

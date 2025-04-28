@@ -10,7 +10,9 @@ import { FormasPagoService } from './service/formas-pago.service';
 import { FormaPagoDetailEffects } from './ngrx/effects/forma-pago-detail.effects';
 import { FormasPagoRoutingModule } from './formas-pago.routing';
 import { PrimeNgModule } from 'src/app/primeng/primeng.module';
-
+import { StoreModule } from '@ngrx/store';
+import * as FormaPagoDetailReducers from './ngrx/reducers/forma-pago-detail.reducer'
+import * as FormasPagoListReducers from './ngrx/reducers/formas-pago-list.reducer'
 
 const FORMAS_PAGO_COMPONENTS = [
     FormasPagoListComponent,
@@ -37,6 +39,8 @@ const FORMAS_PAGO_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         FormasPagoRoutingModule,
+        StoreModule.forFeature(FormaPagoDetailReducers.formaPagoDetailFeatureKey, FormaPagoDetailReducers.reducer),
+        StoreModule.forFeature(FormasPagoListReducers.formasPagoListFeatureKey, FormasPagoListReducers.reducer),
         EffectsModule.forFeature(FORMAS_PAGO_EFFECTS),
     ],
     providers: [

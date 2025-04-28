@@ -7,7 +7,8 @@ import { GastosProgramadosListComponent } from './pages/gastos-programados-list/
 const routes: Routes = [
     { path: 'gastos-list', component: GastosListComponent },
     { path: 'gastos-programados-list', component: GastosProgramadosListComponent },
-    { path: 'gasto-detail/:id', component: GastoDetailComponent },    
+    { path: 'gasto-detail/:id', component: GastoDetailComponent },
+    { path: 'gasto-programado-detail/:id', component: GastoDetailComponent },
     { path: '**', redirectTo: 'gastos-list' },  
 ];
 

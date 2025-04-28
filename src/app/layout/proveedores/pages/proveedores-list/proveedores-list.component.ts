@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, filter, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
-import { selectErrorCarga, selectProveedoresList, selectLoading } from '../../ngrx/selectors/proveedores-list.selectors';
+import { takeUntil } from 'rxjs/operators';
+import { selectErrorCarga } from '../../ngrx/selectors/proveedores-list.selectors';
 import { ActionsSubject, Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import * as SelectProveedoresList from '../../ngrx/selectors/proveedores-list.selectors'
@@ -16,6 +15,8 @@ import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { EntidadListState } from 'src/app/shared/models/entidades/estados/entidadListState.model';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 
 
 @Component({
@@ -46,7 +47,8 @@ export class ProveedoresListComponent implements OnInit, OnDestroy {
   idUsuario!: number;
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<EntidadListState<Proveedor>>,
+    private _store: Store<AuthState>,
     private router: Router,
     private location: Location,
     private actionsSubject: ActionsSubject,
@@ -55,7 +57,7 @@ export class ProveedoresListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario:number)=>{
+    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario:number)=>{
       this.idUsuario = idUsuario;
     });
 

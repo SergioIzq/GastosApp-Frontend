@@ -11,6 +11,8 @@ import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { CategoriaDetailState } from 'src/app/shared/models/entidades/estados/categoriaDetail.model';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 
 @Component({
   selector: 'app-categoria-detail',
@@ -34,7 +36,8 @@ export class CategoriaDetailComponent implements OnInit, OnDestroy {
   private _confirmationService: ConfirmationService = inject(ConfirmationService);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<CategoriaDetailState>,
+    private _store: Store<AuthState>,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private location: Location,
@@ -57,7 +60,7 @@ export class CategoriaDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
+    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.IdUsuario = idUsuario;
     });
 

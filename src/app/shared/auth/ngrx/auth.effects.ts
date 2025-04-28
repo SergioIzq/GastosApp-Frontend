@@ -25,7 +25,7 @@ export class AuthEffects extends BaseService {
     ofType(AuthActions.login),
     mergeMap(({ Correo, Contrasena }) => this.authService.login(Correo, Contrasena)
       .pipe(
-        map((token: any) => {
+        map((respuesta: any) => {
 
           this.messageService.add({
             severity: 'info',
@@ -34,7 +34,7 @@ export class AuthEffects extends BaseService {
             life: 5000
           });
 
-          return AuthActions.loginSuccess({ token });
+          return AuthActions.loginSuccess({ respuesta });
         }),
         catchError((error) => {
           return of(AuthActions.loginFailure({ error }));

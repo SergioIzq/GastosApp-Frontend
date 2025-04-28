@@ -1,9 +1,9 @@
-import { createSelector } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { PersonaDetailState } from 'src/app/shared/models/entidades/estados/personaDetail.model';
+import { personaDetailFeatureKey } from '../reducers/persona-detail.reducer';
 
 
-export const selectPersonaDetailFeature = (state: AppState) => state.personaPorId;
+export const selectPersonaDetailFeature = createFeatureSelector<PersonaDetailState>(personaDetailFeatureKey);
 
 export const selectedPersonaSelector = createSelector(
     selectPersonaDetailFeature,

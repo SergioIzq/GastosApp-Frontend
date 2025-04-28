@@ -4,6 +4,7 @@ import { EntidadListState } from "src/app/shared/models/entidades/estados/entida
 import { Persona } from "src/app/shared/models/entidades/persona.model";
 
 export const estadoInicial: EntidadListState<Persona> = { loading: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
+export const personasListFeatureKey = 'personasListState';
 
 export const personasListReducer = createReducer(
     estadoInicial,
@@ -43,3 +44,7 @@ export const personasListReducer = createReducer(
         };
     }),
 )
+
+export function reducer(state: EntidadListState<Persona> = estadoInicial, action: any): EntidadListState<Persona> {
+    return personasListReducer(state, action);
+}

@@ -1,9 +1,10 @@
-import { createReducer, on } from "@ngrx/store";
+import { Action, createReducer, on } from "@ngrx/store";
 import * as GastosListActions from '../actions/gastos-list.actions'
 import { EntidadListState } from "src/app/shared/models/entidades/estados/entidadListState.model";
 import { Gasto } from "src/app/shared/models/entidades/gasto.model";
 
 export const estadoInicial: EntidadListState<Gasto> = { loading: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
+export const gastosListFeatureKey = 'gastosListState';
 
 export const gastosListReducer = createReducer(
     estadoInicial,
@@ -41,3 +42,7 @@ export const gastosListReducer = createReducer(
         };
     }),
 )
+
+export function reducer(state: EntidadListState<Gasto> | undefined, action: Action) {
+    return gastosListReducer(state, action);
+}

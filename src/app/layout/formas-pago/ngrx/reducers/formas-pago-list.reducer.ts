@@ -4,6 +4,7 @@ import { EntidadListState } from "src/app/shared/models/entidades/estados/entida
 import { FormaPago } from "src/app/shared/models/entidades/formaPago.model";
 
 export const estadoInicial: EntidadListState<FormaPago> = { loading: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
+export const formasPagoListFeatureKey = 'formasPagoListState';
 
 export const formasPagoListReducer = createReducer(
     estadoInicial,
@@ -43,3 +44,7 @@ export const formasPagoListReducer = createReducer(
         };
     }),
 )
+
+export function reducer(state: EntidadListState<FormaPago> = estadoInicial, action: any): EntidadListState<FormaPago> {
+    return formasPagoListReducer(state, action);
+}

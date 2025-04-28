@@ -4,6 +4,7 @@ import { EntidadListState } from "src/app/shared/models/entidades/estados/entida
 import { GastoProgramado } from "src/app/shared/models/entidades/gastoProgramado.model";
 
 export const estadoInicial: EntidadListState<GastoProgramado> = { loading: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
+export const gastosProgramadosListFeatureKey = 'gastosProgramadosListState';
 
 export const gastosProgramadosListReducer = createReducer(
     estadoInicial,
@@ -41,3 +42,7 @@ export const gastosProgramadosListReducer = createReducer(
         };
     }),
 )
+
+export function reducer(state: EntidadListState<GastoProgramado> = estadoInicial, action: any): EntidadListState<GastoProgramado> {
+    return gastosProgramadosListReducer(state, action);
+}

@@ -4,6 +4,7 @@ import { EntidadListState } from "src/app/shared/models/entidades/estados/entida
 import { Traspaso } from "src/app/shared/models/entidades/traspaso.model";
 
 export const estadoInicial: EntidadListState<Traspaso> = { loading: false, lista: { TotalRecords: 0, Items: [] }, errorCarga: false };
+export const traspasosListFeatureKey='traspasosListState';
 
 export const traspasosListReducer = createReducer(
     estadoInicial,
@@ -43,3 +44,7 @@ export const traspasosListReducer = createReducer(
         };
     }),
 )
+
+export function reducer(state: EntidadListState<Traspaso> = estadoInicial, action: any): EntidadListState<Traspaso> {
+    return traspasosListReducer(state, action);
+}

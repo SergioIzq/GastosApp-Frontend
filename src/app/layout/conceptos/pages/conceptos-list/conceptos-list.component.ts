@@ -16,8 +16,8 @@ import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
-import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
-import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
+import { EntidadListState } from 'src/app/shared/models/entidades/estados/entidadListState.model';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 
 
 @Component({
@@ -49,7 +49,8 @@ export class ConceptosListComponent implements OnInit, OnDestroy {
   idUsuario!: number;
   
   constructor(
-    private store: Store<AppState>,
+    private store: Store<EntidadListState<Concepto>>,
+    private _store: Store<AuthState>,
     private router: Router,
     private location: Location,
     private actionsSubject: ActionsSubject,
@@ -58,7 +59,7 @@ export class ConceptosListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
+    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
     });
 

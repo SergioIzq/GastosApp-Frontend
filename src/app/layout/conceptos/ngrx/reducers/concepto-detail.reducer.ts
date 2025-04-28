@@ -3,6 +3,7 @@ import { ConceptoDetailState } from "src/app/shared/models/entidades/estados/con
 import * as ConceptoDetailActions from '../actions/concepto-detail.actions'
 
 export const estadoInicial: ConceptoDetailState = { loading: false, conceptoPorId: null, errorCarga: false, categorias: null };
+export const conceptoDetailFeatureKey = 'conceptoDetailState';
 
 const conceptoDetailReducer = createReducer(
     estadoInicial,
@@ -79,6 +80,6 @@ const conceptoDetailReducer = createReducer(
     }))
 );
 
-export function ConceptoDetailReducer(state: ConceptoDetailState = estadoInicial, action: any): ConceptoDetailState {
+export function reducer(state: ConceptoDetailState = estadoInicial, action: any): ConceptoDetailState {
     return conceptoDetailReducer(state, action);
 }

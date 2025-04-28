@@ -1,9 +1,8 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Observable, takeUntil, of, switchMap } from 'rxjs';
+import { Subject, Observable, takeUntil, of } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Persona } from 'src/app/shared/models/entidades/persona.model';
 import { ActionsSubject, Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as PersonaDetailActions from '../../ngrx/actions/persona-detail.actions';
 import * as PersonaSelector from '../../ngrx/selectors/persona-detail.selectors';
@@ -12,6 +11,8 @@ import { filter } from 'rxjs/operators';
 import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { PersonaDetailState } from 'src/app/shared/models/entidades/estados/personaDetail.model';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 
 @Component({
   selector: 'app-persona-detail',
@@ -38,7 +39,8 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
   private _confirmationService: ConfirmationService = inject(ConfirmationService);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<PersonaDetailState>,
+    private _store: Store<AuthState>,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private location: Location,
@@ -61,7 +63,7 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
+    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
     });
 
