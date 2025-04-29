@@ -21,6 +21,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { GastoProgramadoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoProgramadoByIdRespuesta.model';
 import { GastoProgramadoDetailState } from 'src/app/shared/models/entidades/estados/gastoProgramadoDetailState.model';
 import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
+import { GastoProgramado } from 'src/app/shared/models/entidades/gastoProgramado.model';
 
 @Component({
   selector: 'app-gasto-programado-detail',
@@ -36,7 +37,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   error$!: Observable<boolean>;
   detailGastoForm: FormGroup;
-  originalGastoData!: Gasto;
+  originalGastoData!: GastoProgramado;
   isNewGasto: boolean = false;
   newGastoForm!: FormGroup;
   cuentas: Cuenta[] = [];
@@ -75,17 +76,15 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
       FormaPago: ['', [Validators.required]],
       Cuenta: ['', [Validators.required]],
       Categoria: ['', [Validators.required]],
-      FechaInicio: ['', [Validators.required]],
-      FechaFin: ['', [Validators.required]],
-      Frecuencia: ['', [Validators.required]],
-      Activo: ['', [Validators.required]]
+      Activo: ['', [Validators.required]],
+      DiaEjecucion: ['', [Validators.required]],
+      AjustarAUltimoDia: ['', [Validators.required]]
     });
 
     this.detailGastoForm = this.fb.group({
       Id: [''],
       IdUsuario: [''],
       Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
-      Fecha: ['', [Validators.required]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
       Categoria: ['', [Validators.required]],
@@ -93,10 +92,9 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
       Persona: ['', [Validators.required]],
       FormaPago: ['', [Validators.required]],
       Cuenta: ['', [Validators.required]],
-      FechaInicio: ['', [Validators.required]],
-      FechaFin: ['', [Validators.required]],
-      Frecuencia: ['', [Validators.required]],
-      Activo: ['', [Validators.required]]
+      Activo: ['', [Validators.required]],
+      DiaEjecucion: ['', [Validators.required]],
+      AjustarAUltimoDia: ['', [Validators.required]]
     });
 
   }
@@ -172,16 +170,12 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
           this.categorias = [...gastoByIdRespuesta.GastoRespuesta.ListaCategorias];
           this.cdRef.detectChanges();
 
-          // Convierte la fecha de UTC a local
-          const fechaUTC = new Date(gasto.Fecha);
-          const fechaLocal = new Date(fechaUTC.getTime() - fechaUTC.getTimezoneOffset() * 60000);
           const monto = this.replaceDotsWithCommas(gasto.Monto);
           this.selectedCategoria = gasto.Concepto.Categoria.Id;
           this.selectedConceptoId = gasto.Concepto.Id;
 
           this.detailGastoForm.patchValue({
             ...gasto,
-            Fecha: fechaLocal,
             Monto: monto,
             Categoria: gasto.Concepto.Categoria,
           });

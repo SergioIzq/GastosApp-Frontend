@@ -1,14 +1,12 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, map, takeUntil, Subject, filter } from 'rxjs';
 import { ActionsSubject, Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import * as SelectGastosList from '../../ngrx/selectors/gastos-list.selectors'
+import * as SelectGastosList from '../../ngrx/selectors/gastos-programados-list.selectors'
 import * as GastosProgramadosListActions from 'src/app/layout/gastos/ngrx/actions/gastos-programados-list.actions';
 import { Table } from 'primeng/table';
 import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
-import { Gasto } from 'src/app/shared/models/entidades/gasto.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
@@ -170,8 +168,7 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
 
   exportarAExcel(): void {
     const exportData = this.respuesta.Items.map(item => {
-      return {
-        'Fecha': item.Fecha,
+      return {        
         'Persona': item.Persona,
         'FormaPago': item.FormaPago,
         'Proveedor': item.Proveedor,
@@ -204,18 +201,18 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
 
   // Función para transformar el objeto
   transformData(data: ResponseData<GastoProgramado>) {
+    console.log(data)
     return data.Items.map((item: any) => ({
       Id: item.Id,
       Importe: item.Monto,
       Proveedor: item.Proveedor.Nombre,
       CategoriaNombre: item.Concepto.Categoria.Nombre,
       Concepto: item.Concepto.Nombre,
-      Cuenta: item.Cuenta.Nombre,
-      Descripcion: item.Descripcion,
-      Fecha: this.formatFecha(item.Fecha),
+      Cuenta: item.Cuenta.Nombre,            
       Persona: item.Persona.Nombre,
       FormaPago: item.FormaPago.Nombre,
-      Frecuencia: item.Frecuencia
+      DiaEjecucion: item.DiaEjecucion
+
     }));
   }
 
