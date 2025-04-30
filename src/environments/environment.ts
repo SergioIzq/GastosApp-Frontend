@@ -1,6 +1,6 @@
-// environment.prod.ts
+// environment.ts
 export const environment = {
-    production: true,
-    apiUrl: 'https://localhost:7115/api/'
+    production: false,
+    apiUrl: 'https://gbackend.sergioizq.es'
   };
   

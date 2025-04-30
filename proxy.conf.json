@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://gastosapp-backend.onrender.com",
+    "target": "https://gbackend.sergioizq.es",
     "secure": false,
     "changeOrigin": true
   }
