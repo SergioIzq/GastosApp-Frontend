@@ -2,7 +2,7 @@
 
 Bienvenido a la aplicación de gestión económica personal desarrollada para ayudarte a organizar y controlar tus **ingresos, gastos, cuentas y más** de forma sencilla y eficiente.
 
-🌐 **Accede a la aplicación aquí:** [https://appg.sergioizq.es](https://appg.sergioizq.es)
+🌐 **Accede a la aplicación aquí:** [https://ahorroland.sergioizq.es](https://ahorroland.sergioizq.es)
 
 ---
 
