@@ -70,7 +70,7 @@ export class GastoDetailEffects extends BaseService {
 
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
+            summary: 'Operación exitosa',
             detail: 'Gasto creado correctamente',
             life: 5000
           });

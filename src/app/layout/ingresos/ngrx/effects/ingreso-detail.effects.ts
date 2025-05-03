@@ -70,7 +70,7 @@ export class IngresoDetailEffects extends BaseService {
 
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
+            summary: 'Operación exitosa',
             detail: 'Ingreso creado correctamente',
             life: 5000
           });

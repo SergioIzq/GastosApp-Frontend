@@ -1,16 +1,16 @@
 <div class="card">
     <div class="p-grid p-justify-center p-align-center">
         <div>
-            <ng-container *ngIf="(error$ | async); else newOrDetalleGasto" class="mt-4">
+            <ng-container *ngIf="(error$ | async); else newOrDetalleIngreso" class="mt-4">
                 <div class="alert alert-danger" role="alert">
                     <strong>Ha habido un error en la carga de datos</strong>
                 </div>
             </ng-container>
 
-            <ng-template #newOrDetalleGasto>
+            <ng-template #newOrDetalleIngreso>
 
-                <form *ngIf="isNewGasto" [formGroup]="newGastoForm" (ngSubmit)="onSubmit()">
-                    <p-fieldset legend="Datos gasto programado">
+                <form *ngIf="isNewIngreso" [formGroup]="newIngresoForm" (ngSubmit)="onSubmit()">
+                    <p-fieldset legend="Datos ingreso programado">
                         <div class="grid p-fluid mt-3">
                             <!-- Primera fila de inputs -->
                             <div class="field col-12 md:col-3">
@@ -18,16 +18,16 @@
                                     <input type="text" id="Monto" pInputText style="text-align: right;"
                                         formControlName="Monto" appNumberFormatter>
                                     <label for="Monto">Importe</label>
-                                    <div *ngIf="newGastoForm.get('Monto')?.invalid && (newGastoForm.get('Monto')?.['dirty'] || newGastoForm.get('Monto')?.['touched'])"
+                                    <div *ngIf="newIngresoForm.get('Monto')?.invalid && (newIngresoForm.get('Monto')?.['dirty'] || newIngresoForm.get('Monto')?.['touched'])"
                                         class="text-danger">
-                                        <div *ngIf="newGastoForm.get('Monto')?.errors?.['required']">El campo importe
+                                        <div *ngIf="newIngresoForm.get('Monto')?.errors?.['required']">El campo importe
                                             es
                                             obligatorio.</div>
-                                        <div *ngIf="newGastoForm.get('Monto')?.errors?.['pattern']">El importe debe
+                                        <div *ngIf="newIngresoForm.get('Monto')?.errors?.['pattern']">El importe debe
                                             ser
                                             un
                                             número válido. Ej: 22.22</div>
-                                        <div *ngIf="newGastoForm.get('Monto')?.errors?.['minAmount']">
+                                        <div *ngIf="newIngresoForm.get('Monto')?.errors?.['minAmount']">
                                             El Importe mínimo es de 0,01 €
                                         </div>
                                     </div>
@@ -45,9 +45,9 @@
                             <!-- Segunda fila de inputs -->
                             <div class="field col-12 md:col-3">
                                 <span class="p-float-label">
-                                    <p-dropdown [options]="proveedores" optionLabel="Nombre" [filter]="true"
+                                    <p-dropdown [options]="clientes" optionLabel="Nombre" [filter]="true"
                                         emptyMessage="No se encontraron resultados"
-                                        emptyFilterMessage="No se encontraron resultados" formControlName="Proveedor"
+                                        emptyFilterMessage="No se encontraron resultados" formControlName="Cliente"
                                         filterBy="Nombre" [showClear]="true">
 
                                         <ng-template pTemplate="selectedItem" let-selectedOption>
@@ -62,7 +62,7 @@
                                             </div>
                                         </ng-template>
                                     </p-dropdown>
-                                    <label for="clienteDropdown">Proveedor</label>
+                                    <label for="clienteDropdown">Cliente</label>
                                 </span>
                             </div>
 
@@ -199,9 +199,9 @@
                                 <span class="p-float-label">
                                     <input type="text" id="Descripcion" pInputText formControlName="Descripcion">
                                     <label for="Descripcion">Descripción</label>
-                                    <div *ngIf="newGastoForm.get('Descripcion')?.invalid && (newGastoForm.get('Descripcion')?.['dirty'] || newGastoForm.get('Descripcion')?.['touched'])"
+                                    <div *ngIf="newIngresoForm.get('Descripcion')?.invalid && (newIngresoForm.get('Descripcion')?.['dirty'] || newIngresoForm.get('Descripcion')?.['touched'])"
                                         class="text-danger">
-                                        <div *ngIf="newGastoForm.get('Descripcion')?.errors?.['maxlength']">Ha
+                                        <div *ngIf="newIngresoForm.get('Descripcion')?.errors?.['maxlength']">Ha
                                             excedido
                                             el máximo número de caracteres (200)</div>
                                     </div>
@@ -218,7 +218,7 @@
 
                             <div class="field col-6 md:col-6" style="text-align: center;">
                                 <p-button label="Crear" icon="pi pi-check" severity="success" iconPos="right"
-                                    [disabled]="newGastoForm.invalid || newGastoForm.pristine || deshabilitarBoton"
+                                    [disabled]="newIngresoForm.invalid || newIngresoForm.pristine || deshabilitarBoton"
                                     (onClick)="onSubmit()" [raised]="true"
                                     [style]="{'width': '140px', 'margin-top': '1rem'}">
                                 </p-button>
@@ -229,8 +229,8 @@
 
 
 
-                <form *ngIf="!isNewGasto" [formGroup]="detailGastoForm" (ngSubmit)="onSubmit()">
-                    <p-fieldset legend="Datos gasto">
+                <form *ngIf="!isNewIngreso" [formGroup]="detailIngresoForm" (ngSubmit)="onSubmit()">
+                    <p-fieldset legend="Datos ingreso programado">
                         <div class="grid p-fluid mt-3">
                             <!-- Primera fila de inputs -->
                             <div class="field col-12 md:col-3">
@@ -238,17 +238,17 @@
                                     <input type="text" id="Monto" pInputText style="text-align: right;"
                                         formControlName="Monto" appNumberFormatter>
                                     <label for="Monto">Importe</label>
-                                    <div *ngIf="detailGastoForm.get('Monto')?.invalid && (detailGastoForm.get('Monto')?.['dirty'] || detailGastoForm.get('Monto')?.['touched'])"
+                                    <div *ngIf="detailIngresoForm.get('Monto')?.invalid && (detailIngresoForm.get('Monto')?.['dirty'] || detailIngresoForm.get('Monto')?.['touched'])"
                                         class="text-danger">
-                                        <div *ngIf="detailGastoForm.get('Monto')?.errors?.['required']">El campo
+                                        <div *ngIf="detailIngresoForm.get('Monto')?.errors?.['required']">El campo
                                             importe
                                             es
                                             obligatorio.</div>
-                                        <div *ngIf="detailGastoForm.get('Monto')?.errors?.['pattern']">El importe debe
+                                        <div *ngIf="detailIngresoForm.get('Monto')?.errors?.['pattern']">El importe debe
                                             ser
                                             un
                                             número válido. Ej: 22.22</div>
-                                        <div *ngIf="detailGastoForm.get('Monto')?.errors?.['minAmount']">
+                                        <div *ngIf="detailIngresoForm.get('Monto')?.errors?.['minAmount']">
                                             El Importe mínimo es de 0,01 €
                                         </div>
                                     </div>
@@ -266,9 +266,9 @@
                             <!-- Segunda fila de inputs -->
                             <div class="field col-12 md:col-3">
                                 <span class="p-float-label">
-                                    <p-dropdown [options]="proveedores" optionLabel="Nombre" [filter]="true"
+                                    <p-dropdown [options]="clientes" optionLabel="Nombre" [filter]="true"
                                         emptyMessage="No se encontraron resultados"
-                                        emptyFilterMessage="No se encontraron resultados" formControlName="Proveedor"
+                                        emptyFilterMessage="No se encontraron resultados" formControlName="Cliente"
                                         filterBy="Nombre" [showClear]="true">
 
                                         <ng-template pTemplate="selectedItem" let-selectedOption>
@@ -283,7 +283,7 @@
                                             </div>
                                         </ng-template>
                                     </p-dropdown>
-                                    <label for="clienteDropdown">Proveedor</label>
+                                    <label for="clienteDropdown">Cliente</label>
                                 </span>
                             </div>
 
@@ -418,9 +418,9 @@
                                 <span class="p-float-label">
                                     <input type="text" id="Descripcion" pInputText formControlName="Descripcion">
                                     <label for="Descripcion">Descripción</label>
-                                    <div *ngIf="newGastoForm.get('Descripcion')?.invalid && (newGastoForm.get('Descripcion')?.['dirty'] || newGastoForm.get('Descripcion')?.['touched'])"
+                                    <div *ngIf="newIngresoForm.get('Descripcion')?.invalid && (newIngresoForm.get('Descripcion')?.['dirty'] || newIngresoForm.get('Descripcion')?.['touched'])"
                                         class="text-danger">
-                                        <div *ngIf="newGastoForm.get('Descripcion')?.errors?.['maxlength']">Ha
+                                        <div *ngIf="newIngresoForm.get('Descripcion')?.errors?.['maxlength']">Ha
                                             excedido
                                             el máximo número de caracteres (200)</div>
                                     </div>
@@ -437,7 +437,7 @@
 
                             <div class="field col-6 md:col-6" style="text-align: center;">
                                 <p-button label="Guardar" icon="pi pi-check" severity="success" iconPos="right"
-                                    [disabled]="detailGastoForm.invalid || detailGastoForm.pristine || deshabilitarBoton"
+                                    [disabled]="detailIngresoForm.invalid || detailIngresoForm.pristine || deshabilitarBoton"
                                     (onClick)="onSubmit()" [raised]="true"
                                     [style]="{'width': '140px', 'margin-top': '1rem'}">
                                 </p-button>

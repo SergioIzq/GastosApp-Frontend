@@ -118,15 +118,16 @@ export class MenuComponent implements OnInit, OnDestroy {
           { label: 'Cuentas', icon: 'fa fa-bank', routerLink: '/cuentas/cuentas-list' }
         ]
       },
-      { label: 'Resumen', icon: 'pi pi-fw pi-chart-line', routerLink: '/resumen/resumen-list' },
-      { label: 'Cerrar Sesión', icon: 'pi pi-fw pi-sign-out', command: () => this.logout() },
       {
         label: 'Programables',
         icon: 'pi pi-calculator',
         items: [
-          { label: 'Gastos programados', icon: 'pi pi-fw pi-euro', routerLink: '/gastos/gastos-programados-list' },
+          { label: 'Ingresos programados', icon: 'pi pi-fw pi-euro', routerLink: '/ingresos/ingresos-programados-list' },
+          { label: 'Gastos programados', icon: 'pi pi-fw pi-code', routerLink: '/gastos/gastos-programados-list' },
         ]
       },
+      { label: 'Resumen', icon: 'pi pi-fw pi-chart-line', routerLink: '/resumen/resumen-list' },
+      { label: 'Cerrar Sesión', icon: 'pi pi-fw pi-sign-out', command: () => this.logout() },
     ];
   }
 

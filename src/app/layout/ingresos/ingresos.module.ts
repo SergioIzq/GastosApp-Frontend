@@ -13,21 +13,31 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { PrimeNgModule } from 'src/app/primeng/primeng.module';
 import { SharedModule } from 'src/app/shared/pipes/shared.module';
 import * as IngresosListReducers from './ngrx/reducer/ingresos-list.reducer';
+import * as IngresosProgramadosListReducers from './ngrx/reducer/ingresos-programados-list.reducer';
 import * as IngresoDetailReducers from './ngrx/reducer/ingreso-detail.reducer';
+import * as IngresoProgramadoDetailReducers from './ngrx/reducer/ingreso-programado-detail.reducer';
 import { StoreModule } from '@ngrx/store';
+import { IngresosProgramadosListEffects } from './ngrx/effects/ingresos-programados-list.effects';
+import { IngresosProgramadosListComponent } from './pages/ingresos-programados-list/ingresos-programados-list.component';
+import { IngresoProgramadoDetailComponent } from './pages/ingreso-programado-detail/ingreso-programado-detail.component';
+import { IngresoProgramadoDetailEffects } from './ngrx/effects/ingreso-programado-detail.effects';
 
 const INGRESOS_COMPONENTS = [
   IngresosListComponent,
-  IngresoDetailComponent
+  IngresoDetailComponent,
+  IngresosProgramadosListComponent,
+  IngresoProgramadoDetailComponent
 ];
 
 const INGRESOS_EFFECTS = [
   IngresosListEffects,
-  IngresoDetailEffects
+  IngresoDetailEffects,
+  IngresosProgramadosListEffects,
+  IngresoProgramadoDetailEffects
 ];
 
 const INGRESOS_PROVIDERS = [
-  IngresoService,
+  IngresoService
 ];
 
 @NgModule({
@@ -44,6 +54,8 @@ const INGRESOS_PROVIDERS = [
     IngresosRoutingModule,
     StoreModule.forFeature(IngresosListReducers.ingresosListFeatureKey, IngresosListReducers.reducer),
     StoreModule.forFeature(IngresoDetailReducers.ingresoDetailFeatureKey, IngresoDetailReducers.reducer),
+    StoreModule.forFeature(IngresosProgramadosListReducers.ingresosProgramadosListFeatureKey, IngresosProgramadosListReducers.reducer),
+    StoreModule.forFeature(IngresoProgramadoDetailReducers.ingresoProgramadoDetailFeatureKey, IngresoProgramadoDetailReducers.reducer),
     EffectsModule.forFeature(INGRESOS_EFFECTS),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
