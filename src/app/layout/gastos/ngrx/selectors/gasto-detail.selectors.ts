@@ -1,9 +1,9 @@
-import { createSelector } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { GastoDetailState } from '../../../../shared/models/entidades/estados/gastoDetailState.model';
+import { gastoDetailFeatureKey } from '../reducer/gasto-detail.reducer';
 
 
-export const selectGastoDetailFeature = (state: AppState) => state.gastoPorId;
+export const selectGastoDetailFeature = createFeatureSelector<GastoDetailState>(gastoDetailFeatureKey);
 
 export const selectedGastoSelector = createSelector(
     selectGastoDetailFeature,

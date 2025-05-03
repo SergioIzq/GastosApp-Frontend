@@ -16,6 +16,8 @@ import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { EntidadListState } from 'src/app/shared/models/entidades/estados/entidadListState.model';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 
 @Component({
   selector: 'app-clientes-list',
@@ -45,7 +47,8 @@ export class ClientesListComponent implements OnInit, OnDestroy {
   idUsuario!: number;
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<EntidadListState<Cliente>>,
+    private _store: Store<AuthState>,
     private router: Router,
     private location: Location,
     private actionsSubject: ActionsSubject,
@@ -54,7 +57,7 @@ export class ClientesListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
+    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
     });
 

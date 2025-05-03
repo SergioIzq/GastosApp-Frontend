@@ -31,7 +31,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   exports: [    
@@ -65,7 +65,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     TagModule,
     ChartModule,
     PaginatorModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    CheckboxModule
   ]
 })
 export class PrimeNgModule { }

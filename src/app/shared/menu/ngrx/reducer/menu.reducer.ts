@@ -3,6 +3,7 @@ import * as MenuActions from '../actions/menu.actions';
 import { MenuState } from 'src/app/shared/models/entidades/estados/menustate.model';
 
 export const estadoincial: MenuState = { usuarioPorId: null, loading: false };
+export const menuFeatureKey = 'menu';
 
 const menuReducer = createReducer(
     estadoincial,
@@ -14,7 +15,7 @@ const menuReducer = createReducer(
     on(MenuActions.GetUsuarioSuccess, (state, { usuarioPorId }) => ({
         ...state,
         loading: false,
-        usuarioPorId: usuarioPorId,        
+        usuarioPorId: usuarioPorId,
         errorCarga: false,
     })),
     on(MenuActions.GetUsuarioFail, (state) => ({

@@ -1,9 +1,8 @@
-import { createSelector } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { CategoriaDetailState } from 'src/app/shared/models/entidades/estados/categoriaDetail.model';
+import { categoriaDetailFeatureKey } from '../reducer/categoria-detail.reducer';
 
-
-export const selectCategoriaDetailFeature = (state: AppState) => state.categoriaPorId;
+export const selectCategoriaDetailFeature = createFeatureSelector<CategoriaDetailState>(categoriaDetailFeatureKey);
 
 export const selectedCategoriaSelector = createSelector(
     selectCategoriaDetailFeature,

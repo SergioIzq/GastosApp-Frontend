@@ -14,6 +14,8 @@ import { Traspaso } from 'src/app/shared/models/entidades/traspaso.model';
 import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import { Usuario } from 'src/app/shared/models/entidades/usuario.model';
 import { minAmountValidator } from 'src/app/shared/models/entidades/minAmountValidator.model';
+import { TraspasoDetailState } from 'src/app/shared/models/entidades/estados/traspasoDetail.model';
+import { MenuState } from 'src/app/shared/models/entidades/estados/menustate.model';
 
 @Component({
   selector: 'app-traspaso-detail',
@@ -39,7 +41,8 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
   deshabilitarBoton: boolean = false;
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<TraspasoDetailState>,
+    private _store: Store<MenuState>,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private location: Location,
@@ -68,7 +71,7 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.store.select(selectUsuarioPorId).pipe(takeUntil(this.destroy$)).subscribe((usuario: any) => {
+    this._store.select(selectUsuarioPorId).pipe(takeUntil(this.destroy$)).subscribe((usuario: any) => {
       if (usuario) {
 
         this.usuario = usuario;

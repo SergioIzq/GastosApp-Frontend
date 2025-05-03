@@ -3,6 +3,7 @@ import * as CategoriaDetailActions from '../actions/categoria-detail.actions'
 import { CategoriaDetailState } from '../../../../shared/models/entidades/estados/categoriaDetail.model';
 
 export const estadoInicial: CategoriaDetailState = { loading: false, categoriaPorId: null, errorCarga: false };
+export const categoriaDetailFeatureKey = 'categoriaDetailState';
 
 const categoriaDetailReducer = createReducer(
     estadoInicial,
@@ -60,6 +61,6 @@ const categoriaDetailReducer = createReducer(
 
 );
 
-export function CategoriaDetailReducer(state: CategoriaDetailState = estadoInicial, action: any): CategoriaDetailState {
+export function reducer(state: CategoriaDetailState = estadoInicial, action: any): CategoriaDetailState {
     return categoriaDetailReducer(state, action);
 }

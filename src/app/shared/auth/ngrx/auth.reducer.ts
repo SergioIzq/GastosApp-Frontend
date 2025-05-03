@@ -9,17 +9,18 @@ const estadoInicial: AuthState = {
   error: null,
   loading: false
 };
+export const authReducerFeatureKey = 'auth';
 
-const authReducer = createReducer(
+export const authReducer = createReducer(
   estadoInicial,
   on(AuthActions.login, state => ({
     ...state,
     loading: true
   })),
-  on(AuthActions.loginSuccess, (state, { token }) => {    
+  on(AuthActions.loginSuccess, (state, { respuesta }) => {
     return {
       ...state,
-      token: token.token,
+      token: respuesta.token,
       loading: false,
       error: null
     };

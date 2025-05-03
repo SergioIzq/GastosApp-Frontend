@@ -12,7 +12,9 @@ import { IngresoDetailComponent } from './pages/ingreso-detail/ingreso-detail.co
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { PrimeNgModule } from 'src/app/primeng/primeng.module';
 import { SharedModule } from 'src/app/shared/pipes/shared.module';
-import { UsuariosModule } from '../usuario/usuario.module';
+import * as IngresosListReducers from './ngrx/reducer/ingresos-list.reducer';
+import * as IngresoDetailReducers from './ngrx/reducer/ingreso-detail.reducer';
+import { StoreModule } from '@ngrx/store';
 
 const INGRESOS_COMPONENTS = [
   IngresosListComponent,
@@ -40,6 +42,8 @@ const INGRESOS_PROVIDERS = [
     RouterModule,
     PrimeNgModule,
     IngresosRoutingModule,
+    StoreModule.forFeature(IngresosListReducers.ingresosListFeatureKey, IngresosListReducers.reducer),
+    StoreModule.forFeature(IngresoDetailReducers.ingresoDetailFeatureKey, IngresoDetailReducers.reducer),
     EffectsModule.forFeature(INGRESOS_EFFECTS),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

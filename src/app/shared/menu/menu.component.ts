@@ -10,6 +10,8 @@ import { MenuItem, MessageService } from 'primeng/api';
 import { filter, takeUntil } from 'rxjs/operators';
 import { selectLoading, selectUsuarioPorId } from './ngrx/selectors/menu.selectors';
 import { Usuario } from '../models/entidades/usuario.model';
+import { MenuState } from '../models/entidades/estados/menustate.model';
+import { AuthState } from '../models/entidades/estados/authState.model';
 
 @Component({
   selector: 'app-menu',
@@ -29,7 +31,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   loading: boolean = false;
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<MenuState>,
+    private _store: Store<AuthState>,
     private actionsSubject: ActionsSubject,
     private router: Router,
     private messageService: MessageService
@@ -37,7 +40,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.store.select(selectUserId).subscribe((idUsuario: number) => {
+    this._store.select(selectUserId).subscribe((idUsuario: number) => {
       if (idUsuario) {
         this.idUsuario = idUsuario;
         this.store.dispatch(MenuActions.GetUsuario({ id: this.idUsuario }));
@@ -48,7 +51,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.usuario = usuario;
     });
 
-    this.store.select(selectIsAuthenticated).pipe(takeUntil(this.destroy$)).subscribe(isAuthenticated => {
+    this._store.select(selectIsAuthenticated).pipe(takeUntil(this.destroy$)).subscribe(isAuthenticated => {
       this.items = isAuthenticated ? this.getAuthenticatedMenuItems() : this.getUnauthenticatedMenuItems();
     });
 
@@ -116,7 +119,14 @@ export class MenuComponent implements OnInit, OnDestroy {
         ]
       },
       { label: 'Resumen', icon: 'pi pi-fw pi-chart-line', routerLink: '/resumen/resumen-list' },
-      { label: 'Cerrar Sesión', icon: 'pi pi-fw pi-sign-out', command: () => this.logout() }
+      { label: 'Cerrar Sesión', icon: 'pi pi-fw pi-sign-out', command: () => this.logout() },
+      {
+        label: 'Programables',
+        icon: 'pi pi-calculator',
+        items: [
+          { label: 'Gastos programados', icon: 'pi pi-fw pi-euro', routerLink: '/gastos/gastos-programados-list' },
+        ]
+      },
     ];
   }
 

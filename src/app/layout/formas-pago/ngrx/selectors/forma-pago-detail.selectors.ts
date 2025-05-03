@@ -1,9 +1,9 @@
-import { createSelector } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { FormaPagoDetailState } from 'src/app/shared/models/entidades/estados/formaPagoDetailState.model';
+import { formaPagoDetailFeatureKey } from '../reducers/forma-pago-detail.reducer';
 
 
-export const selectFormaPagoDetailFeature = (state: AppState) => state.formaPago;
+export const selectFormaPagoDetailFeature = createFeatureSelector<FormaPagoDetailState>(formaPagoDetailFeatureKey);
 
 export const selectedFormaPagoSelector = createSelector(
     selectFormaPagoDetailFeature,

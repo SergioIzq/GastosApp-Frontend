@@ -1,18 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Observable, takeUntil, of, switchMap } from 'rxjs';
+import { Subject, Observable, takeUntil } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Usuario } from 'src/app/shared/models/entidades/usuario.model';
 import { ActionsSubject, Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as UsuarioDetailActions from '../ngrx/usuario-detail.actions';
 import * as UsuarioSelector from '../ngrx/usuario-detail.selectors';
 import { Location } from '@angular/common';
-import { filter } from 'rxjs/operators';
-import { NumberFormatterPipe } from 'src/app/shared/pipes/numberFormatterPipe.pipe';
-import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
-import { GetUsuario } from 'src/app/shared/menu/ngrx/actions/menu.actions';
+import { UsuarioDetailState } from 'src/app/shared/models/entidades/estados/usuarioDetailState.model';
+import { MenuState } from 'src/app/shared/models/entidades/estados/menustate.model';
 
 @Component({
   selector: 'app-usuario-detail',
@@ -32,7 +29,8 @@ export class UsuarioDetailComponent implements OnInit, OnDestroy {
   showConfirmationDialog: boolean = false;
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<UsuarioDetailState>,
+    private _store: Store<MenuState>,  
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private location: Location,
@@ -51,7 +49,7 @@ export class UsuarioDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.store.select(selectUsuarioPorId).pipe(takeUntil(this.destroy$)).subscribe((usuario: Usuario | null) => {
+    this._store.select(selectUsuarioPorId).pipe(takeUntil(this.destroy$)).subscribe((usuario: Usuario | null) => {
       if (usuario) {
         this.detailUsuarioForm.patchValue({
           ...usuario,

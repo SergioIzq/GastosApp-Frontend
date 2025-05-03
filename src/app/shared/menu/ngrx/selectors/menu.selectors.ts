@@ -1,8 +1,8 @@
-import { createSelector } from "@ngrx/store";
-import { AppState } from "src/app/app.state";
+import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { MenuState } from "src/app/shared/models/entidades/estados/menustate.model";
+import { menuFeatureKey } from "../reducer/menu.reducer";
 
-export const selectMenuFeature = (state: AppState) => state.menu
+export const selectMenuFeature = createFeatureSelector<MenuState>(menuFeatureKey);
 
 export const selectUsuarioPorId = createSelector(
     selectMenuFeature,

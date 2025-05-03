@@ -20,6 +20,9 @@ import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { AuthInterceptor } from './shared/auth/auth.interceptor';
 import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
+import { MenuReducer } from './shared/menu/ngrx/reducer/menu.reducer';
+import { authReducer } from './shared/auth/ngrx/auth.reducer';
+import { AuthEffects } from './shared/auth/ngrx/auth.effects';
 
 // Register the locale data
 registerLocaleData(localeEs);
@@ -38,8 +41,8 @@ registerLocaleData(localeEs);
     BrowserModule,
     BrowserAnimationsModule,
     PrimeNgModule,
-    StoreModule.forRoot(ROOT_REDUCERS),    
-    EffectsModule.forRoot([MenuEffects]),    
+    StoreModule.forRoot({ auth: authReducer, menu: MenuReducer }),
+    EffectsModule.forRoot([MenuEffects, AuthEffects]),  
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

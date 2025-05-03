@@ -13,6 +13,8 @@ import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConceptoDetailState } from 'src/app/shared/models/entidades/estados/conceptoDetail.model';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 
 @Component({
   selector: 'app-concepto-detail',
@@ -39,7 +41,8 @@ export class ConceptoDetailComponent implements OnInit, OnDestroy {
   private _confirmationService: ConfirmationService = inject(ConfirmationService);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<ConceptoDetailState>,
+    private _store: Store<AuthState>,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private location: Location,
@@ -70,7 +73,7 @@ export class ConceptoDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
 
-    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
+    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
     });
 

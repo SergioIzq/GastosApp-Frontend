@@ -10,7 +10,9 @@ import { ClienteService } from './service/clientes.service';
 import { ClienteDetailEffects } from './ngrx/effects/cliente-detail.effects';
 import { ClientesRoutingModule } from './clientes.routing';
 import { PrimeNgModule } from 'src/app/primeng/primeng.module';
-
+import * as ClientesListReducers from './ngrx/reducers/clientes-list.reducer';
+import * as ClienteDetailReducers from './ngrx/reducers/cliente-detail.reducer';
+import { StoreModule } from '@ngrx/store';
 
 const CLIENTES_COMPONENTS = [
     ClientesListComponent,
@@ -37,7 +39,9 @@ const CLIENTES_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         ClientesRoutingModule,
-        EffectsModule.forFeature(CLIENTES_EFFECTS),
+        StoreModule.forFeature(ClientesListReducers.clientesListFeatureKey, ClientesListReducers.reducer),
+        StoreModule.forFeature(ClienteDetailReducers.clienteDetailFeaturekey, ClienteDetailReducers.reducer),
+        EffectsModule.forFeature(CLIENTES_EFFECTS)
     ],
     providers: [
         ...CLIENTES_PROVIDERS

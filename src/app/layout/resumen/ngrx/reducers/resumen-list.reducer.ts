@@ -1,6 +1,8 @@
 import { createReducer, on } from "@ngrx/store";
 import * as ResumenListActions from '../actions/resumen-list.actions'
 import { ResumenListState } from "src/app/shared/models/entidades/estados/resumenListState.model";
+import { Resumen } from "src/app/shared/models/entidades/resumen.model";
+import { EntidadListState } from "src/app/shared/models/entidades/estados/entidadListState.model";
 
 export const estadoInicial: ResumenListState = {
     loading: false,   
@@ -8,6 +10,7 @@ export const estadoInicial: ResumenListState = {
     listaGastos: null,
     listaIngresos: null
 };
+export const resumenListFeatureKey = 'resumenListState';
 
 export const resumenListReducer = createReducer(
     estadoInicial,
@@ -52,3 +55,7 @@ export const resumenListReducer = createReducer(
         };
     }),
 )
+
+export function reducer(state: ResumenListState = estadoInicial, action: any): ResumenListState {
+    return resumenListReducer(state, action);
+}

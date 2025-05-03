@@ -1,9 +1,8 @@
-import { createSelector } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ProveedorDetailState } from 'src/app/shared/models/entidades/estados/proveedorDetailState.model';
+import { proveedorFeatureKey } from '../reducers/proveedor-detail.reducer';
 
-
-export const selectProveedorDetailFeature = (state: AppState) => state.proveedorPorId;
+export const selectProveedorDetailFeature = createFeatureSelector<ProveedorDetailState>(proveedorFeatureKey);
 
 export const selectedProveedorSelector = createSelector(
     selectProveedorDetailFeature,

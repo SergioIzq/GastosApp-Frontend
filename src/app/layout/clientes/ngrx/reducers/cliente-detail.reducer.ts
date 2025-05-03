@@ -3,6 +3,7 @@ import { ClienteDetailState } from "src/app/shared/models/entidades/estados/clie
 import * as ClienteDetailActions from '../actions/cliente-detail.actions'
 
 export const estadoInicial: ClienteDetailState = { loading: false, clientePorId: null, errorCarga: false };
+export const clienteDetailFeaturekey = 'clienteDetailState';
 
 const clienteDetailReducer = createReducer(
     estadoInicial,
@@ -61,6 +62,6 @@ const clienteDetailReducer = createReducer(
     }))
 );
 
-export function ClienteDetailReducer(state: ClienteDetailState = estadoInicial, action: any): ClienteDetailState {
+export function reducer(state: ClienteDetailState = estadoInicial, action: any): ClienteDetailState {
     return clienteDetailReducer(state, action);
 }

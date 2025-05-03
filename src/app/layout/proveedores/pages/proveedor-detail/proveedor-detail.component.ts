@@ -11,6 +11,8 @@ import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ProveedorDetailState } from 'src/app/shared/models/entidades/estados/proveedorDetailState.model';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 
 @Component({
   selector: 'app-proveedor-detail',
@@ -35,7 +37,8 @@ export class ProveedorDetailComponent implements OnInit, OnDestroy {
   private _confirmationService: ConfirmationService = inject(ConfirmationService);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<ProveedorDetailState>,
+    private _store: Store<AuthState>,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private location: Location,
@@ -57,7 +60,7 @@ export class ProveedorDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
+    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
     });
 

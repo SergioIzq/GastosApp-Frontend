@@ -3,6 +3,7 @@ import { FormaPagoDetailState } from "src/app/shared/models/entidades/estados/fo
 import * as FormaPagoDetailActions from '../actions/forma-pago-detail.actions'
 
 export const estadoInicial: FormaPagoDetailState = { loading: false, formaPagoPorId: null, errorCarga: false };
+export const formaPagoDetailFeatureKey = 'formaPagoDetailState';
 
 const formaPagoDetailReducer = createReducer(
     estadoInicial,
@@ -61,6 +62,6 @@ const formaPagoDetailReducer = createReducer(
     }))
 );
 
-export function FormaPagoDetailReducer(state: FormaPagoDetailState = estadoInicial, action: any): FormaPagoDetailState {
+export function reducer(state: FormaPagoDetailState = estadoInicial, action: any): FormaPagoDetailState {
     return formaPagoDetailReducer(state, action);
 }

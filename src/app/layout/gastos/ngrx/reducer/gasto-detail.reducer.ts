@@ -3,6 +3,7 @@ import { GastoDetailState } from "src/app/shared/models/entidades/estados/gastoD
 import * as GastoDetailActions from '../actions/gasto-detail.actions'
 
 export const estadoInicial: GastoDetailState = { loading: false, gastoPorId: null, errorCarga: false, errorMessage: '', gastoRespuesta: null};
+export const gastoDetailFeatureKey = 'gastoDetailState';
 
 const gastoDetailReducer = createReducer(
     estadoInicial,
@@ -75,6 +76,6 @@ const gastoDetailReducer = createReducer(
     })),
 );
 
-export function GastoDetailReducer(state: GastoDetailState = estadoInicial, action: any): GastoDetailState {
+export function reducer(state: GastoDetailState = estadoInicial, action: any): GastoDetailState {
     return gastoDetailReducer(state, action);
 }

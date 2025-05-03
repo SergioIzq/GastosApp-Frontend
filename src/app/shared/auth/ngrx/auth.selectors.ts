@@ -1,10 +1,10 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AuthState } from '../../models/entidades/estados/authState.model';
-import { AppState } from 'src/app/app.state';
 import { jwtDecode } from 'jwt-decode';
+import { authReducerFeatureKey } from './auth.reducer';
 
 // Define the feature selector
-export const selectAuthFeature = (state: AppState) => state.auth;
+export const selectAuthFeature = createFeatureSelector<AuthState>(authReducerFeatureKey);
 
 // Selector to get the token
 export const selectAuthToken = createSelector(

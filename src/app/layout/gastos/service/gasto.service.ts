@@ -9,6 +9,8 @@ import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoRespuesta.model';
 import { GastoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoByIdRespuesta.model';
 import { environment } from 'src/environments/environment';
+import { GastoProgramado } from 'src/app/shared/models/entidades/gastoProgramado.model';
+import { GastoProgramadoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoProgramadoByIdRespuesta.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,9 +38,26 @@ export class GastoService {
 
   }
 
+  getCantidadGastosProgramados(page: number, size: number, idUsuario: number): Observable<ResponseData<GastoProgramado>> {
+    const url = `${this.apiUrl}gastoProgramado/getCantidad`;
+
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('idUsuario', idUsuario)
+
+    return this.http.get<ResponseData<GastoProgramado>>(url, { params });
+
+  }
+
   getById(id: number): Observable<GastoByIdRespuesta> {
     const url = `${this.apiUrl}gasto/getById/${id}`;
     return this.http.get<GastoByIdRespuesta>(url);
+  }
+
+  getGastoProgramadoById(id: number): Observable<GastoProgramadoByIdRespuesta> {
+    const url = `${this.apiUrl}gastoProgramado/getById/${id}`;
+    return this.http.get<GastoProgramadoByIdRespuesta>(url);
   }
 
   update(gasto: Partial<Gasto>): Observable<Gasto> {
@@ -46,13 +65,27 @@ export class GastoService {
     return this.http.put<Gasto>(url, gasto);
   }
 
+  updateGastoProgramado(gastoProgramado: Partial<GastoProgramado>): Observable<GastoProgramado> {
+    const url = `${this.apiUrl}gastoProgramado/${gastoProgramado.Id}`;
+    return this.http.put<GastoProgramado>(url, gastoProgramado);
+  }
+
   delete(id: number): Observable<Gasto> {
     const url = `${this.apiUrl}gasto/${id}`;
     return this.http.delete<Gasto>(url);
   }
 
+  deleteProgramado(id: number): Observable<GastoProgramado> {
+    const url = `${this.apiUrl}gastoProgramado/${id}`;
+    return this.http.delete<GastoProgramado>(url);
+  }
+
   create(gasto: Gasto): Observable<ResponseOne<Gasto>> {
     return this.http.post<ResponseOne<Gasto>>(`${this.apiUrl}gasto`, gasto);
+  }
+
+  createGastoProgramado(gastoProgramado: GastoProgramado): Observable<ResponseOne<GastoProgramado>> {
+    return this.http.post<ResponseOne<GastoProgramado>>(`${this.apiUrl}gastoProgramado`, gastoProgramado);
   }
 
   exportExcel(res: Excel): Observable<any> {

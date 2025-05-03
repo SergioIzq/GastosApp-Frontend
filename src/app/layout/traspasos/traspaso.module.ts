@@ -11,6 +11,9 @@ import { PrimeNgModule } from 'src/app/primeng/primeng.module';
 import { SharedModule } from 'src/app/shared/pipes/shared.module';
 import { TraspasosListComponent } from './pages/traspasos-list/traspasos-list.component';
 import { TraspasosListEffects } from './ngrx/effects/traspasos-list.effects';
+import * as TraspasosListReducers from './ngrx/reducers/traspasos-list.reducer';
+import * as TraspasoDetailReducers from './ngrx/reducers/traspaso-detail.reducer';
+import { StoreModule } from '@ngrx/store';
 
 const TRASPASO_COMPONENTS = [
     TraspasoDetailComponent,
@@ -38,6 +41,8 @@ const TRASPASO_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         TraspasoRoutingModule,
+        StoreModule.forFeature(TraspasosListReducers.traspasosListFeatureKey, TraspasosListReducers.reducer),
+        StoreModule.forFeature(TraspasoDetailReducers.traspasoDetailFeatureKey, TraspasoDetailReducers.reducer),
         EffectsModule.forFeature(TRASPASO_EFFECTS),
     ],
     providers: [

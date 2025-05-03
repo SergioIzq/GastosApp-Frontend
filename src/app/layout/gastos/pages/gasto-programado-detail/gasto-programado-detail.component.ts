@@ -1,0 +1,348 @@
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Subject, Observable, takeUntil, of, filter, combineLatest } from 'rxjs';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ActionsSubject, Store } from '@ngrx/store';
+import { ActivatedRoute } from '@angular/router';
+import * as GastoProgramadoDetailActions from '../../ngrx/actions/gasto-programado-detail.actions'
+import * as GastoProgramadoSelector from '../../ngrx/selectors/gasto-programado-detail.selectors'
+import { Router } from '@angular/router';
+import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
+import { Persona } from 'src/app/shared/models/entidades/persona.model';
+import { Proveedor } from 'src/app/shared/models/entidades/proveedor.model';
+import { FormaPago } from 'src/app/shared/models/entidades/formaPago.model';
+import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
+import { Concepto } from 'src/app/shared/models/entidades/concepto.model';
+import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
+import { minAmountValidator } from 'src/app/shared/models/entidades/minAmountValidator.model';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoRespuesta.model';
+import { ChangeDetectorRef } from '@angular/core';
+import { GastoProgramadoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoProgramadoByIdRespuesta.model';
+import { GastoProgramadoDetailState } from 'src/app/shared/models/entidades/estados/gastoProgramadoDetailState.model';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
+import { GastoProgramado } from 'src/app/shared/models/entidades/gastoProgramado.model';
+
+@Component({
+  selector: 'app-gasto-programado-detail',
+  templateUrl: './gasto-programado-detail.component.html',
+  styleUrls: ['./gasto-programado-detail.component.css'],
+  providers: [ConfirmationService, MessageService]
+})
+export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
+
+  destroy$: Subject<boolean> = new Subject<boolean>();
+  gastoId: number = 0;
+  gastoPorId$!: Observable<GastoProgramadoByIdRespuesta | null>;
+  loading: boolean = false;
+  error$!: Observable<boolean>;
+  detailGastoForm: FormGroup;
+  originalGastoData!: GastoProgramado;
+  isNewGasto: boolean = false;
+  newGastoForm!: FormGroup;
+  cuentas: Cuenta[] = [];
+  personas: Persona[] = [];
+  proveedores: Proveedor[] = [];
+  formasPago: FormaPago[] = [];
+  conceptos: Concepto[] = [];
+  categorias: Categoria[] = [];
+  filteredConceptos: Concepto[] = [];
+  categoriaSeleccionada: Categoria | null = null;
+  selectedCategoria: any | null = null;
+  selectedConceptoId!: number;
+  idUsuario: number | null = null;
+  deshabilitarBoton: boolean = false;
+  gastoRespuesta: GastoRespuesta = new GastoRespuesta();
+  diasMes: { label: string, value: number }[] = [];
+  private _confirmationService: ConfirmationService = inject(ConfirmationService);
+  private cdRef: ChangeDetectorRef = inject(ChangeDetectorRef);
+
+  constructor(
+    private store: Store<GastoProgramadoDetailState>,
+    private _store: Store<AuthState>,
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private actionsSubject: ActionsSubject
+  ) {
+
+    this.newGastoForm = this.fb.group({
+      IdUsuario: [''],
+      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
+      Fecha: ['', [Validators.required]],
+      Descripcion: ['', [Validators.maxLength(200)]],
+      Concepto: ['', [Validators.required]],
+      Proveedor: ['', [Validators.required]],
+      Persona: ['', [Validators.required]],
+      FormaPago: ['', [Validators.required]],
+      Cuenta: ['', [Validators.required]],
+      Categoria: ['', [Validators.required]],
+      Activo: [false],
+      DiaEjecucion: ['', [Validators.required]],
+      AjustarAUltimoDia: [false]
+    });
+
+    this.detailGastoForm = this.fb.group({
+      Id: [''],
+      IdUsuario: [''],
+      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
+      Descripcion: ['', [Validators.maxLength(200)]],
+      Concepto: ['', [Validators.required]],
+      Categoria: ['', [Validators.required]],
+      Proveedor: ['', [Validators.required]],
+      Persona: ['', [Validators.required]],
+      FormaPago: ['', [Validators.required]],
+      Cuenta: ['', [Validators.required]],
+      Activo: [false],
+      DiaEjecucion: ['', [Validators.required]],
+      AjustarAUltimoDia: [false]
+    });
+
+    this.diasMes = Array.from({ length: 31 }, (_, i) => {
+      const num = i + 1;
+      return { label: num.toString(), value: num };
+    });
+  }
+
+  ngOnInit(): void {
+    this.newGastoForm.get('Concepto')?.disable();
+
+    combineLatest([
+      this.route.paramMap,
+      this._store.select(selectUserId).pipe(filter(id => id > 0))
+    ])
+      .pipe(
+        takeUntil(this.destroy$),
+      )
+      .subscribe(([params, idUsuario]) => {
+        this.idUsuario = idUsuario;
+
+        const idString = params.get('id');
+        const id = parseInt(idString!, 10);
+        this.gastoId = id;
+
+        if (id === 0) {
+          this.isNewGasto = true;
+          this.gastoPorId$ = of(null);
+          this.newGastoForm.patchValue({
+            Fecha: new Date().toLocaleDateString('es-ES')
+          });
+
+          this.store.dispatch(GastoProgramadoDetailActions.GetNewGastoProgramado({ payload: idUsuario }));
+        } else {
+          this.isNewGasto = false;
+          this.store.dispatch(GastoProgramadoDetailActions.GetGastoProgramado({ id }));
+          this.gastoPorId$ = this.store.select(GastoProgramadoSelector.selectedGastoProgramadoSelector);
+        }
+      });
+
+    this.actionsSubject.pipe(filter(action => action.type === 'CreateGastoProgramadoSuccess'), takeUntil(this.destroy$))
+      .subscribe((action: any) => {
+        if (this.idUsuario) {
+          this.router.navigate(['gastos/gasto-programado-detail', action.gastoProgramado.Item.Id])
+          this.gastoId = action.gastoProgramado.Item.Id;
+          this.isNewGasto = false;
+          this.detailGastoForm.patchValue(this.newGastoForm.value);
+          this.detailGastoForm.markAsPristine();
+        }
+      });
+
+    this.actionsSubject.pipe(filter(action => action.type === 'GetNewGastoProgramadoSuccess'), takeUntil(this.destroy$))
+      .subscribe((action: any) => {
+        this.gastoRespuesta = action.payload;
+
+        if (this.gastoRespuesta) {
+          this.cuentas = [...this.gastoRespuesta.ListaCuentas];
+          this.formasPago = [...this.gastoRespuesta.ListaFormasPago];
+          this.personas = [...this.gastoRespuesta.ListaPersonas];
+          this.proveedores = [...this.gastoRespuesta.ListaProveedores];
+          this.conceptos = [...this.gastoRespuesta.ListaConceptos];
+          this.categorias = [...this.gastoRespuesta.ListaCategorias];
+          this.cdRef.detectChanges();
+        }
+      })
+
+    this.gastoPorId$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((gastoByIdRespuesta: GastoProgramadoByIdRespuesta | null) => {
+        if (gastoByIdRespuesta) {          
+          let gasto = gastoByIdRespuesta.GastoProgramadoById;
+          this.cuentas = [...gastoByIdRespuesta.GastoRespuesta.ListaCuentas];
+          this.formasPago = [...gastoByIdRespuesta.GastoRespuesta.ListaFormasPago];
+          this.personas = [...gastoByIdRespuesta.GastoRespuesta.ListaPersonas];
+          this.proveedores = [...gastoByIdRespuesta.GastoRespuesta.ListaProveedores];
+          this.conceptos = [...gastoByIdRespuesta.GastoRespuesta.ListaConceptos];
+          this.categorias = [...gastoByIdRespuesta.GastoRespuesta.ListaCategorias];
+          this.cdRef.detectChanges();
+
+          const monto = this.replaceDotsWithCommas(gasto.Monto);
+          this.selectedCategoria = gasto.Concepto.Categoria.Id;
+          this.selectedConceptoId = gasto.Concepto.Id;
+
+          this.detailGastoForm.patchValue({
+            ...gasto,
+            Monto: monto,
+            Categoria: gasto.Concepto.Categoria,
+          });
+
+          this.originalGastoData = { ...gasto }
+
+          this.filteredConceptos.push(gasto.Concepto);
+          this.detailGastoForm.markAsPristine();
+        }
+      });
+
+    this.store.select(GastoProgramadoSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
+      this.loading = loading;
+    });
+
+    this.error$ = this.store.select(GastoProgramadoSelector.selectErrorCarga);
+
+    this.detailGastoForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.deshabilitarBoton = false;
+    });
+
+    this.newGastoForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.deshabilitarBoton = false;
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
+  onSubmit() {
+    const formValue = this.isNewGasto ? this.newGastoForm.value : this.detailGastoForm.value;
+
+    formValue.IdUsuario = this.idUsuario;
+
+    let fechaLocal = formValue.Fecha;
+
+
+    if (typeof fechaLocal === 'string' && fechaLocal.includes('/')) {
+      const [day, month, year] = fechaLocal.split('/').map(Number);
+      fechaLocal = new Date(year, month - 1, day);
+    }
+
+    const formattedImporte = this.replaceCommasWithDots(formValue.Monto);
+
+    // Crea un nuevo objeto con el Monto formateado
+    const formattedFormValue = {
+      ...formValue,
+      Monto: formattedImporte
+    };
+
+    if (this.isNewGasto) {
+      this.showConfirmation('create', formattedFormValue);
+    } else {
+      this.showConfirmation('edit', formattedFormValue);
+    }
+  }
+
+  private showConfirmation(actionType: string, formValue: any) {
+    const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
+    const detailMessage = actionType === 'create'
+      ? '¿Está seguro que desea crear este registro?'
+      : '¿Está seguro que desea editar este registro?';
+
+    this._confirmationService.confirm({
+      message: detailMessage,
+      header: headerMessage,
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        // Acción confirmada, proceder con el envío del formulario
+        if (actionType === 'create') {
+          this.createGasto(formValue);
+        } else {
+          this.updateGasto(formValue);
+        }
+      }
+    });
+  }
+
+  private createGasto(formattedFormValue: any) {
+    const newGastoData = { ...formattedFormValue };
+    this.store.dispatch(GastoProgramadoDetailActions.CreateGastoProgramado({ payload: newGastoData }));
+    this.deshabilitarBoton = true;
+  }
+
+  private updateGasto(formattedFormValue: any) {
+    const updatedGastoData = { ...formattedFormValue };
+    updatedGastoData.Id = this.gastoId;
+    this.store.dispatch(GastoProgramadoDetailActions.UpdateGastoProgramado({ gastoProgramado: updatedGastoData }));
+    this.detailGastoForm.markAsPristine();
+    this.deshabilitarBoton = true;
+  }
+
+  private replaceCommasWithDots(value: any): any {
+    if (typeof value === 'string') {
+      value = value.replace(/,/g, '.');
+      return value.replace(/\.(?=.*\.)/g, '');
+    }
+    return value;
+  }
+
+  private replaceDotsWithCommas(value: any): any {
+    // Convertimos el valor a cadena
+    let stringValue = value.toString();
+
+    // Primero, eliminamos todos los puntos excepto el último
+    stringValue = stringValue.replace(/\.(?=.*\.)/g, '');
+
+    // Luego, reemplazamos el último punto por una coma
+    stringValue = stringValue.replace(/\./g, ',');
+
+    return stringValue;
+  }
+
+  goBack(): void {
+    this.router.navigate(['gastos/gastos-programados-list'])
+  }
+
+  onCategoriaChange(event: any): void {
+    const selectedCategoria = event.value;
+
+    if (selectedCategoria) {
+      this.selectedCategoria = selectedCategoria.Id;
+      if (this.isNewGasto) {
+        this.newGastoForm.get('Concepto')?.enable();
+      } else {
+        this.detailGastoForm.get('Concepto')?.enable();
+      }
+      this.filterConceptos();
+    } else {
+      this.selectedCategoria = null;
+      this.filteredConceptos = [];
+      if (this.isNewGasto) {
+        this.newGastoForm.get('Concepto')?.disable();
+        this.newGastoForm.patchValue({ Concepto: null });
+      } else {
+        this.detailGastoForm.patchValue({ Concepto: null });
+        this.detailGastoForm.get('Concepto')?.disable();
+      }
+    }
+  }
+
+  private filterConceptos(): void {
+    if (this.selectedCategoria !== null && this.conceptos) {
+      // Filtra los conceptos por la categoría seleccionada
+      this.filteredConceptos = this.conceptos.filter(concepto => {
+        const conceptoCategoriaId = concepto.Categoria.Id;
+        return conceptoCategoriaId === this.selectedCategoria;
+      }).sort((a: Concepto, b: Concepto) =>
+        a.Nombre.localeCompare(b.Nombre)
+      );
+
+    } else {
+      // Si no hay categoría seleccionada, mostrar todos los conceptos
+      this.filteredConceptos = this.conceptos ? this.conceptos.sort((a: Concepto, b: Concepto) =>
+        a.Nombre.localeCompare(b.Nombre)
+      ) : [];
+    }
+  }
+
+}

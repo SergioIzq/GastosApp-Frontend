@@ -3,6 +3,7 @@ import { PersonaDetailState } from "src/app/shared/models/entidades/estados/pers
 import * as PersonaDetailActions from '../actions/persona-detail.actions'
 
 export const estadoInicial: PersonaDetailState = { loading: false, personaPorId: null, errorCarga: false };
+export const personaDetailFeatureKey = 'personaDetailState';
 
 const personaDetailReducer = createReducer(
     estadoInicial,
@@ -61,6 +62,6 @@ const personaDetailReducer = createReducer(
     }))
 );
 
-export function PersonaDetailReducer(state: PersonaDetailState = estadoInicial, action: any): PersonaDetailState {
+export function reducer(state: PersonaDetailState = estadoInicial, action: any): PersonaDetailState {
     return personaDetailReducer(state, action);
 }

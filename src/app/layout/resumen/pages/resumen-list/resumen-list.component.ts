@@ -32,6 +32,8 @@ import { ResumenGastosResponse } from 'src/app/shared/models/entidades/respuesta
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
+import { ResumenListState } from 'src/app/shared/models/entidades/estados/resumenListState.model';
+import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 
 @Component({
   selector: 'app-resumen-list',
@@ -77,7 +79,8 @@ export class ResumenListComponent implements OnInit, OnDestroy, AfterViewInit {
   showChart: boolean = false;
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<ResumenListState>,
+    private _store: Store<AuthState>,
     private location: Location,
     private primengConfig: PrimeNGConfig,
     private messageService: MessageService,
@@ -90,7 +93,7 @@ export class ResumenListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
 
-    this.store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
+    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
     });
 

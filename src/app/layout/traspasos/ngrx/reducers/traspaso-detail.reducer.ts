@@ -3,6 +3,7 @@ import { TraspasoDetailState } from "src/app/shared/models/entidades/estados/tra
 import * as TraspasoDetailActions from '../actions/traspaso-detail.actions'
 
 export const estadoInicial: TraspasoDetailState = { loading: false, errorCarga: false, cuentas: null, traspasoPorId: null };
+export const traspasoDetailFeatureKey = 'traspasoDetailState';
 
 const traspasoDetailReducer = createReducer(
     estadoInicial,
@@ -70,6 +71,6 @@ const traspasoDetailReducer = createReducer(
     }))
 );
 
-export function TraspasoDetailReducer(state: TraspasoDetailState = estadoInicial, action: any): TraspasoDetailState {
+export function reducer(state: TraspasoDetailState = estadoInicial, action: any): TraspasoDetailState {
     return traspasoDetailReducer(state, action);
 }

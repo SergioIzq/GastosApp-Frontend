@@ -12,7 +12,9 @@ import { CuentasRoutingModule } from './cuentas.routing';
 import { PrimeNgModule } from 'src/app/primeng/primeng.module';
 import { SharedModule } from 'src/app/shared/pipes/shared.module';
 import { NumberFormatterPipe } from 'src/app/shared/pipes/numberFormatterPipe.pipe';
-
+import * as CuentaDetailReducers from './ngrx/reducers/cuenta-detail.reducer'
+import * as CuentasListReducers from './ngrx/reducers/cuentas-list.reducer'
+import { StoreModule } from '@ngrx/store';
 
 const CUENTAS_COMPONENTS = [
     CuentasListComponent,
@@ -40,6 +42,8 @@ const CUENTAS_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         CuentasRoutingModule,
+        StoreModule.forFeature(CuentaDetailReducers.cuentaDetailFeatureKey, CuentaDetailReducers.reducer),
+        StoreModule.forFeature(CuentasListReducers.cuentasListFeatureKey, CuentasListReducers.reducer),
         EffectsModule.forFeature(CUENTAS_EFFECTS),
     ],
     providers: [

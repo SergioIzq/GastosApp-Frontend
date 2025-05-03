@@ -1,9 +1,9 @@
-import { createSelector } from "@ngrx/store";
-import { AppState } from "src/app/app.state";
+import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { EntidadListState } from "src/app/shared/models/entidades/estados/entidadListState.model";
 import { FormaPago } from "src/app/shared/models/entidades/formaPago.model";
+import { formasPagoListFeatureKey } from "../reducers/formas-pago-list.reducer";
 
-export const selectFormasPagoFeature = (state: AppState) => state.listaFormasPago
+export const selectFormasPagoFeature = createFeatureSelector<EntidadListState<FormaPago>>(formasPagoListFeatureKey);
 
 export const selectFormasPagoList = createSelector(
     selectFormasPagoFeature,

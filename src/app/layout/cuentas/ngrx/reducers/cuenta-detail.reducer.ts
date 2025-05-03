@@ -3,6 +3,7 @@ import { CuentaDetailState } from "src/app/shared/models/entidades/estados/cuent
 import * as CuentaDetailActions from '../actions/cuenta-detail.actions'
 
 export const estadoInicial: CuentaDetailState = { loading: false, cuentaPorId: null, errorCarga: false };
+export const cuentaDetailFeatureKey = 'cuentaDetailState';
 
 const cuentaDetailReducer = createReducer(
     estadoInicial,
@@ -61,6 +62,6 @@ const cuentaDetailReducer = createReducer(
     }))
 );
 
-export function CuentaDetailReducer(state: CuentaDetailState = estadoInicial, action: any): CuentaDetailState {
+export function reducer(state: CuentaDetailState = estadoInicial, action: any): CuentaDetailState {
     return cuentaDetailReducer(state, action);
 }

@@ -1,10 +1,8 @@
-import { createSelector } from "@ngrx/store";
-import { AppState } from "src/app/app.state";
-import { EntidadListState } from "src/app/shared/models/entidades/estados/entidadListState.model";
-import { Resumen } from "src/app/shared/models/entidades/resumen.model";
+import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { ResumenListState } from "src/app/shared/models/entidades/estados/resumenListState.model";
+import { resumenListFeatureKey } from "../reducers/resumen-list.reducer";
 
-export const selectResumenFeature = (state: AppState) => state.resumen
+export const selectResumenFeature = createFeatureSelector<ResumenListState>(resumenListFeatureKey);
 
 export const selectListaGastos = createSelector(
     selectResumenFeature,
