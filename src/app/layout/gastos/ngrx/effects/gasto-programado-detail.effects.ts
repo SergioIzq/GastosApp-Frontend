@@ -70,8 +70,8 @@ export class GastoProgramadoDetailEffects extends BaseService {
 
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
-            detail: 'Gasto creado correctamente',
+            summary: 'Operación exitosa',
+            detail: 'Gasto programado creado correctamente',
             life: 5000
           });
 

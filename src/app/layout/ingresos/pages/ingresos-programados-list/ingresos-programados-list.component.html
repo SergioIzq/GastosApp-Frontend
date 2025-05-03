@@ -1,14 +1,14 @@
 <div class="p-grid">
     <div class="p-col-12">
-        <h2 class="page-title">Gastos programados</h2>
+        <h2 class="page-title">Ingresos programados</h2>
     </div>
     <div class="p-col-12 p-sm-6">
         <div class="card">
             <p-table #dt [value]="transformedData" dataKey="Id" [rowHover]="true" [rows]="10"
                 [totalRecords]="totalRecords" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
-                [loading]="loading" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} gastos"
+                [loading]="loading" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} ingresos"
                 [filterDelay]="0" [sortField]="'FechaCreacion'" [sortOrder]="-1"
-                [globalFilterFields]="['Importe', 'FormaPago','Concepto','CategoriaNombre','Proveedor','Descripcion','Fecha','Cuenta','Persona', 'AjustarAUltimoDia', 'DiaEjecucion']">
+                [globalFilterFields]="['Importe', 'FormaPago','Concepto','CategoriaNombre','Cliente','Descripcion','Fecha','Cuenta','Persona', 'AjustarAUltimoDia', 'DiaEjecucion']">
 
                 <ng-template pTemplate="caption">
                     <div class="grid datatable-header"
@@ -17,7 +17,7 @@
                         <div class="field col-12 md:col-4" style="width:150px">
                             <p-button pRipple severity="success" [raised]="true" label="Nuevo" icon="pi pi-plus"
                                 iconPos="right" class="mr-0 nuevo-button"
-                                [routerLink]="['/gastos/gasto-programado-detail', 0]"></p-button>
+                                [routerLink]="['/ingresos/ingreso-programado-detail', 0]"></p-button>
                         </div>
 
                         <!-- Botón Limpiar -->
@@ -92,11 +92,11 @@
                             </div>
                         </th>
 
-                        <th pSortableColumn="Proveedor" style="min-width: 10rem">
+                        <th pSortableColumn="Cliente" style="min-width: 10rem">
                             <div class="flex justify-content-between align-items-center">
-                                Proveedor
-                                <p-sortIcon field="Proveedor" />
-                                <p-columnFilter type="text" field="Proveedor" display="menu" class="ml-auto"
+                                Cliente
+                                <p-sortIcon field="Cliente" />
+                                <p-columnFilter type="text" field="Cliente" display="menu" class="ml-auto"
                                     [matchModeOptions]="[
                                     { label: 'Contiene', value: 'contains' },
                                     { label: 'No contiene', value: 'notContains' },
@@ -191,38 +191,38 @@
                     </tr>
                 </ng-template>
 
-                <ng-template pTemplate="body" let-gasto>
+                <ng-template pTemplate="body" let-ingreso>
                     <tr>
-                        <td>{{ gasto.DiaEjecucion }}</td>
-                        <td>{{ gasto.Persona }}</td>                        
-                        <td>{{ gasto.FormaPago }}</td>
-                        <td>{{ gasto.Proveedor }}</td>
-                        <td>{{ gasto.CategoriaNombre }}</td>
-                        <td>{{ gasto.Concepto }}</td>
-                        <td>{{ gasto.Cuenta }}</td>
-                        <td style="color: red !important;">-{{ gasto.Importe | currency: 'EUR'}}</td>                                
+                        <td>{{ ingreso.DiaEjecucion }}</td>
+                        <td>{{ ingreso.Persona }}</td>                        
+                        <td>{{ ingreso.FormaPago }}</td>
+                        <td>{{ ingreso.Cliente }}</td>
+                        <td>{{ ingreso.CategoriaNombre }}</td>
+                        <td>{{ ingreso.Concepto }}</td>
+                        <td>{{ ingreso.Cuenta }}</td>
+                        <td style="color: rgb(0, 161, 0) !important;">+{{ ingreso.Importe | currency: 'EUR'}}</td>                                
                         <td>
                             <p-button pRipple icon="pi pi-pencil" class="mr-2 rounded-button" [rounded]="true"
                                 [outlined]="true" severity="success"
-                                [routerLink]="['/gastos/gasto-programado-detail', gasto.Id]" />
+                                [routerLink]="['/ingresos/ingreso-programado-detail', ingreso.Id]" />
                         </td>
                         <td>
                             <p-button pRipple icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"
-                                (click)="showDeleteConfirmationDialog(gasto.Id)" />
+                                (click)="showDeleteConfirmationDialog(ingreso.Id)" />
                         </td>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td colspan="12">No se encontraron gastos programados con esos filtros</td>
+                        <td colspan="12">No se encontraron ingresos con esos filtros</td>
                     </tr>
                 </ng-template>
             </p-table>
             <!-- Paginador personalizado -->
             <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="size"
                 [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 20, 30]" [showCurrentPageReport]="true"
-                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} gastos programados">
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} ingresos programados">
             </p-paginator>
         </div>
         <!-- En pantallas pequeñas (≥ 576px), ocupa 6 columnas; en otras, ocupa 12 columnas -->
@@ -230,12 +230,12 @@
             [style]="{ width: '25rem' }" [style.max-width.px]="getDialogWidth()">
             <div style="margin-bottom: 1rem;">
                 <!-- Agrega margen en la parte inferior para separar el texto de los botones -->
-                <span class="p-text-secondary block">¿Está seguro de que quiere borrar este gasto programado?</span>
+                <span class="p-text-secondary block">¿Está seguro de que quiere borrar este ingreso programado?</span>
             </div>
             <div class="">
                 <p-button label="Cancelar" [raised]="true" severity="secondary" (click)="showConfirmationDialog = false"
                     class="" />
-                <p-button label="Eliminar" [raised]="true" severity="danger" (click)="onDeleteGasto()" iconPos="right"
+                <p-button label="Eliminar" [raised]="true" severity="danger" (click)="onDeleteIngreso()" iconPos="right"
                     class="pa-button" icon="pi pi-trash" />
             </div>
         </p-dialog>

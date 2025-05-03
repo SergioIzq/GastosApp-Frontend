@@ -9,6 +9,8 @@ import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 import { IngresoRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresoRespuesta.model';
 import { IngresoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresoByIdRespuesta.model';
 import { environment } from 'src/environments/environment';
+import { IngresoProgramado } from 'src/app/shared/models/entidades/ingresoProgramado.model';
+import { IngresoProgramadoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresoProgramadoByIdRespuesta.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +35,22 @@ export class IngresoService {
       .set('idUsuario', idUsuario)
 
     return this.http.get<ResponseData<Ingreso>>(url, { params });
+  }
 
+  getIngresoProgramadoById(id: number): Observable<IngresoProgramadoByIdRespuesta> {
+    const url = `${this.apiUrl}ingresoProgramado/getById/${id}`;
+    return this.http.get<IngresoProgramadoByIdRespuesta>(url);
+  }
+
+  getCantidadIngresosProgramados(page: number, size: number, idUsuario: number): Observable<ResponseData<IngresoProgramado>> {
+    const url = `${this.apiUrl}ingresoProgramado/getCantidad`;
+
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('idUsuario', idUsuario)
+
+    return this.http.get<ResponseData<IngresoProgramado>>(url, { params });
   }
 
   getById(id: number): Observable<IngresoByIdRespuesta> {
@@ -46,13 +63,27 @@ export class IngresoService {
     return this.http.put<Ingreso>(url, ingreso);
   }
 
+  updateIngresoProgramado(ingresoProgramado: Partial<IngresoProgramado>): Observable<IngresoProgramado> {
+    const url = `${this.apiUrl}ingresoProgramado/${ingresoProgramado.Id}`;
+    return this.http.put<IngresoProgramado>(url, ingresoProgramado);
+  }
+
   delete(id: number): Observable<Ingreso> {
     const url = `${this.apiUrl}ingreso/${id}`;
     return this.http.delete<Ingreso>(url);
   }
 
+  deleteProgramado(id: number): Observable<IngresoProgramado> {
+    const url = `${this.apiUrl}ingresoProgramado/${id}`;
+    return this.http.delete<IngresoProgramado>(url);
+  }
+
   create(ingreso: Ingreso): Observable<ResponseOne<IngresoByIdRespuesta>> {
     return this.http.post<ResponseOne<IngresoByIdRespuesta>>(`${this.apiUrl}ingreso`, ingreso);
+  }
+
+  createIngresoProgramado(ingresoProgramado: IngresoProgramado): Observable<ResponseOne<IngresoProgramado>> {
+    return this.http.post<ResponseOne<IngresoProgramado>>(`${this.apiUrl}ingresoProgramado`, ingresoProgramado);
   }
 
   exportExcel(res: Excel): Observable<any> {
@@ -61,7 +92,7 @@ export class IngresoService {
     return this.http.post<Excel>(url, res);
   }
 
-  getNewIngreso(idUsuario: number): Observable<IngresoRespuesta>{    
+  getNewIngreso(idUsuario: number): Observable<IngresoRespuesta> {
     const url = `${this.apiUrl}ingreso/getNewIngreso/${idUsuario}`;
     return this.http.get<IngresoRespuesta>(url);
   }
