@@ -16,14 +16,14 @@ const gastoProgramadoDetailReducer = createReducer(
     on(GastoProgramadoDetailActions.GetGastoProgramadoSuccess, (state, { gastoProgramado }) => ({
         ...state,
         loading: false,
-        gastoPorId: gastoProgramado,
+        gastoProgramadoPorId: gastoProgramado,
         errorCarga: false,
         createdSuccess: false
     })),
     on(GastoProgramadoDetailActions.GetGastoProgramadoFail, (state) => ({
         ...state,
         loading: false,
-        gastoPorId: null,
+        gastoProgramadoPorId: null,
         errorCarga: true,
         createdSuccess: false
     })),

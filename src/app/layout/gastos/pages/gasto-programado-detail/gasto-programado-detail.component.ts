@@ -1,10 +1,9 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Observable, takeUntil, of, filter, combineLatest } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Gasto } from 'src/app/shared/models/entidades/gasto.model';
 import { ActionsSubject, Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
-import * as GastoDetailActions from '../../ngrx/actions/gasto-detail.actions'
+import * as GastoProgramadoDetailActions from '../../ngrx/actions/gasto-programado-detail.actions'
 import * as GastoProgramadoSelector from '../../ngrx/selectors/gasto-programado-detail.selectors'
 import { Router } from '@angular/router';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
@@ -53,6 +52,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
   idUsuario: number | null = null;
   deshabilitarBoton: boolean = false;
   gastoRespuesta: GastoRespuesta = new GastoRespuesta();
+  diasMes: { label: string, value: number }[] = [];
   private _confirmationService: ConfirmationService = inject(ConfirmationService);
   private cdRef: ChangeDetectorRef = inject(ChangeDetectorRef);
 
@@ -76,9 +76,9 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
       FormaPago: ['', [Validators.required]],
       Cuenta: ['', [Validators.required]],
       Categoria: ['', [Validators.required]],
-      Activo: ['', [Validators.required]],
+      Activo: [false],
       DiaEjecucion: ['', [Validators.required]],
-      AjustarAUltimoDia: ['', [Validators.required]]
+      AjustarAUltimoDia: [false]
     });
 
     this.detailGastoForm = this.fb.group({
@@ -92,11 +92,15 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
       Persona: ['', [Validators.required]],
       FormaPago: ['', [Validators.required]],
       Cuenta: ['', [Validators.required]],
-      Activo: ['', [Validators.required]],
+      Activo: [false],
       DiaEjecucion: ['', [Validators.required]],
-      AjustarAUltimoDia: ['', [Validators.required]]
+      AjustarAUltimoDia: [false]
     });
 
+    this.diasMes = Array.from({ length: 31 }, (_, i) => {
+      const num = i + 1;
+      return { label: num.toString(), value: num };
+    });
   }
 
   ngOnInit(): void {
@@ -123,26 +127,26 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
             Fecha: new Date().toLocaleDateString('es-ES')
           });
 
-          this.store.dispatch(GastoDetailActions.GetNewGasto({ payload: idUsuario }));
+          this.store.dispatch(GastoProgramadoDetailActions.GetNewGastoProgramado({ payload: idUsuario }));
         } else {
           this.isNewGasto = false;
-          this.store.dispatch(GastoDetailActions.GetGasto({ id }));
+          this.store.dispatch(GastoProgramadoDetailActions.GetGastoProgramado({ id }));
           this.gastoPorId$ = this.store.select(GastoProgramadoSelector.selectedGastoProgramadoSelector);
         }
       });
 
-    this.actionsSubject.pipe(filter(action => action.type === 'CreateGastoSuccess'), takeUntil(this.destroy$))
+    this.actionsSubject.pipe(filter(action => action.type === 'CreateGastoProgramadoSuccess'), takeUntil(this.destroy$))
       .subscribe((action: any) => {
         if (this.idUsuario) {
-          this.router.navigate(['gastos/gasto-detail', action.gasto.Item.Id])
-          this.gastoId = action.gasto.Item.Id;
+          this.router.navigate(['gastos/gasto-programado-detail', action.gastoProgramado.Item.Id])
+          this.gastoId = action.gastoProgramado.Item.Id;
           this.isNewGasto = false;
           this.detailGastoForm.patchValue(this.newGastoForm.value);
           this.detailGastoForm.markAsPristine();
         }
       });
 
-    this.actionsSubject.pipe(filter(action => action.type === 'GetNewGastoSuccess'), takeUntil(this.destroy$))
+    this.actionsSubject.pipe(filter(action => action.type === 'GetNewGastoProgramadoSuccess'), takeUntil(this.destroy$))
       .subscribe((action: any) => {
         this.gastoRespuesta = action.payload;
 
@@ -160,7 +164,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
     this.gastoPorId$
       .pipe(takeUntil(this.destroy$))
       .subscribe((gastoByIdRespuesta: GastoProgramadoByIdRespuesta | null) => {
-        if (gastoByIdRespuesta) {
+        if (gastoByIdRespuesta) {          
           let gasto = gastoByIdRespuesta.GastoProgramadoById;
           this.cuentas = [...gastoByIdRespuesta.GastoRespuesta.ListaCuentas];
           this.formasPago = [...gastoByIdRespuesta.GastoRespuesta.ListaFormasPago];
@@ -220,8 +224,6 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
       fechaLocal = new Date(year, month - 1, day);
     }
 
-    const fechaUTC = new Date(fechaLocal.getTime() - fechaLocal.getTimezoneOffset() * 60000).toISOString();
-
     const formattedImporte = this.replaceCommasWithDots(formValue.Monto);
 
     // Crea un nuevo objeto con el Monto formateado
@@ -231,13 +233,13 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
     };
 
     if (this.isNewGasto) {
-      this.showConfirmation('create', formattedFormValue, fechaUTC);
+      this.showConfirmation('create', formattedFormValue);
     } else {
-      this.showConfirmation('edit', formattedFormValue, fechaUTC);
+      this.showConfirmation('edit', formattedFormValue);
     }
   }
 
-  private showConfirmation(actionType: string, formValue: any, fechaUTC: any) {
+  private showConfirmation(actionType: string, formValue: any) {
     const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
     const detailMessage = actionType === 'create'
       ? '¿Está seguro que desea crear este registro?'
@@ -254,24 +256,24 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
       accept: () => {
         // Acción confirmada, proceder con el envío del formulario
         if (actionType === 'create') {
-          this.createGasto(formValue, fechaUTC);
+          this.createGasto(formValue);
         } else {
-          this.updateGasto(formValue, fechaUTC);
+          this.updateGasto(formValue);
         }
       }
     });
   }
 
-  private createGasto(formattedFormValue: any, fechaUTC: any) {
-    const newGastoData = { ...formattedFormValue, Fecha: fechaUTC };
-    this.store.dispatch(GastoDetailActions.CreateGasto({ payload: newGastoData }));
+  private createGasto(formattedFormValue: any) {
+    const newGastoData = { ...formattedFormValue };
+    this.store.dispatch(GastoProgramadoDetailActions.CreateGastoProgramado({ payload: newGastoData }));
     this.deshabilitarBoton = true;
   }
 
-  private updateGasto(formattedFormValue: any, fechaUTC: any) {
-    const updatedGastoData = { ...formattedFormValue, Fecha: fechaUTC };
+  private updateGasto(formattedFormValue: any) {
+    const updatedGastoData = { ...formattedFormValue };
     updatedGastoData.Id = this.gastoId;
-    this.store.dispatch(GastoDetailActions.UpdateGasto({ gasto: updatedGastoData }));
+    this.store.dispatch(GastoProgramadoDetailActions.UpdateGastoProgramado({ gastoProgramado: updatedGastoData }));
     this.detailGastoForm.markAsPristine();
     this.deshabilitarBoton = true;
   }
@@ -298,7 +300,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['gastos/gastos-list'])
+    this.router.navigate(['gastos/gastos-programados-list'])
   }
 
   onCategoriaChange(event: any): void {

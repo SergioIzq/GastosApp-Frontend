@@ -20,6 +20,7 @@ import * as GastoDetailReducer from './ngrx/reducer/gasto-detail.reducer'
 import * as GastosListReducer from './ngrx/reducer/gastos-list.reducer'
 import * as GastosProgramadosListReducer from './ngrx/reducer/gastos-programados-list.reducer'
 import * as GastoProgramadoDetailReducer from './ngrx/reducer/gasto-programado-detail.reducer'
+import { GastoProgramadoDetailEffects } from './ngrx/effects/gasto-programado-detail.effects';
 
 
 const GASTOS_COMPONENTS = [
@@ -32,7 +33,8 @@ const GASTOS_COMPONENTS = [
 const GASTOS_EFFECTS = [
   GastosListEffects,
   GastosProgramadosListEffects,
-  GastoDetailEffects
+  GastoDetailEffects,
+  GastoProgramadoDetailEffects
 ];
 
 const GASTOS_PROVIDERS = [

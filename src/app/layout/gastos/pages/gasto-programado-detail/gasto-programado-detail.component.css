@@ -1,0 +1,18 @@
+.euro-input-container {
+    position: relative;
+  }
+  
+  .euro-input-container input {
+    padding-right: 2.5em; /* Ajusta el padding derecho para hacer espacio para el símbolo */
+  }
+  
+  .euro-input-container::after {
+    content: '€';
+    position: absolute;
+    right: 1em; /* Ajusta la posición del símbolo */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1em; /* Ajusta el tamaño del símbolo según sea necesario */
+    color: #333; /* Ajusta el color del símbolo según sea necesario */
+    pointer-events: none; /* Asegura que el símbolo no interfiera con la interacción del usuario */
+  }  

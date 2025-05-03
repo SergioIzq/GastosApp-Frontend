@@ -200,8 +200,7 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
   }
 
   // Función para transformar el objeto
-  transformData(data: ResponseData<GastoProgramado>) {
-    console.log(data)
+  transformData(data: ResponseData<GastoProgramado>) {    
     return data.Items.map((item: any) => ({
       Id: item.Id,
       Importe: item.Monto,
