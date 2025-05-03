@@ -7,7 +7,7 @@
             <p-table #dt [value]="transformedData" dataKey="id" [rowHover]="true" [rows]="10"
                 [totalRecords]="totalRecords" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
                 [loading]="loading" [filterDelay]="0"
-                [globalFilterFields]="['Importe', 'FormaPago','Concepto','CategoriaNombre','Cliente','Descripcion','Fecha','Cuenta','Persona']" [sortField]="'Fecha'" [sortOrder]="-1">
+                [globalFilterFields]="['Importe', 'FormaPago','Concepto','CategoriaNombre','Cliente','Descripcion','Fecha','Cuenta','Persona']" [sortField]="'FechaCreacion'" [sortOrder]="-1">
 
                 <ng-template pTemplate="caption">
                     <div class="grid datatable-header"

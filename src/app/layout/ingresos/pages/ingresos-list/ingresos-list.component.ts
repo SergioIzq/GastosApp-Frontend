@@ -214,7 +214,8 @@ export class IngresosListComponent implements OnInit, OnDestroy {
       Descripcion: item.Descripcion,
       Fecha: this.formatFecha(item.Fecha),
       Persona: item.Persona.Nombre,
-      FormaPago: item.FormaPago.Nombre
+      FormaPago: item.FormaPago.Nombre,
+      FechaCreacion: item.FechaCreacion
     }));
   }
 

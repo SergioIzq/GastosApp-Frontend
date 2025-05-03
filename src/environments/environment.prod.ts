@@ -1,6 +1,6 @@
-// environment.ts
+// environment.prod.ts
 export const environment = {
     production: true,
-    apiUrl: 'https://gastosapp-backend.onrender.com/api/'
+    apiUrl: 'https://gbackend.sergioizq.es/api/'
   };
   
