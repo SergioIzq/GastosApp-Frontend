@@ -218,8 +218,21 @@
 
                 <ng-template pTemplate="body" let-gasto>
                     <tr>
-                        <td>{{ gasto.FechaEjecucion }}</td>
-                        <td>{{ gasto.Frecuencia.toLowerCase().charAt(0).toUpperCase() + gasto.Frecuencia.toLowerCase().slice(1) }}</td>
+                        <td>
+                            <ng-container [ngSwitch]="gasto.Frecuencia">
+                                <span *ngSwitchCase="'SEMANAL'">
+                                    {{ capitalizarPrimeraLetra(gasto.FechaEjecucion | date:'EEEE') }}
+                                </span>
+                                <span *ngSwitchCase="'MENSUAL'">
+                                    {{ gasto.FechaEjecucion | date:'d' }} <!-- Día del mes -->
+                                </span>
+                                <span *ngSwitchCase="'DIARIA'">
+                                    {{ gasto.FechaEjecucion | date:'shortTime' }} <!-- Ej: 14:30 -->
+                                </span>
+                            </ng-container>
+                        </td>
+                        <td>{{ gasto.Frecuencia.toLowerCase().charAt(0).toUpperCase() +
+                            gasto.Frecuencia.toLowerCase().slice(1) }}</td>
                         <td>{{ gasto.Persona }}</td>
                         <td>{{ gasto.FormaPago }}</td>
                         <td>{{ gasto.Proveedor }}</td>

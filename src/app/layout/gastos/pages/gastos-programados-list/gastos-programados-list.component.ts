@@ -161,10 +161,20 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
     return `${day}/${month}/${year}`;
   }
 
-  // Función para obtener el formato adecuado
-  formatFecha(fechaStr: string): string {    
-    return this.getDateTimeLocalFormat(new Date(fechaStr));
-  }
+  formatFecha(fecha: Date): string {
+    // Convierte la fecha a un formato legible con la hora y minuto.
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false // Si deseas formato 24h
+    };
+  
+    // Usamos toLocaleString para obtener el formato de fecha y hora.
+    return fecha.toLocaleString('es-ES', options);
+  }  
 
   exportarAExcel(): void {
     const exportData = this.respuesta.Items.map(item => {
@@ -210,7 +220,7 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
       Cuenta: item.Cuenta.Nombre,   
       Persona: item.Persona.Nombre,
       FormaPago: item.FormaPago.Nombre,
-      FechaEjecucion: this.formatFecha(new Date(item.FechaEjecucion.toString().replace('Z', '')).toLocaleDateString()),
+      FechaEjecucion: this.formatFecha(new Date(item.FechaEjecucion.toString().replace('Z', ''))),
       Frecuencia: item.Frecuencia,
       Activo: item.Activo
     }));
@@ -226,4 +236,10 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
     this.first = event.first; // Actualiza la página inicial
     this.loadGastos();
   }
+
+  capitalizarPrimeraLetra(texto: string | null): string {
+    if (!texto) return '';
+    return texto.charAt(0).toUpperCase() + texto.slice(1);
+  }  
+  
 }
