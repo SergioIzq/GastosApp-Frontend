@@ -27,8 +27,8 @@ ChartJS.register(
   Legend,
   Title
 );
-import { ResumenIngresosResponse } from 'src/app/shared/models/entidades/respuestas/resumenIngresosResponse.model'; 
-import { ResumenGastosResponse } from 'src/app/shared/models/entidades/respuestas/ResumenGastosResumen.model';
+import { ResumenIngresosResponse } from 'src/app/shared/models/entidades/respuestas/resumen/resumenIngresosResponse.model'; 
+import { ResumenGastosResponse } from 'src/app/shared/models/entidades/respuestas/resumen/ResumenGastosResumen.model';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';

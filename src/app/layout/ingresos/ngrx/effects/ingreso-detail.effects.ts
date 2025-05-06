@@ -5,11 +5,11 @@ import { IngresoService } from "../../service/ingreso.service";
 import * as IngresoDetailActions from "../actions/ingreso-detail.actions";
 import { Router } from "@angular/router";
 import { MessageService } from 'primeng/api';
-import { ResponseOne } from "src/app/shared/models/entidades/respuestas/responseOne.model";
+import { ResponseOne } from "src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model";
 import { Ingreso } from "src/app/shared/models/entidades/ingreso.model";
 import { BaseService } from "src/app/shared/service/base-service.service";
 import { HttpClient } from "@angular/common/http";
-import { IngresoByIdRespuesta } from "src/app/shared/models/entidades/respuestas/ingresoByIdRespuesta.model";
+import { IngresoByIdRespuesta } from "src/app/shared/models/entidades/respuestas/ingresos/ingresoByIdRespuesta.model";
 
 @Injectable()
 export class IngresoDetailEffects extends BaseService {

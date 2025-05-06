@@ -4,7 +4,7 @@ import { of, mergeMap } from "rxjs";
 import { map, catchError, tap } from "rxjs/operators";
 import * as ProveedoresListActions from 'src/app/layout/proveedores/ngrx/actions/proveedores-list.actions';
 import { ProveedorService } from '../../service/proveedores.service';
-import { ResponseData } from '../../../../shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from '../../../../shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { Proveedor } from 'src/app/shared/models/entidades/proveedor.model';
 import { MessageService } from 'primeng/api';
 

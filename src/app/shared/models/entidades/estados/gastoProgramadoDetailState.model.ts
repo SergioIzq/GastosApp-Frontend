@@ -1,5 +1,5 @@
-import { GastoProgramadoByIdRespuesta } from "../respuestas/gastoProgramadoByIdRespuesta.model";
-import { GastoRespuesta } from "../respuestas/gastoRespuesta.model";
+import { GastoProgramadoByIdRespuesta } from "../respuestas/gastos/gastoProgramadoByIdRespuesta.model";
+import { GastoRespuesta } from "../respuestas/gastos/gastoRespuesta.model";
 
 export interface GastoProgramadoDetailState{
     loading: boolean;

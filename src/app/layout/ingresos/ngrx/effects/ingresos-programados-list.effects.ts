@@ -4,7 +4,7 @@ import { of, mergeMap } from "rxjs";
 import { map, catchError } from "rxjs/operators";
 import * as IngresosProgramadosListActions from 'src/app/layout/ingresos/ngrx/actions/ingresos-programados-list.actions';
 import { IngresoService } from '../../service/ingreso.service';
-import { ResponseData } from '../../../../shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from '../../../../shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { MessageService } from 'primeng/api';
 import { IngresoProgramado } from "src/app/shared/models/entidades/ingresoProgramado.model";
 

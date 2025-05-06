@@ -4,7 +4,7 @@ import { of, mergeMap } from "rxjs";
 import { map, catchError, tap } from "rxjs/operators";
 import * as CategoriasListActions from 'src/app/layout/categorias/ngrx/actions/categorias-list.actions';
 import { CategoriaService } from '../../service/categoria.service';
-import { ResponseData } from '../../../../shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from '../../../../shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { MessageService } from 'primeng/api';
 

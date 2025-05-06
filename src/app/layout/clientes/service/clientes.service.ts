@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Cliente } from 'src/app/shared/models/entidades/cliente.model';
 import { HttpParams } from '@angular/common/http';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
-import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 import { environment } from 'src/environments/environment';
 

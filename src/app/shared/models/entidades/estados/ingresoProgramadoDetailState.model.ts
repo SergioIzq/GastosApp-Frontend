@@ -1,5 +1,5 @@
-import { IngresoProgramadoByIdRespuesta } from "../respuestas/ingresoProgramadoByIdRespuesta.model";
-import { IngresoRespuesta } from "../respuestas/ingresoRespuesta.model";
+import { IngresoProgramadoByIdRespuesta } from "../respuestas/ingresos/ingresoProgramadoByIdRespuesta.model";
+import { IngresoRespuesta } from "../respuestas/ingresos/ingresoRespuesta.model";
 
 export interface IngresoProgramadoDetailState{
     loading: boolean;

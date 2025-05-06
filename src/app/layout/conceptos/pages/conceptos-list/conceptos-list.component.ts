@@ -9,7 +9,7 @@ import { Location } from '@angular/common';
 import * as SelectConceptosList from '../../ngrx/selectors/conceptos-list.selectors'
 import * as ConceptosListActions from 'src/app/layout/conceptos/ngrx/actions/conceptos-list.actions';
 import { Table } from 'primeng/table';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { Concepto } from 'src/app/shared/models/entidades/concepto.model';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';

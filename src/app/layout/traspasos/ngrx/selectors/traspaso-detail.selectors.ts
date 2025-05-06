@@ -6,7 +6,7 @@ export const selectTraspasoDetailFeature = createFeatureSelector<TraspasoDetailS
 
 export const selectedTraspasoSelector = createSelector(
     selectTraspasoDetailFeature,
-    (state: TraspasoDetailState) => state.traspasoPorId
+    (state: TraspasoDetailState) => state.traspasoPorIdRespuesta
 );
 
 export const selectLoading = createSelector(

@@ -1,5 +1,5 @@
-import { IngresoByIdRespuesta } from "../respuestas/ingresoByIdRespuesta.model";
-import { IngresoRespuesta } from "../respuestas/ingresoRespuesta.model";
+import { IngresoByIdRespuesta } from "../respuestas/ingresos/ingresoByIdRespuesta.model";
+import { IngresoRespuesta } from "../respuestas/ingresos/ingresoRespuesta.model";
 
 export interface IngresoDetailState {
     loading: boolean;

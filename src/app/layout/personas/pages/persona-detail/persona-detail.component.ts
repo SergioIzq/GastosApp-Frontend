@@ -8,7 +8,7 @@ import * as PersonaDetailActions from '../../ngrx/actions/persona-detail.actions
 import * as PersonaSelector from '../../ngrx/selectors/persona-detail.selectors';
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
-import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { PersonaDetailState } from 'src/app/shared/models/entidades/estados/personaDetail.model';

@@ -4,7 +4,7 @@ import { of, mergeMap } from "rxjs";
 import { map, catchError } from "rxjs/operators";
 import * as GastosProgramadosListActions from 'src/app/layout/gastos/ngrx/actions/gastos-programados-list.actions';
 import { GastoService } from '../../service/gasto.service';
-import { ResponseData } from '../../../../shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from '../../../../shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { MessageService } from 'primeng/api';
 import { GastoProgramado } from "src/app/shared/models/entidades/gastoProgramado.model";
 

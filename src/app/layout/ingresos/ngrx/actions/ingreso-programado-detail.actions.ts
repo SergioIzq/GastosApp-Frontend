@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model';
 import { IngresoProgramado } from '../../../../shared/models/entidades/ingresoProgramado.model';
-import { IngresoProgramadoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresoProgramadoByIdRespuesta.model';
-import { IngresoRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresoRespuesta.model';
+import { IngresoProgramadoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresos/ingresoProgramadoByIdRespuesta.model';
+import { IngresoRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresos/ingresoRespuesta.model';
 
 export const GetIngresoProgramado = createAction('GetIngresoProgramado', props<{ id: number }>());
 

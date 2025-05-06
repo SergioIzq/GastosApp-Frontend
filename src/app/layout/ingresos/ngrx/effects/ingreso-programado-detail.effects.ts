@@ -5,7 +5,7 @@ import { IngresoService } from "../../service/ingreso.service";
 import * as IngresoProgramadoDetailActions from "../actions/ingreso-programado-detail.actions";
 import { Router } from "@angular/router";
 import { MessageService } from 'primeng/api';
-import { ResponseOne } from "src/app/shared/models/entidades/respuestas/responseOne.model";
+import { ResponseOne } from "src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model";
 import { BaseService } from "src/app/shared/service/base-service.service";
 import { HttpClient } from "@angular/common/http";
 import { IngresoProgramado } from "src/app/shared/models/entidades/ingresoProgramado.model";

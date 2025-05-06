@@ -6,7 +6,7 @@ import { Location } from '@angular/common';
 import * as SelectIngresosList from '../../ngrx/selectors/ingresos-programados-list.selectors'
 import * as IngresosProgramadosListActions from 'src/app/layout/ingresos/ngrx/actions/ingresos-programados-list.actions';
 import { Table } from 'primeng/table';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';

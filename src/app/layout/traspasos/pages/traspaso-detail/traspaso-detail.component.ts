@@ -1,21 +1,20 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Observable, takeUntil, filter, of } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store, ActionsSubject } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as TraspasoDetailActions from '../../ngrx/actions/traspaso-detail.actions';
 import * as TraspasoSelector from '../../ngrx/selectors/traspaso-detail.selectors';
 import { Location } from '@angular/common';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { Traspaso } from 'src/app/shared/models/entidades/traspaso.model';
 import { selectUsuarioPorId } from 'src/app/shared/menu/ngrx/selectors/menu.selectors';
 import { Usuario } from 'src/app/shared/models/entidades/usuario.model';
 import { minAmountValidator } from 'src/app/shared/models/entidades/minAmountValidator.model';
 import { TraspasoDetailState } from 'src/app/shared/models/entidades/estados/traspasoDetail.model';
 import { MenuState } from 'src/app/shared/models/entidades/estados/menustate.model';
+import { TraspasoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/traspasos/traspasoByIdRespuesta.model';
 
 @Component({
   selector: 'app-traspaso-detail',
@@ -29,16 +28,17 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
   error$!: Observable<boolean>;
   newTraspasoForm!: FormGroup;
   detailTraspasoForm!: FormGroup;
-  cuentas$!: Observable<ResponseData<Cuenta> | null>;
-  cuentas!: ResponseData<Cuenta>;
+  cuentas$!: Observable<Cuenta[] | null>;
+  cuentas!: Cuenta[];
   traspasoId: number = 0;
-  traspasoPorId$!: Observable<Traspaso | null>;
+  traspasoPorId$!: Observable<TraspasoByIdRespuesta | null>;
   originalTraspasoData!: Traspaso;
   isNewTraspaso: boolean = false;
   filteredCuentasDestinos: Cuenta[] = [];
   filteredCuentasOrigen: Cuenta[] = [];
   usuario!: Usuario;
   deshabilitarBoton: boolean = false;
+  private _confirmationService: ConfirmationService = inject(ConfirmationService);
 
   constructor(
     private store: Store<TraspasoDetailState>,
@@ -71,27 +71,23 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
+    this.actionsSubject.pipe(filter(action => action.type === 'GetNewTraspasoSuccess'), takeUntil(this.destroy$))
+      .subscribe((action: any) => {
+        if (action) {          
+          this.cuentas = [...action.payload];
+          this.filteredCuentasDestinos = this.cuentas.slice().sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+          this.filteredCuentasOrigen = this.cuentas.slice().sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+
+          if (!this.isNewTraspaso) {
+            this.filterInitialCuentas();
+          }          
+        }
+      })
+
     this._store.select(selectUsuarioPorId).pipe(takeUntil(this.destroy$)).subscribe((usuario: any) => {
       if (usuario) {
 
         this.usuario = usuario;
-        this.store.dispatch(TraspasoDetailActions.GetCuentas({ id: this.usuario.Id }));
-        this.cuentas$ = this.store.select(TraspasoSelector.selectCuentas);
-
-        this.cuentas$
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((cuentas: ResponseData<Cuenta> | null) => {
-            if (cuentas) {
-              this.cuentas = cuentas;
-
-              this.filteredCuentasDestinos = cuentas.Items.slice().sort((a, b) => a.Nombre.localeCompare(b.Nombre));
-              this.filteredCuentasOrigen = cuentas.Items.slice().sort((a, b) => a.Nombre.localeCompare(b.Nombre));
-
-              if (!this.isNewTraspaso) {
-                this.filterInitialCuentas();
-              }
-            }
-          });
       }
     });
 
@@ -105,7 +101,9 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
           this.traspasoPorId$ = of(null);
           this.newTraspasoForm.patchValue({
             Fecha: new Date().toLocaleDateString('es-ES')
-          })
+          });
+
+          this.store.dispatch(TraspasoDetailActions.GetNewTraspaso({ payload: this.usuario.Id }));
         } else {
           this.store.dispatch(TraspasoDetailActions.GetTraspaso({ id: id }));
           this.traspasoPorId$ = this.store.select(TraspasoSelector.selectedTraspasoSelector);
@@ -127,7 +125,7 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
         if (this.usuario.Id) {
           this.router.navigate(['traspasos/traspaso-detail', action.traspaso.Item.Id]);
           this.isNewTraspaso = false;
-          this.store.dispatch(TraspasoDetailActions.GetCuentas({ id: this.usuario.Id }));
+          this.store.dispatch(TraspasoDetailActions.GetNewTraspaso({ payload: this.usuario.Id }));
 
           this.filterCuentasOrigen(action.traspaso.Item?.CuentaDestino);
           this.filterCuentasDestinos(action.traspaso.Item?.CuentaOrigen);
@@ -137,8 +135,10 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
 
     this.traspasoPorId$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((traspaso: Traspaso | null) => {
-        if (traspaso) {
+      .subscribe((traspasoRespuesta: TraspasoByIdRespuesta | null) => {
+        if (traspasoRespuesta) {
+          let traspaso = traspasoRespuesta.TraspasoById;
+          this.cuentas = traspasoRespuesta.ListaCuentas;
           const fechaUTC = new Date(traspaso.Fecha);
           const fechaLocal = new Date(fechaUTC.getTime() - fechaUTC.getTimezoneOffset() * 60000);
 
@@ -191,6 +191,11 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
     };
 
     if (this.isNewTraspaso) {
+      this.showConfirmation('create', formattedFormValue);
+    } else {
+      this.showConfirmation('edit', formattedFormValue);
+    }
+    if (this.isNewTraspaso) {
       const newTraspasoData = { ...formattedFormValue };
       this.store.dispatch(TraspasoDetailActions.RealizarTraspaso({ payload: newTraspasoData }));
       this.deshabilitarBoton = true;
@@ -202,6 +207,45 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
       this.deshabilitarBoton = true;
     }
   }
+
+    private showConfirmation(actionType: string, formValue: any) {
+      const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
+      const detailMessage = actionType === 'create'
+        ? '¿Está seguro que desea crear este registro?'
+        : '¿Está seguro que desea editar este registro?';
+  
+      this._confirmationService.confirm({
+        message: detailMessage,
+        header: headerMessage,
+        icon: 'pi pi-info-circle',
+        acceptLabel: 'Sí',
+        rejectLabel: 'No',
+        acceptButtonStyleClass: 'p-button-success',
+        rejectButtonStyleClass: 'p-button-danger',
+        accept: () => {
+          // Acción confirmada, proceder con el envío del formulario
+          if (actionType === 'create') {
+            this.createTraspaso(formValue);
+          } else {
+            this.updateTraspaso(formValue);
+          }
+        }
+      });
+    }
+  
+    private createTraspaso(formattedFormValue: any) {
+      const newTraspasoData = { ...formattedFormValue };
+      this.store.dispatch(TraspasoDetailActions.RealizarTraspaso({ payload: newTraspasoData }));
+      this.deshabilitarBoton = true;
+    }
+  
+    private updateTraspaso(formattedFormValue: any) {
+      const updatedTraspasoData = { ...formattedFormValue };
+      updatedTraspasoData.Id = this.traspasoId;
+      this.store.dispatch(TraspasoDetailActions.UpdateTraspaso({ traspaso: updatedTraspasoData }));
+      this.detailTraspasoForm.markAsPristine();
+      this.deshabilitarBoton = true;
+    }
 
   private replaceCommasWithDots(value: any): any {
     if (typeof value === 'string') {
@@ -220,7 +264,7 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
     if (cuentaOrigen) {
       this.filterCuentasDestinos(cuentaOrigen);
     } else {
-      this.filteredCuentasDestinos = this.cuentas.Items;
+      this.filteredCuentasDestinos = this.cuentas;
     }
   }
 
@@ -230,14 +274,14 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
     if (cuentaDestino) {
       this.filterCuentasOrigen(cuentaDestino);
     } else {
-      this.filteredCuentasOrigen = this.cuentas.Items;
+      this.filteredCuentasOrigen = this.cuentas;
     }
 
   }
 
   private filterCuentasDestinos(cuentaOrigen: Cuenta): void {
     if (this.cuentas) {
-      this.filteredCuentasDestinos = this.cuentas.Items
+      this.filteredCuentasDestinos = this.cuentas
         .filter(cuenta => cuenta.Id !== cuentaOrigen.Id)
         .sort((a, b) => a.Nombre.localeCompare(b.Nombre)); // Ordena alfabéticamente por 'Nombre'
     }
@@ -245,7 +289,7 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
 
   private filterCuentasOrigen(cuentaDestino: Cuenta): void {
     if (this.cuentas) {
-      this.filteredCuentasOrigen = this.cuentas.Items
+      this.filteredCuentasOrigen = this.cuentas
         .filter(cuenta => cuenta.Id !== cuentaDestino.Id)
         .sort((a, b) => a.Nombre.localeCompare(b.Nombre)); // Ordena alfabéticamente por 'Nombre'
     }

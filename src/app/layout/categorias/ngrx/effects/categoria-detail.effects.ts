@@ -6,7 +6,7 @@ import * as CategoriaDetailActions from "../actions/categoria-detail.actions";
 import { Router } from "@angular/router";
 import { MessageService } from 'primeng/api';
 import { Categoria } from "src/app/shared/models/entidades/categoria.model";
-import { ResponseOne } from "src/app/shared/models/entidades/respuestas/responseOne.model";
+import { ResponseOne } from "src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model";
 
 @Injectable()
 export class CategoriaDetailEffects {

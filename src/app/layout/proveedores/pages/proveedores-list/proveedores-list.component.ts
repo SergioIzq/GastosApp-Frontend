@@ -8,7 +8,7 @@ import { Location } from '@angular/common';
 import * as SelectProveedoresList from '../../ngrx/selectors/proveedores-list.selectors'
 import * as ProveedoresListActions from 'src/app/layout/proveedores/ngrx/actions/proveedores-list.actions';
 import { Table } from 'primeng/table';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { Proveedor } from 'src/app/shared/models/entidades/proveedor.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';

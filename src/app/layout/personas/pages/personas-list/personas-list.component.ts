@@ -9,7 +9,7 @@ import { Location } from '@angular/common';
 import * as SelectPersonasList from '../../ngrx/selectors/personas-list.selectors'
 import * as PersonasListActions from 'src/app/layout/personas/ngrx/actions/personas-list.actions';
 import { Table } from 'primeng/table';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { Persona } from 'src/app/shared/models/entidades/persona.model';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';

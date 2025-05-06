@@ -1,8 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 import { Ingreso } from 'src/app/shared/models/entidades/ingreso.model';
-import { IngresoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresoByIdRespuesta.model';
-import { IngresoRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresoRespuesta.model';
-import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
+import { IngresoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresos/ingresoByIdRespuesta.model';
+import { IngresoRespuesta } from 'src/app/shared/models/entidades/respuestas/ingresos/ingresoRespuesta.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model';
 
 
 export const GetIngreso = createAction('GetIngreso', props<{ id: number }>());

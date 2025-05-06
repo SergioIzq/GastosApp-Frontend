@@ -4,7 +4,7 @@ import { of, mergeMap } from "rxjs";
 import { map, catchError, tap } from "rxjs/operators";
 import * as FormasPagosListActions from 'src/app/layout/formas-pago/ngrx/actions/formas-pago-list.actions';
 import { FormasPagoService } from '../../service/formas-pago.service';
-import { ResponseData } from '../../../../shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from '../../../../shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { FormaPago } from 'src/app/shared/models/entidades/formaPago.model';
 import { MessageService } from 'primeng/api';
 

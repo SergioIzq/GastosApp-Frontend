@@ -17,9 +17,9 @@ import { Concepto } from 'src/app/shared/models/entidades/concepto.model';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { minAmountValidator } from 'src/app/shared/models/entidades/minAmountValidator.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoRespuesta.model';
+import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastos/gastoRespuesta.model';
 import { ChangeDetectorRef } from '@angular/core';
-import { GastoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoByIdRespuesta.model';
+import { GastoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastos/gastoByIdRespuesta.model';
 import { GastoDetailState } from 'src/app/shared/models/entidades/estados/gastoDetailState.model';
 import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 

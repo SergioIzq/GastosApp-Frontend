@@ -5,7 +5,7 @@ import { GastoService } from "../../service/gasto.service";
 import * as GastoProgramadoDetailActions from "../actions/gasto-programado-detail.actions";
 import { Router } from "@angular/router";
 import { MessageService } from 'primeng/api';
-import { ResponseOne } from "src/app/shared/models/entidades/respuestas/responseOne.model";
+import { ResponseOne } from "src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model";
 import { Gasto } from "src/app/shared/models/entidades/gasto.model";
 import { BaseService } from "src/app/shared/service/base-service.service";
 import { HttpClient } from "@angular/common/http";

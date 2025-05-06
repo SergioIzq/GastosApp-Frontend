@@ -7,7 +7,7 @@ import { Router } from "@angular/router";
 import { BaseService } from "src/app/shared/service/base-service.service";
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
-import { ResponseOne } from "src/app/shared/models/entidades/respuestas/responseOne.model";
+import { ResponseOne } from "src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model";
 import { Proveedor } from "src/app/shared/models/entidades/proveedor.model";
 
 @Injectable()

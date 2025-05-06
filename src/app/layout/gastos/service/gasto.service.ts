@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Gasto } from 'src/app/shared/models/entidades/gasto.model';
 import { HttpParams } from '@angular/common/http';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
-import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
-import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoRespuesta.model';
-import { GastoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoByIdRespuesta.model';
+import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastos/gastoRespuesta.model';
+import { GastoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastos/gastoByIdRespuesta.model';
 import { environment } from 'src/environments/environment';
 import { GastoProgramado } from 'src/app/shared/models/entidades/gastoProgramado.model';
-import { GastoProgramadoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoProgramadoByIdRespuesta.model';
+import { GastoProgramadoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastos/gastoProgramadoByIdRespuesta.model';
 
 @Injectable({
   providedIn: 'root'

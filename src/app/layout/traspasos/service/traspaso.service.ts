@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { Traspaso } from '../../../shared/models/entidades/traspaso.model';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
-import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 import { environment } from 'src/environments/environment';
+import { TraspasoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/traspasos/traspasoByIdRespuesta.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +16,8 @@ export class TraspasoService {
   apiUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  realizarTraspaso(traspaso: Traspaso): Observable<ResponseOne<Traspaso>> {
-
-    return this.http.post<ResponseOne<Traspaso>>(`${this.apiUrl}traspaso/realizarTraspaso`, traspaso);
+  realizarTraspaso(traspaso: Traspaso): Observable<TraspasoByIdRespuesta> {
+    return this.http.post<TraspasoByIdRespuesta>(`${this.apiUrl}traspaso/realizarTraspaso`, traspaso);
   }
 
   getAll(): Observable<ResponseData<Traspaso>> {
@@ -26,9 +25,9 @@ export class TraspasoService {
     return this.http.get<ResponseData<Traspaso>>(url);
   }
 
-  getCuentas(idUsuario: number): Observable<ResponseData<Cuenta>> {
-    const url = `${this.apiUrl}cuenta/getCuentas/${idUsuario}`;
-    return this.http.get<ResponseData<Cuenta>>(url);
+  getNewTraspaso(idUsuario: number): Observable<Cuenta[]> {
+    const url = `${this.apiUrl}traspaso/getNewTraspaso/${idUsuario}`;
+    return this.http.get<Cuenta[]>(url);
   }
 
   getCantidad(page: number, size: number, idUsuario: number): Observable<ResponseData<Traspaso>> {
@@ -42,9 +41,9 @@ export class TraspasoService {
     return this.http.get<ResponseData<Traspaso>>(url, { params });
   }
 
-  getById(id: number): Observable<Traspaso> {
-    const url = `${this.apiUrl}traspaso/${id}`;
-    return this.http.get<Traspaso>(url);
+  getById(id: number): Observable<TraspasoByIdRespuesta> {
+    const url = `${this.apiUrl}traspaso/getById/${id}`;
+    return this.http.get<TraspasoByIdRespuesta>(url);
   }
 
   update(traspaso: Partial<Traspaso>): Observable<Traspaso> {

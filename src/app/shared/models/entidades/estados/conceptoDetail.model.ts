@@ -1,7 +1,7 @@
 import { Concepto } from "../concepto.model";
-import { ResponseOne } from "../respuestas/responseOne.model";
+import { ResponseOne } from "../respuestas/respuestas-genericas/responseOne.model";
 import { Categoria } from "../categoria.model";
-import { ResponseData } from "../respuestas/responseData.model";
+import { ResponseData } from "../respuestas/respuestas-genericas/responseData.model";
 
 export interface ConceptoDetailState{
     loading: boolean;

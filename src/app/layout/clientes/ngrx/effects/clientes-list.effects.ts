@@ -4,7 +4,7 @@ import { of, mergeMap } from "rxjs";
 import { map, catchError, tap } from "rxjs/operators";
 import * as ClientesListActions from 'src/app/layout/clientes/ngrx/actions/clientes-list.actions';
 import { ClienteService } from '../../service/clientes.service';
-import { ResponseData } from '../../../../shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from '../../../../shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { Cliente } from 'src/app/shared/models/entidades/cliente.model';
 import { MessageService } from 'primeng/api';
 
