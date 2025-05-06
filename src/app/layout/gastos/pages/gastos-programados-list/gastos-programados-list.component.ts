@@ -162,7 +162,7 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
   }
 
   // Función para obtener el formato adecuado
-  formatFecha(fechaStr: string): string {
+  formatFecha(fechaStr: string): string {    
     return this.getDateTimeLocalFormat(new Date(fechaStr));
   }
 
@@ -207,11 +207,12 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
       Proveedor: item.Proveedor.Nombre,
       CategoriaNombre: item.Concepto.Categoria.Nombre,
       Concepto: item.Concepto.Nombre,
-      Cuenta: item.Cuenta.Nombre,            
+      Cuenta: item.Cuenta.Nombre,   
       Persona: item.Persona.Nombre,
       FormaPago: item.FormaPago.Nombre,
-      DiaEjecucion: item.DiaEjecucion
-
+      FechaEjecucion: this.formatFecha(new Date(item.FechaEjecucion.toString().replace('Z', '')).toLocaleDateString()),
+      Frecuencia: item.Frecuencia,
+      Activo: item.Activo
     }));
   }
 

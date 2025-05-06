@@ -52,7 +52,7 @@ export class GastoProgramadoDetailEffects extends BaseService {
     mergeMap(({ gastoProgramado }) => this.gastoDetailService.updateGastoProgramado(gastoProgramado)
       .pipe(
         map(updatedGasto => {
-          this.messageService.add({ severity: 'success', summary: 'Operación exitosa', detail: 'Gasto actualizado correctamente', life: 5000 });
+          this.messageService.add({ severity: 'success', summary: 'Operación exitosa', detail: 'Gasto programado actualizado correctamente', life: 5000 });
           return GastoProgramadoDetailActions.UpdateGastoProgramadoSuccess({ gastoProgramado: updatedGasto });
         }),
         catchError((error) => {

@@ -21,6 +21,7 @@ import { GastoProgramadoByIdRespuesta } from 'src/app/shared/models/entidades/re
 import { GastoProgramadoDetailState } from 'src/app/shared/models/entidades/estados/gastoProgramadoDetailState.model';
 import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 import { GastoProgramado } from 'src/app/shared/models/entidades/gastoProgramado.model';
+import { FrecuenciaEnum } from 'src/app/shared/models/entidades/enums/frecuencia.enum';
 
 @Component({
   selector: 'app-gasto-programado-detail',
@@ -53,6 +54,11 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
   deshabilitarBoton: boolean = false;
   gastoRespuesta: GastoRespuesta = new GastoRespuesta();
   diasMes: { label: string, value: number }[] = [];
+  diaMesSeleccionado!: number;
+  diasSemana: { label: string, value: string }[] = [];
+  diaSemanaSeleccionado!: string;
+  frecuenciaGastoProgramado: { label: string; value: string; }[] = FrecuenciaEnum;
+  diasSemanaMap!: { [key: string]: number };
   private _confirmationService: ConfirmationService = inject(ConfirmationService);
   private cdRef: ChangeDetectorRef = inject(ChangeDetectorRef);
 
@@ -67,8 +73,8 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
 
     this.newGastoForm = this.fb.group({
       IdUsuario: [''],
+      HangFireJobId: [''],
       Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
-      Fecha: ['', [Validators.required]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
       Proveedor: ['', [Validators.required]],
@@ -76,14 +82,15 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
       FormaPago: ['', [Validators.required]],
       Cuenta: ['', [Validators.required]],
       Categoria: ['', [Validators.required]],
+      Frecuencia: ['', [Validators.required]],
       Activo: [false],
-      DiaEjecucion: ['', [Validators.required]],
-      AjustarAUltimoDia: [false]
+      FechaEjecucion: [new Date(), [Validators.required]]
     });
 
     this.detailGastoForm = this.fb.group({
       Id: [''],
       IdUsuario: [''],
+      HangFireJobId: [''],
       Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
@@ -92,15 +99,35 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
       Persona: ['', [Validators.required]],
       FormaPago: ['', [Validators.required]],
       Cuenta: ['', [Validators.required]],
+      Frecuencia: ['', [Validators.required]],
       Activo: [false],
-      DiaEjecucion: ['', [Validators.required]],
-      AjustarAUltimoDia: [false]
+      FechaEjecucion: [new Date(), [Validators.required]]
     });
 
     this.diasMes = Array.from({ length: 31 }, (_, i) => {
       const num = i + 1;
       return { label: num.toString(), value: num };
     });
+
+    this.diasSemana = [
+      { label: 'Lunes', value: 'MONDAY' },
+      { label: 'Martes', value: 'TUESDAY' },
+      { label: 'Miércoles', value: 'WEDNESDAY' },
+      { label: 'Jueves', value: 'THURSDAY' },
+      { label: 'Viernes', value: 'FRIDAY' },
+      { label: 'Sábado', value: 'SATURDAY' },
+      { label: 'Domingo', value: 'SUNDAY' },
+    ];
+
+    this.diasSemanaMap = {
+      SUNDAY: 0,
+      MONDAY: 1,
+      TUESDAY: 2,
+      WEDNESDAY: 3,
+      THURSDAY: 4,
+      FRIDAY: 5,
+      SATURDAY: 6,
+    };
   }
 
   ngOnInit(): void {
@@ -123,9 +150,6 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
         if (id === 0) {
           this.isNewGasto = true;
           this.gastoPorId$ = of(null);
-          this.newGastoForm.patchValue({
-            Fecha: new Date().toLocaleDateString('es-ES')
-          });
 
           this.store.dispatch(GastoProgramadoDetailActions.GetNewGastoProgramado({ payload: idUsuario }));
         } else {
@@ -164,7 +188,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
     this.gastoPorId$
       .pipe(takeUntil(this.destroy$))
       .subscribe((gastoByIdRespuesta: GastoProgramadoByIdRespuesta | null) => {
-        if (gastoByIdRespuesta) {          
+        if (gastoByIdRespuesta) {
           let gasto = gastoByIdRespuesta.GastoProgramadoById;
           this.cuentas = [...gastoByIdRespuesta.GastoRespuesta.ListaCuentas];
           this.formasPago = [...gastoByIdRespuesta.GastoRespuesta.ListaFormasPago];
@@ -187,7 +211,28 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
           this.originalGastoData = { ...gasto }
 
           this.filteredConceptos.push(gasto.Concepto);
-          this.detailGastoForm.markAsPristine();
+
+          const fechaLocal = new Date(gasto.FechaEjecucion.toString().replace('Z', ''));
+          
+          // Verifica si la fecha está en UTC y ajusta según sea necesario
+          if (gasto.Frecuencia === 'SEMANAL') {
+            const dayIndex = fechaLocal.getUTCDay(); // Usamos getUTCDay para obtener el día de la semana en UTC (0=Domingo, ..., 6=Sábado)
+            // Buscar la clave correspondiente en el map inverso
+            const diaKey = Object.keys(this.diasSemanaMap).find(
+              key => this.diasSemanaMap[key] === dayIndex
+            );
+            this.diaSemanaSeleccionado = diaKey!;
+          }
+          
+          if (gasto.Frecuencia === 'MENSUAL') {
+            this.diaMesSeleccionado = fechaLocal.getUTCDate(); // Usamos getUTCDate para obtener el día del mes en UTC
+          }
+          
+          this.detailGastoForm.patchValue({
+            FechaEjecucion: fechaLocal // Usar la hora ajustada
+          });
+          
+          this.detailGastoForm.markAsPristine();         
         }
       });
 
@@ -216,12 +261,34 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
 
     formValue.IdUsuario = this.idUsuario;
 
-    let fechaLocal = formValue.Fecha;
+    let fechaLocal = formValue.FechaEjecucion;
 
+    if (this.diaMesSeleccionado && formValue.Frecuencia == 'MENSUAL' && fechaLocal instanceof Date) {
+      fechaLocal.setDate(this.diaMesSeleccionado);
+    }
 
-    if (typeof fechaLocal === 'string' && fechaLocal.includes('/')) {
-      const [day, month, year] = fechaLocal.split('/').map(Number);
-      fechaLocal = new Date(year, month - 1, day);
+    if (this.diaSemanaSeleccionado && fechaLocal instanceof Date && formValue.Frecuencia == 'SEMANAL') {
+      const diaTarget = this.diasSemanaMap[this.diaSemanaSeleccionado.toUpperCase()];
+      const año = fechaLocal.getFullYear();
+      const mes = fechaLocal.getMonth(); // 0-based
+      let dia = 1;
+
+      // Buscar el primer día del mes que caiga en el día de semana deseado
+      while (true) {
+        const posibleFecha = new Date(año, mes, dia);
+        if (posibleFecha.getDay() === diaTarget) {
+          // Copiar la hora y minuto original
+          posibleFecha.setHours(fechaLocal.getHours(), fechaLocal.getMinutes(), 0, 0);
+          fechaLocal = posibleFecha;
+          break;
+        }
+        dia++;
+      }
+    }
+
+    if (fechaLocal instanceof Date) {
+      const offset = fechaLocal.getTimezoneOffset() * 60000;
+      fechaLocal = new Date(fechaLocal.getTime() - offset);
     }
 
     const formattedImporte = this.replaceCommasWithDots(formValue.Monto);
@@ -229,7 +296,8 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
     // Crea un nuevo objeto con el Monto formateado
     const formattedFormValue = {
       ...formValue,
-      Monto: formattedImporte
+      Monto: formattedImporte,
+      FechaEjecucion: fechaLocal
     };
 
     if (this.isNewGasto) {
@@ -345,4 +413,16 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  get frecuenciaSeleccionadaNewForm(): string {
+    return this.newGastoForm.get('Frecuencia')?.value;
+  }
+
+  get frecuenciaSeleccionadaDetailForm(): string {
+    return this.detailGastoForm.get('Frecuencia')?.value;
+  }
+
+  onDiaSemanaChange() {
+    this.detailGastoForm.markAsDirty();
+    this.deshabilitarBoton = false;   
+  }
 }
