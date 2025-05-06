@@ -34,14 +34,6 @@
                                 </span>
                             </div>
 
-                            <div class="field col-12 md:col-3">
-                                <span class="p-float-label">
-                                    <p-dropdown [options]="diasMes" formControlName="DiaEjecucion">
-                                    </p-dropdown>
-                                    <label for="DiaMes">Dia ejecución cada mes</label>
-                                </span>
-                            </div>
-
                             <!-- Segunda fila de inputs -->
                             <div class="field col-12 md:col-3">
                                 <span class="p-float-label">
@@ -182,19 +174,6 @@
                                 </span>
                             </div>
 
-                            <div class="field col-12 md:col-6">
-                                <span class="">
-                                    <p-checkbox [binary]="true" formControlName="Activo" label="Activo">
-                                    </p-checkbox>                                    
-                                </span>
-                            </div>
-                            <div class="field col-12 md:col-6">
-                                <span class="">
-                                    <p-checkbox [binary]="true" formControlName="AjustarAUltimoDia" label="Ajustar a último dia del mes">
-                                    </p-checkbox>                                    
-                                </span>
-                            </div>
-
                             <div class="field col-12 md:col-12">
                                 <span class="p-float-label">
                                     <input type="text" id="Descripcion" pInputText formControlName="Descripcion">
@@ -206,6 +185,60 @@
                                             el máximo número de caracteres (200)</div>
                                     </div>
                                 </span>
+                            </div>
+
+                            <div class="field col-12 md:col-12 grid-nogutter">
+                                <p-fieldset legend="Programabilidad">
+                                    <div class="grid p-fluid mt-2">
+                                        <div class="field col-12 md:col-6">
+                                            <span class="p-float-label">
+                                                <p-dropdown [options]="frecuenciaGastoProgramado"
+                                                    formControlName="Frecuencia">
+                                                </p-dropdown>
+                                                <label for="Frecuencia">Frecuencia del gasto programado</label>
+                                            </span>
+                                        </div>
+                                        <div class="col-12 md:col-6" *ngIf="frecuenciaSeleccionadaNewForm == 'DIARIA'">
+                                            <span class="p-float-label">
+                                                <!-- p-calendar para frecuencia DIARIA -->
+                                                <p-calendar formControlName="FechaEjecucion" [timeOnly]="true"
+                                                    hourFormat="24"></p-calendar>
+                                                <label for="">Hora ejecución</label>
+                                            </span>
+                                        </div>
+                                        <div class="col-12 md:col-6" *ngIf="frecuenciaSeleccionadaNewForm == 'SEMANAL'">
+                                            <span class="p-float-label">
+                                                <!-- p-dropdown para frecuencia SEMANAL -->
+                                                <p-dropdown *ngIf="frecuenciaSeleccionadaNewForm == 'SEMANAL'"
+                                                    [options]="diasSemana" [(ngModel)]="diaSemanaSeleccionado"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    placeholder="Selecciona un día de la semana">
+                                                </p-dropdown>
+                                                <label for="">Día ejecución</label>
+                                            </span>
+                                        </div>
+                                        <div class="col-12 md:col-6" *ngIf="frecuenciaSeleccionadaNewForm == 'MENSUAL'">
+                                            <span class="p-float-label">
+                                                <!-- p-dropdown para frecuencia MENSUAL -->
+                                                <p-dropdown *ngIf="frecuenciaSeleccionadaNewForm == 'MENSUAL'"
+                                                    [(ngModel)]="diaMesSeleccionado" [options]="diasMes"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    placeholder="Selecciona un día del mes">
+                                                </p-dropdown>
+                                                <label for="">Día ejecución</label>
+                                            </span>
+                                        </div>
+                                        <div class="col-12 md:col-6"
+                                            *ngIf="frecuenciaSeleccionadaNewForm && frecuenciaSeleccionadaNewForm != 'DIARIA'">
+                                            <span class="p-float-label">
+                                                <!-- p-time para seleccionar la hora -->
+                                                <p-calendar formControlName="FechaEjecucion" [timeOnly]="true"
+                                                    hourFormat="24"></p-calendar>
+                                                <label for="">Hora ejecución</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </p-fieldset>
                             </div>
 
                             <!-- Fila de botones -->
@@ -252,14 +285,6 @@
                                             El Importe mínimo es de 0,01 €
                                         </div>
                                     </div>
-                                </span>
-                            </div>
-
-                            <div class="field col-12 md:col-3">
-                                <span class="p-float-label">
-                                    <p-dropdown [options]="diasMes" formControlName="DiaEjecucion">
-                                    </p-dropdown>
-                                    <label for="DiaMes">Dia ejecución cada mes</label>
                                 </span>
                             </div>
 
@@ -401,17 +426,10 @@
                                 </span>
                             </div>
 
-                            <div class="field col-12 md:col-6">
-                                <span class="">
-                                    <p-checkbox [binary]="true" formControlName="Activo" label="Activo">
-                                    </p-checkbox>                                    
-                                </span>
-                            </div>
-                            <div class="field col-12 md:col-6">
-                                <span class="">
-                                    <p-checkbox [binary]="true" formControlName="AjustarAUltimoDia" label="Ajustar a último dia del mes">
-                                    </p-checkbox>                                    
-                                </span>
+                            <div class="field col-12 md:col-3">
+                                <div class="flex align-items-center h-full">
+                                    <p-checkbox [binary]="true" formControlName="Activo" label="Activo"></p-checkbox>
+                                </div>
                             </div>
 
                             <div class="field col-12 md:col-12">
@@ -425,6 +443,63 @@
                                             el máximo número de caracteres (200)</div>
                                     </div>
                                 </span>
+                            </div>
+
+                            <div class="field col-12 md:col-12 grid-nogutter">
+                                <p-fieldset legend="Programabilidad">
+                                    <div class="grid p-fluid mt-2">
+                                        <div class="field col-12 md:col-6">
+                                            <span class="p-float-label">
+                                                <p-dropdown [options]="frecuenciaGastoProgramado"
+                                                    formControlName="Frecuencia">
+                                                </p-dropdown>
+                                                <label for="Frecuencia">Frecuencia del gasto programado</label>
+                                            </span>
+                                        </div>
+                                        <div class="col-12 md:col-6"
+                                            *ngIf="frecuenciaSeleccionadaDetailForm == 'DIARIA'">
+                                            <span class="p-float-label">
+                                                <!-- p-calendar para frecuencia DIARIA -->
+                                                <p-calendar formControlName="FechaEjecucion" [timeOnly]="true"
+                                                    hourFormat="24"></p-calendar>
+                                                <label for="">Hora ejecución</label>
+                                            </span>
+                                        </div>
+                                        <div class="col-12 md:col-6"
+                                            *ngIf="frecuenciaSeleccionadaDetailForm == 'SEMANAL'">
+                                            <span class="p-float-label">
+                                                <!-- p-dropdown para frecuencia SEMANAL -->
+                                                <p-dropdown *ngIf="frecuenciaSeleccionadaDetailForm == 'SEMANAL'"
+                                                    [options]="diasSemana" [(ngModel)]="diaSemanaSeleccionado"
+                                                    [ngModelOptions]="{standalone: true}" (ngModelChange)="onDiaSemanaChange()"
+                                                    placeholder="Selecciona un día de la semana">
+                                                </p-dropdown>
+                                                <label for="">Día ejecución</label>
+                                            </span>
+                                        </div>
+                                        <div class="col-12 md:col-6"
+                                            *ngIf="frecuenciaSeleccionadaDetailForm == 'MENSUAL'">
+                                            <span class="p-float-label">
+                                                <!-- p-dropdown para frecuencia MENSUAL -->
+                                                <p-dropdown *ngIf="frecuenciaSeleccionadaDetailForm == 'MENSUAL'"
+                                                    [(ngModel)]="diaMesSeleccionado" [options]="diasMes" (ngModelChange)="onDiaSemanaChange()"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    placeholder="Selecciona un día del mes">
+                                                </p-dropdown>
+                                                <label for="">Día ejecución</label>
+                                            </span>
+                                        </div>
+                                        <div class="col-12 md:col-6"
+                                            *ngIf="frecuenciaSeleccionadaDetailForm && frecuenciaSeleccionadaDetailForm != 'DIARIA'">
+                                            <span class="p-float-label">
+                                                <!-- p-time para seleccionar la hora -->
+                                                <p-calendar formControlName="FechaEjecucion" [timeOnly]="true"
+                                                    hourFormat="24"></p-calendar>
+                                                <label for="">Hora ejecución</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </p-fieldset>
                             </div>
 
                             <!-- Fila de botones -->
