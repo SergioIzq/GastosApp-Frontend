@@ -475,3 +475,23 @@ body.dark-mode .euro-input-container::after {
 .text-dangerPerso {
     color: red !important;
 }
+
+body.dark-mode .p-paginator-current {
+    color: white;
+}
+
+body.dark-mode .p-paginator button {
+    color: white;
+}
+
+body.dark-mode .p-paginator button:hover {
+    background-color: #555;
+}
+
+body.dark-mode .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background-color: #2b2b2b !important;
+}
+
+body.dark-mode h4 {
+    color: white;
+}

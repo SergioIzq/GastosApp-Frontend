@@ -8,7 +8,7 @@
                 [totalRecords]="totalRecords" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
                 [loading]="loading" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} ingresos"
                 [filterDelay]="0" [sortField]="'FechaCreacion'" [sortOrder]="-1"
-                [globalFilterFields]="['Importe', 'FormaPago','Concepto','CategoriaNombre','Cliente','Descripcion','Fecha','Cuenta','Persona', 'AjustarAUltimoDia', 'DiaEjecucion']">
+                [globalFilterFields]="['Importe', 'FormaPago','Concepto','CategoriaNombre','Cliente','Activo','Cuenta','Persona', 'Frecuencia', 'Fechajecucion']">
 
                 <ng-template pTemplate="caption">
                     <div class="grid datatable-header"
@@ -36,11 +36,29 @@
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="DiaEjecucion" style="min-width: 10rem">
+                        <th pSortableColumn="FechaEjecucion" style="min-width: 10rem">
                             <div class="flex justify-content-between align-items-center">
-                                Dia de ejecucion
-                                <p-sortIcon field="DiaEjecucion" />
-                                <p-columnFilter type="text" field="DiaEjecucion" display="menu" class="ml-auto"
+                                Fecha de ejecución
+                                <p-sortIcon field="FechaEjecucion" />
+                                <p-columnFilter type="text" field="FechaEjecucion" display="menu" class="ml-auto"
+                                    [matchModeOptions]="[
+                                    { label: 'Contiene', value: 'contains' },
+                                    { label: 'No contiene', value: 'notContains' },
+                                    { label: 'Empieza con', value: 'startsWith' },
+                                    { label: 'Termina con', value: 'endsWith' },
+                                    { label: 'Es igual a', value: 'equals' },
+                                    { label: 'No es igual a', value: 'notEquals' },
+                                    { label: 'Es nulo', value: 'isNull' },
+                                    { label: 'No es nulo', value: 'isNotNull' }
+                                ]">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+                        <th pSortableColumn="Frecuencia" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Frecuencia
+                                <p-sortIcon field="Frecuencia" />
+                                <p-columnFilter type="text" field="Frecuencia" display="menu" class="ml-auto"
                                     [matchModeOptions]="[
                                     { label: 'Contiene', value: 'contains' },
                                     { label: 'No contiene', value: 'notContains' },
@@ -110,7 +128,7 @@
                                 </p-columnFilter>
                             </div>
                         </th>
-                        
+
                         <th pSortableColumn="CategoriaNombre" style="min-width: 10rem">
                             <div class="flex justify-content-between align-items-center">
                                 Categoria
@@ -169,6 +187,13 @@
                             </div>
                         </th>
 
+                        <th pSortableColumn="Activo" style="min-width: 10rem">
+                            <div class="flex justify-content-between align-items-center">
+                                Activo
+                                <p-sortIcon field="Activo" />
+                            </div>
+                        </th>
+
                         <th pSortableColumn="Importe" style="min-width: 10rem">
                             <div class="flex justify-content-between align-items-center">
                                 Importe
@@ -193,13 +218,28 @@
 
                 <ng-template pTemplate="body" let-ingreso>
                     <tr>
-                        <td>{{ ingreso.DiaEjecucion }}</td>
-                        <td>{{ ingreso.Persona }}</td>                        
+                        <td>
+                            <ng-container [ngSwitch]="ingreso.Frecuencia">
+                                <span *ngSwitchCase="'SEMANAL'">
+                                    {{ capitalizarPrimeraLetra(ingreso.FechaEjecucion | date:'EEEE') }}
+                                </span>
+                                <span *ngSwitchCase="'MENSUAL'">
+                                    {{ ingreso.FechaEjecucion | date:'d' }} <!-- Día del mes -->
+                                </span>
+                                <span *ngSwitchCase="'DIARIA'">
+                                    {{ ingreso.FechaEjecucion | date:'HH:mm' }} <!-- Ej: 14:30 -->
+                                </span>
+                            </ng-container>
+                        </td>
+                        <td>{{ ingreso.Frecuencia.toLowerCase().charAt(0).toUpperCase() +
+                            ingreso.Frecuencia.toLowerCase().slice(1) }}</td>
+                        <td>{{ ingreso.Persona }}</td>
                         <td>{{ ingreso.FormaPago }}</td>
                         <td>{{ ingreso.Cliente }}</td>
                         <td>{{ ingreso.CategoriaNombre }}</td>
                         <td>{{ ingreso.Concepto }}</td>
                         <td>{{ ingreso.Cuenta }}</td>
+                        <td><p-checkbox [binary]="true" [ngModel]="ingreso.Activo" [disabled]="true"></p-checkbox></td>
                         <td style="color: rgb(0, 161, 0) !important;">+{{ ingreso.Importe | currency: 'EUR'}}</td>                                
                         <td>
                             <p-button pRipple icon="pi pi-pencil" class="mr-2 rounded-button" [rounded]="true"

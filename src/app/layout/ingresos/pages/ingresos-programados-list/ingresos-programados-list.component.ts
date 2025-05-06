@@ -161,14 +161,9 @@ export class IngresosProgramadosListComponent implements OnInit, OnDestroy {
     return `${day}/${month}/${year}`;
   }
 
-  // Función para obtener el formato adecuado
-  formatFecha(fechaStr: string): string {
-    return this.getDateTimeLocalFormat(new Date(fechaStr));
-  }
-
   exportarAExcel(): void {
     const exportData = this.respuesta.Items.map(item => {
-      return {        
+      return {
         'Persona': item.Persona,
         'FormaPago': item.FormaPago,
         'Cliente': item.Cliente,
@@ -199,19 +194,19 @@ export class IngresosProgramadosListComponent implements OnInit, OnDestroy {
     saveAs(blob, 'ingresos-programados.xlsx');
   }
 
-  // Función para transformar el objeto
-  transformData(data: ResponseData<IngresoProgramado>) {    
+  transformData(data: ResponseData<IngresoProgramado>) {
     return data.Items.map((item: any) => ({
       Id: item.Id,
       Importe: item.Monto,
       Cliente: item.Cliente.Nombre,
       CategoriaNombre: item.Concepto.Categoria.Nombre,
       Concepto: item.Concepto.Nombre,
-      Cuenta: item.Cuenta.Nombre,            
+      Cuenta: item.Cuenta.Nombre,
       Persona: item.Persona.Nombre,
       FormaPago: item.FormaPago.Nombre,
-      DiaEjecucion: item.DiaEjecucion
-
+      FechaEjecucion: new Date(item.FechaEjecucion.toString().replace('Z', '')),
+      Frecuencia: item.Frecuencia,
+      Activo: item.Activo
     }));
   }
 
@@ -224,5 +219,10 @@ export class IngresosProgramadosListComponent implements OnInit, OnDestroy {
     this.size = event.rows;
     this.first = event.first; // Actualiza la página inicial
     this.loadIngresos();
+  }
+
+  capitalizarPrimeraLetra(texto: string | null): string {
+    if (!texto) return '';
+    return texto.charAt(0).toUpperCase() + texto.slice(1);
   }
 }

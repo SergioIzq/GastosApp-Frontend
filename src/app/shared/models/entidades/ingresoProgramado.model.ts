@@ -13,8 +13,9 @@ export class IngresoProgramado {
     FormaPago!: FormaPago;
     Cuenta!: Cuenta;
     IdUsuario!: number;
-    DiaEjecucion!: number;
+    FechaEjecucion!: Date;
     Monto!: number;
-    AjustarAUltimoDia!: boolean;
     Activo!: boolean;
+    Frecuencia!: string;
+    HangfireJobId!: string
 }
