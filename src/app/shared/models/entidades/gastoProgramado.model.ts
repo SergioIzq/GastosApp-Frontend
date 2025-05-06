@@ -17,5 +17,5 @@ export class GastoProgramado {
     Monto!: number;
     Activo!: boolean;
     Frecuencia!: string;
-    HangFireJobId!: string
+    HangfireJobId!: string
 }

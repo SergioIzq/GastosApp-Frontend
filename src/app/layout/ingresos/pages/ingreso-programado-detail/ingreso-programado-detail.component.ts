@@ -21,6 +21,7 @@ import { IngresoProgramadoDetailState } from 'src/app/shared/models/entidades/es
 import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 import { IngresoProgramado } from 'src/app/shared/models/entidades/ingresoProgramado.model';
 import { Cliente } from 'src/app/shared/models/entidades/cliente.model';
+import { FrecuenciaEnum } from 'src/app/shared/models/entidades/enums/frecuencia.enum';
 
 @Component({
   selector: 'app-ingreso-programado-detail',
@@ -53,6 +54,11 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
   deshabilitarBoton: boolean = false;
   ingresoRespuesta: IngresoRespuesta = new IngresoRespuesta();
   diasMes: { label: string, value: number }[] = [];
+  diaMesSeleccionado!: number;
+  diasSemana: { label: string, value: string }[] = [];
+  diaSemanaSeleccionado!: string;
+  frecuenciaIngresoProgramado: { label: string; value: string; }[] = FrecuenciaEnum;
+  diasSemanaMap!: { [key: string]: number };
   private _confirmationService: ConfirmationService = inject(ConfirmationService);
   private cdRef: ChangeDetectorRef = inject(ChangeDetectorRef);
 
@@ -67,8 +73,8 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
 
     this.newIngresoForm = this.fb.group({
       IdUsuario: [''],
+      HangfireJobId: [''],
       Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
-      Fecha: ['', [Validators.required]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
       Cliente: ['', [Validators.required]],
@@ -76,14 +82,15 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
       FormaPago: ['', [Validators.required]],
       Cuenta: ['', [Validators.required]],
       Categoria: ['', [Validators.required]],
+      Frecuencia: ['', [Validators.required]],
       Activo: [false],
-      DiaEjecucion: ['', [Validators.required]],
-      AjustarAUltimoDia: [false]
+      FechaEjecucion: [new Date(), [Validators.required]]
     });
 
     this.detailIngresoForm = this.fb.group({
       Id: [''],
       IdUsuario: [''],
+      HangfireJobId: [''],
       Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
@@ -92,15 +99,35 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
       Persona: ['', [Validators.required]],
       FormaPago: ['', [Validators.required]],
       Cuenta: ['', [Validators.required]],
+      Frecuencia: ['', [Validators.required]],
       Activo: [false],
-      DiaEjecucion: ['', [Validators.required]],
-      AjustarAUltimoDia: [false]
+      FechaEjecucion: [new Date(), [Validators.required]]
     });
 
     this.diasMes = Array.from({ length: 31 }, (_, i) => {
       const num = i + 1;
       return { label: num.toString(), value: num };
     });
+
+    this.diasSemana = [
+      { label: 'Lunes', value: 'MONDAY' },
+      { label: 'Martes', value: 'TUESDAY' },
+      { label: 'Miércoles', value: 'WEDNESDAY' },
+      { label: 'Jueves', value: 'THURSDAY' },
+      { label: 'Viernes', value: 'FRIDAY' },
+      { label: 'Sábado', value: 'SATURDAY' },
+      { label: 'Domingo', value: 'SUNDAY' },
+    ];
+
+    this.diasSemanaMap = {
+      SUNDAY: 0,
+      MONDAY: 1,
+      TUESDAY: 2,
+      WEDNESDAY: 3,
+      THURSDAY: 4,
+      FRIDAY: 5,
+      SATURDAY: 6,
+    };
   }
 
   ngOnInit(): void {
@@ -164,7 +191,7 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
     this.ingresoPorId$
       .pipe(takeUntil(this.destroy$))
       .subscribe((ingresoByIdRespuesta: IngresoProgramadoByIdRespuesta | null) => {
-        if (ingresoByIdRespuesta) {          
+        if (ingresoByIdRespuesta) {
           let ingreso = ingresoByIdRespuesta.IngresoProgramadoById;
           this.cuentas = [...ingresoByIdRespuesta.IngresoRespuesta.ListaCuentas];
           this.formasPago = [...ingresoByIdRespuesta.IngresoRespuesta.ListaFormasPago];
@@ -187,6 +214,27 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
           this.originalIngresoData = { ...ingreso }
 
           this.filteredConceptos.push(ingreso.Concepto);
+
+          const fechaLocal = new Date(ingreso.FechaEjecucion.toString().replace('Z', ''));
+
+          // Verifica si la fecha está en UTC y ajusta según sea necesario
+          if (ingreso.Frecuencia === 'SEMANAL') {
+            const dayIndex = fechaLocal.getUTCDay(); // Usamos getUTCDay para obtener el día de la semana en UTC (0=Domingo, ..., 6=Sábado)
+            // Buscar la clave correspondiente en el map inverso
+            const diaKey = Object.keys(this.diasSemanaMap).find(
+              key => this.diasSemanaMap[key] === dayIndex
+            );
+            this.diaSemanaSeleccionado = diaKey!;
+          }
+
+          if (ingreso.Frecuencia === 'MENSUAL') {
+            this.diaMesSeleccionado = fechaLocal.getUTCDate(); // Usamos getUTCDate para obtener el día del mes en UTC
+          }
+
+          this.detailIngresoForm.patchValue({
+            FechaEjecucion: fechaLocal // Usar la hora ajustada
+          });
+
           this.detailIngresoForm.markAsPristine();
         }
       });
@@ -215,13 +263,35 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
     const formValue = this.isNewIngreso ? this.newIngresoForm.value : this.detailIngresoForm.value;
 
     formValue.IdUsuario = this.idUsuario;
+console.log(formValue)
+    let fechaLocal = formValue.FechaEjecucion;
 
-    let fechaLocal = formValue.Fecha;
+    if (this.diaMesSeleccionado && formValue.Frecuencia == 'MENSUAL' && fechaLocal instanceof Date) {
+      fechaLocal.setDate(this.diaMesSeleccionado);
+    }
 
+    if (this.diaSemanaSeleccionado && fechaLocal instanceof Date && formValue.Frecuencia == 'SEMANAL') {
+      const diaTarget = this.diasSemanaMap[this.diaSemanaSeleccionado.toUpperCase()];
+      const año = fechaLocal.getFullYear();
+      const mes = fechaLocal.getMonth(); // 0-based
+      let dia = 1;
 
-    if (typeof fechaLocal === 'string' && fechaLocal.includes('/')) {
-      const [day, month, year] = fechaLocal.split('/').map(Number);
-      fechaLocal = new Date(year, month - 1, day);
+      // Buscar el primer día del mes que caiga en el día de semana deseado
+      while (true) {
+        const posibleFecha = new Date(año, mes, dia);
+        if (posibleFecha.getDay() === diaTarget) {
+          // Copiar la hora y minuto original
+          posibleFecha.setHours(fechaLocal.getHours(), fechaLocal.getMinutes(), 0, 0);
+          fechaLocal = posibleFecha;
+          break;
+        }
+        dia++;
+      }
+    }
+
+    if (fechaLocal instanceof Date) {
+      const offset = fechaLocal.getTimezoneOffset() * 60000;
+      fechaLocal = new Date(fechaLocal.getTime() - offset);
     }
 
     const formattedImporte = this.replaceCommasWithDots(formValue.Monto);
@@ -229,8 +299,10 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
     // Crea un nuevo objeto con el Monto formateado
     const formattedFormValue = {
       ...formValue,
-      Monto: formattedImporte
+      Monto: formattedImporte,
+      FechaEjecucion: fechaLocal
     };
+    console.log(formValue)
 
     if (this.isNewIngreso) {
       this.showConfirmation('create', formattedFormValue);
@@ -266,6 +338,7 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
 
   private createIngreso(formattedFormValue: any) {
     const newIngresoData = { ...formattedFormValue };
+    console.log(newIngresoData)
     this.store.dispatch(IngresoProgramadoDetailActions.CreateIngresoProgramado({ payload: newIngresoData }));
     this.deshabilitarBoton = true;
   }
@@ -343,6 +416,51 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
         a.Nombre.localeCompare(b.Nombre)
       ) : [];
     }
+  }
+
+  get frecuenciaSeleccionadaNewForm(): string {
+    return this.newIngresoForm.get('Frecuencia')?.value;
+  }
+
+  get frecuenciaSeleccionadaDetailForm(): string {
+    return this.detailIngresoForm.get('Frecuencia')?.value;
+  }
+
+  onDiaSemanaChange(nuevoValor: string, form: string) {
+    this.diaSemanaSeleccionado = nuevoValor;
+    this.actualizarEstadoBoton(form);
+  }
+  onDiaMesChange(nuevoValor: number, form: string) {
+    this.diaMesSeleccionado = nuevoValor;
+    this.actualizarEstadoBoton(form);
+  }
+
+  onFrecuenciaChange(nuevaFrecuencia: string, form: string) {
+    if (form == 'new') {
+      this.newIngresoForm.get('Frecuencia')?.setValue(nuevaFrecuencia);
+    } else {
+      this.detailIngresoForm.get('Frecuencia')?.setValue(nuevaFrecuencia);
+    }
+    this.actualizarEstadoBoton(form);
+  }
+
+  actualizarEstadoBoton(form: string) {
+    let frecuencia;
+    if (form == 'new') {
+      frecuencia = this.frecuenciaSeleccionadaNewForm;
+    } else {
+      frecuencia = this.frecuenciaSeleccionadaDetailForm;
+    }
+
+    if (frecuencia === 'DIARIA') {
+      this.deshabilitarBoton = false;
+    } else if (frecuencia === 'SEMANAL') {
+      this.deshabilitarBoton = !this.diaSemanaSeleccionado;
+    } else if (frecuencia === 'MENSUAL') {
+      this.deshabilitarBoton = !this.diaMesSeleccionado;
+    } else {
+      this.deshabilitarBoton = true;
+    }    
   }
 
 }

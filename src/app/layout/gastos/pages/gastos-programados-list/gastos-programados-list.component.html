@@ -227,7 +227,7 @@
                                     {{ gasto.FechaEjecucion | date:'d' }} <!-- Día del mes -->
                                 </span>
                                 <span *ngSwitchCase="'DIARIA'">
-                                    {{ gasto.FechaEjecucion | date:'shortTime' }} <!-- Ej: 14:30 -->
+                                    {{ gasto.FechaEjecucion | date:'HH:mm' }} <!-- Ej: 14:30 -->
                                 </span>
                             </ng-container>
                         </td>

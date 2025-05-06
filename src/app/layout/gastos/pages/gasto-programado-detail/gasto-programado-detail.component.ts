@@ -73,7 +73,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
 
     this.newGastoForm = this.fb.group({
       IdUsuario: [''],
-      HangFireJobId: [''],
+      HangfireJobId: [''],
       Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
@@ -90,7 +90,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
     this.detailGastoForm = this.fb.group({
       Id: [''],
       IdUsuario: [''],
-      HangFireJobId: [''],
+      HangfireJobId: [''],
       Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
@@ -203,11 +203,10 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
           this.selectedConceptoId = gasto.Concepto.Id;
 
           this.detailGastoForm.patchValue({
-            ...gasto,
+            ...gasto,            
             Monto: monto,
             Categoria: gasto.Concepto.Categoria,
           });
-
           this.originalGastoData = { ...gasto }
 
           this.filteredConceptos.push(gasto.Concepto);
@@ -232,7 +231,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
             FechaEjecucion: fechaLocal // Usar la hora ajustada
           });
           
-          this.detailGastoForm.markAsPristine();         
+          this.detailGastoForm.markAsPristine();
         }
       });
 
@@ -421,8 +420,40 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
     return this.detailGastoForm.get('Frecuencia')?.value;
   }
 
-  onDiaSemanaChange() {
-    this.detailGastoForm.markAsDirty();
-    this.deshabilitarBoton = false;   
+  onDiaSemanaChange(nuevoValor: string, form: string) {
+    this.diaSemanaSeleccionado = nuevoValor;
+    this.actualizarEstadoBoton(form);
+  }
+  onDiaMesChange(nuevoValor: number, form: string) {
+    this.diaMesSeleccionado = nuevoValor;
+    this.actualizarEstadoBoton(form);
+  }
+
+  onFrecuenciaChange(nuevaFrecuencia: string, form: string) {
+    if (form == 'new') {
+      this.newGastoForm.get('Frecuencia')?.setValue(nuevaFrecuencia);
+    } else {
+      this.detailGastoForm.get('Frecuencia')?.setValue(nuevaFrecuencia);
+    }
+    this.actualizarEstadoBoton(form);
+  }
+
+  actualizarEstadoBoton(form: string) {
+    let frecuencia;
+    if (form == 'new') {
+      frecuencia = this.frecuenciaSeleccionadaNewForm;
+    } else {
+      frecuencia = this.frecuenciaSeleccionadaDetailForm;
+    }
+
+    if (frecuencia === 'DIARIA') {
+      this.deshabilitarBoton = false;
+    } else if (frecuencia === 'SEMANAL') {
+      this.deshabilitarBoton = !this.diaSemanaSeleccionado;
+    } else if (frecuencia === 'MENSUAL') {
+      this.deshabilitarBoton = !this.diaMesSeleccionado;
+    } else {
+      this.deshabilitarBoton = true;
+    }    
   }
 }

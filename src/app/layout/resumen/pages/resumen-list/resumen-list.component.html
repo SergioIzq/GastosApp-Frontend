@@ -214,7 +214,7 @@
                         <td>{{ ingreso.CategoriaNombre }}</td>
                         <td>{{ ingreso.Concepto }}</td>
                         <td>{{ ingreso.Cuenta }}</td>
-                        <td style="color: green;">+{{ ingreso.Importe | currency: 'EUR'}}</td>
+                        <td style="color: rgb(0, 161, 0) !important;">+{{ ingreso.Importe | currency: 'EUR'}}</td>                                
                     </tr>
                 </ng-template>
 
@@ -421,7 +421,7 @@
                         <td>{{ gasto.CategoriaNombre }}</td>
                         <td>{{ gasto.Concepto }}</td>
                         <td>{{ gasto.Cuenta }}</td>
-                        <td style="color: red;">-{{ gasto.Importe | currency: 'EUR'}}</td>
+                        <td style="color: red !important;">-{{ gasto.Importe | currency: 'EUR'}}</td>
                     </tr>
                 </ng-template>
 

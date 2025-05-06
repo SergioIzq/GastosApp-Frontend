@@ -175,6 +175,12 @@
                             </div>
 
                             <div class="field col-12 md:col-12">
+                                <div class="flex align-items-center h-full">
+                                    <p-checkbox [binary]="true" formControlName="Activo" label="Activo"></p-checkbox>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-12">
                                 <span class="p-float-label">
                                     <input type="text" id="Descripcion" pInputText formControlName="Descripcion">
                                     <label for="Descripcion">Descripción</label>
@@ -192,7 +198,7 @@
                                     <div class="grid p-fluid mt-2">
                                         <div class="field col-12 md:col-6">
                                             <span class="p-float-label">
-                                                <p-dropdown [options]="frecuenciaGastoProgramado"
+                                                <p-dropdown [options]="frecuenciaGastoProgramado" (onChange)="onFrecuenciaChange($event.value, 'new')"
                                                     formControlName="Frecuencia">
                                                 </p-dropdown>
                                                 <label for="Frecuencia">Frecuencia del gasto programado</label>
@@ -210,7 +216,7 @@
                                             <span class="p-float-label">
                                                 <!-- p-dropdown para frecuencia SEMANAL -->
                                                 <p-dropdown *ngIf="frecuenciaSeleccionadaNewForm == 'SEMANAL'"
-                                                    [options]="diasSemana" [(ngModel)]="diaSemanaSeleccionado"
+                                                    [options]="diasSemana" [(ngModel)]="diaSemanaSeleccionado" (ngModelChange)="onDiaSemanaChange($event, 'new')"
                                                     [ngModelOptions]="{standalone: true}"
                                                     placeholder="Selecciona un día de la semana">
                                                 </p-dropdown>
@@ -220,7 +226,7 @@
                                         <div class="col-12 md:col-6" *ngIf="frecuenciaSeleccionadaNewForm == 'MENSUAL'">
                                             <span class="p-float-label">
                                                 <!-- p-dropdown para frecuencia MENSUAL -->
-                                                <p-dropdown *ngIf="frecuenciaSeleccionadaNewForm == 'MENSUAL'"
+                                                <p-dropdown *ngIf="frecuenciaSeleccionadaNewForm == 'MENSUAL'" (ngModelChange)="onDiaMesChange($event, 'new')"
                                                     [(ngModel)]="diaMesSeleccionado" [options]="diasMes"
                                                     [ngModelOptions]="{standalone: true}"
                                                     placeholder="Selecciona un día del mes">
@@ -426,7 +432,7 @@
                                 </span>
                             </div>
 
-                            <div class="field col-12 md:col-3">
+                            <div class="field col-12 md:col-12">
                                 <div class="flex align-items-center h-full">
                                     <p-checkbox [binary]="true" formControlName="Activo" label="Activo"></p-checkbox>
                                 </div>
@@ -450,7 +456,7 @@
                                     <div class="grid p-fluid mt-2">
                                         <div class="field col-12 md:col-6">
                                             <span class="p-float-label">
-                                                <p-dropdown [options]="frecuenciaGastoProgramado"
+                                                <p-dropdown [options]="frecuenciaGastoProgramado" (onChange)="onFrecuenciaChange($event.value, 'detail')"
                                                     formControlName="Frecuencia">
                                                 </p-dropdown>
                                                 <label for="Frecuencia">Frecuencia del gasto programado</label>
@@ -471,7 +477,7 @@
                                                 <!-- p-dropdown para frecuencia SEMANAL -->
                                                 <p-dropdown *ngIf="frecuenciaSeleccionadaDetailForm == 'SEMANAL'"
                                                     [options]="diasSemana" [(ngModel)]="diaSemanaSeleccionado"
-                                                    [ngModelOptions]="{standalone: true}" (ngModelChange)="onDiaSemanaChange()"
+                                                    [ngModelOptions]="{standalone: true}" (ngModelChange)="onDiaSemanaChange($event, 'detail')"
                                                     placeholder="Selecciona un día de la semana">
                                                 </p-dropdown>
                                                 <label for="">Día ejecución</label>
@@ -482,7 +488,7 @@
                                             <span class="p-float-label">
                                                 <!-- p-dropdown para frecuencia MENSUAL -->
                                                 <p-dropdown *ngIf="frecuenciaSeleccionadaDetailForm == 'MENSUAL'"
-                                                    [(ngModel)]="diaMesSeleccionado" [options]="diasMes" (ngModelChange)="onDiaSemanaChange()"
+                                                    [(ngModel)]="diaMesSeleccionado" [options]="diasMes" (ngModelChange)="onDiaSemanaChange($event, 'detail')"
                                                     [ngModelOptions]="{standalone: true}"
                                                     placeholder="Selecciona un día del mes">
                                                 </p-dropdown>
