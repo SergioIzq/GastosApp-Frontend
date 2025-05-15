@@ -7,11 +7,12 @@ import { PrimeNgModule } from 'src/app/primeng/primeng.module';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { AuthService } from './service/auth.service';
+import { ConfirmAccountComponent } from './pages/confirm-account/confirm-account.component';
 
 const AUTH_COMPONENTS = [
     LoginComponent,
-    RegisterComponent
-
+    RegisterComponent,
+    ConfirmAccountComponent
 ];
 
 const AUTH_PROVIDERS = [

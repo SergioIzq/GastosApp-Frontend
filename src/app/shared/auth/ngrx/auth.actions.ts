@@ -21,3 +21,18 @@ export const signUpFailure = createAction(
     '[Auth] Sign Up Failure',
     props<{ error: string }>()
 );
+
+// Confirmar correo
+export const confirmEmail = createAction(
+    '[Auth] Confirm Email',
+    props<{ token: string }>()
+);
+
+export const confirmEmailSuccess = createAction(
+    '[Auth] Confirm Email Success'
+);
+
+export const confirmEmailFailure = createAction(
+    '[Auth] Confirm Email Failure',
+    props<{ error: any }>()
+);

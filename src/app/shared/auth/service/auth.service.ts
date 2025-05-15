@@ -38,6 +38,10 @@ export class AuthService {
     this.startTokenExpirationTimer(token);
   }
 
+  confirmEmail(token: string): Observable<void> {
+    return this.http.get<void>(`${this.apiUrl}auth/confirmar-correo?token=${token}`);
+  }
+
   private startTokenExpirationTimer(token: string) {
     const expirationTime = this.getTokenExpiration(token);
     const currentTime = Date.now();

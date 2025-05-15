@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as AuthActions from './auth.actions';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import { catchError, map, mergeMap, of, tap } from 'rxjs';
 import { AuthService } from '../service/auth.service';
 import { BaseService } from '../../service/base-service.service';
 import { Router } from '@angular/router';
@@ -64,5 +64,40 @@ export class AuthEffects extends BaseService {
       )
     ))
   );
+  
+  confirmEmail$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.confirmEmail),
+    mergeMap(({ token }) =>
+      this.authService.confirmEmail(token).pipe(
+        map(() => AuthActions.confirmEmailSuccess()),
+        catchError((error) => of(AuthActions.confirmEmailFailure({ error })))
+      )
+    )
+  ));
+
+  confirmEmailSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.confirmEmailSuccess),
+    tap(() => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Cuenta confirmada',
+        detail: 'Redirigiendo a la página principal...',
+        life: 5000
+      });
+      setTimeout(() => this.router.navigate(['/']), 5000);
+    })
+  ), { dispatch: false });
+
+  confirmEmailFailure$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.confirmEmailFailure),
+    tap(({ error }) => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error al confirmar',
+        detail: error?.error || 'Token inválido o expirado.',
+        life: 5000
+      });
+    })
+  ), { dispatch: false });
 
 }
