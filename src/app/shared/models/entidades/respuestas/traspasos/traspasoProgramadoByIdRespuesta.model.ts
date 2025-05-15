@@ -1,7 +1,7 @@
 import { Cuenta } from "../../cuenta.model";
-import { IngresoProgramado } from "../../ingresoProgramado.model";
+import { TraspasoProgramado } from "../../traspasoProgramado.model";
 
-export class IngresoProgramadoByIdRespuesta{
-    public IngresoProgramadoById!: IngresoProgramado;
+export class TraspasoProgramadoByIdRespuesta{
+    public TraspasoProgramadoById!: TraspasoProgramado;
     public ListaCuentas!: Cuenta[];
 }

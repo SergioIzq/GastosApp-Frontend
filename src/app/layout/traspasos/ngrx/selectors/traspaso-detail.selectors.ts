@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { TraspasoDetailState } from 'src/app/shared/models/entidades/estados/traspasoDetail.model';
-import { traspasoDetailFeatureKey } from '../reducers/traspaso-detail.reducer';
+import { traspasoDetailFeatureKey } from '../reducer/traspaso-detail.reducer';
 
 export const selectTraspasoDetailFeature = createFeatureSelector<TraspasoDetailState>(traspasoDetailFeatureKey);
 

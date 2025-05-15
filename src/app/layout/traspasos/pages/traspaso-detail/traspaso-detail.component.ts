@@ -195,17 +195,6 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
     } else {
       this.showConfirmation('edit', formattedFormValue);
     }
-    if (this.isNewTraspaso) {
-      const newTraspasoData = { ...formattedFormValue };
-      this.store.dispatch(TraspasoDetailActions.RealizarTraspaso({ payload: newTraspasoData }));
-      this.deshabilitarBoton = true;
-    } else {
-      const updatedTraspasoData = { ...formattedFormValue };
-      updatedTraspasoData.Id = this.originalTraspasoData.Id;
-      this.store.dispatch(TraspasoDetailActions.UpdateTraspaso({ traspaso: updatedTraspasoData }));
-      this.detailTraspasoForm.markAsPristine();
-      this.deshabilitarBoton = true;
-    }
   }
 
     private showConfirmation(actionType: string, formValue: any) {
