@@ -119,7 +119,7 @@
                                 <p-button label="Realizar traspaso" icon="pi pi-check" severity="success"
                                     [raised]="true" iconPos="right"
                                     [disabled]="newTraspasoForm.invalid || !newTraspasoForm.dirty || deshabilitarBoton"
-                                    type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                    (onClick)="onSubmit()" [style]="{'width': '140px', 'margin-top': '1rem'}">
                                 </p-button>
                             </div>
                         </div>
@@ -237,7 +237,7 @@
                                 <p-button label="Guardar" icon="pi pi-check" severity="success" [raised]="true"
                                     iconPos="right"
                                     [disabled]="detailTraspasoForm.invalid || !detailTraspasoForm.dirty || deshabilitarBoton"
-                                    type="submit" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                                    (onClick)="onSubmit()" [style]="{'width': '140px', 'margin-top': '1rem'}">
                                 </p-button>
                             </div>
                         </div>
@@ -252,3 +252,5 @@
 <div *ngIf="loading" class="overlay">
     <p-progressSpinner ariaLabel="loading" />
 </div>
+
+<p-confirmDialog></p-confirmDialog>

@@ -4,7 +4,7 @@ import { of, mergeMap } from "rxjs";
 import { map, catchError, tap } from "rxjs/operators";
 import * as TraspasosListActions from 'src/app/layout/traspasos/ngrx/actions/traspasos-list.actions';
 import { TraspasoService } from '../../service/traspaso.service';
-import { ResponseData } from '../../../../shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from '../../../../shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { Traspaso } from 'src/app/shared/models/entidades/traspaso.model';
 import { MessageService } from 'primeng/api';
 

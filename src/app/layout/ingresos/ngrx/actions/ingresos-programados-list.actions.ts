@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { IngresoProgramado } from 'src/app/shared/models/entidades/ingresoProgramado.model';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 
 export const LoadingIngresosProgramados = createAction('LoadingIngresoProgramados', props<{ page: number, size: number, idUsuario:number }>());
 

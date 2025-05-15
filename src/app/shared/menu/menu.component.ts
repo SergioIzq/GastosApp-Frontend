@@ -124,6 +124,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         items: [
           { label: 'Ingresos programados', icon: 'pi pi-fw pi-code', routerLink: '/ingresos/ingresos-programados-list' },
           { label: 'Gastos programados', icon: 'pi pi-fw pi-code', routerLink: '/gastos/gastos-programados-list' },
+          { label: 'Traspasos programados', icon: 'pi pi-fw pi-code', routerLink: '/traspasos/traspasos-programados-list' },
         ]
       },
       { label: 'Resumen', icon: 'pi pi-fw pi-chart-line', routerLink: '/resumen/resumen-list' },

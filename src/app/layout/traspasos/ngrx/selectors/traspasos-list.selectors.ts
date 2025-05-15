@@ -1,7 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { EntidadListState } from "src/app/shared/models/entidades/estados/entidadListState.model";
 import { Traspaso } from "src/app/shared/models/entidades/traspaso.model";
-import { traspasosListFeatureKey } from "../reducers/traspasos-list.reducer";
+import { traspasosListFeatureKey } from "../reducer/traspasos-list.reducer";
 
 export const selectTraspasosFeature = createFeatureSelector<EntidadListState<Traspaso>>(traspasosListFeatureKey);
 

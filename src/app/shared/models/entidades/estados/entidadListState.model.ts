@@ -1,4 +1,4 @@
-import { ResponseData } from "../respuestas/responseData.model";
+import { ResponseData } from "../respuestas/respuestas-genericas/responseData.model";
 
 export interface EntidadListState<T> {
   loading: boolean;

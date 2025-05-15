@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model';
 import { GastoProgramado } from '../../../../shared/models/entidades/gastoProgramado.model';
-import { GastoProgramadoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoProgramadoByIdRespuesta.model';
-import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoRespuesta.model';
+import { GastoProgramadoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastos/gastoProgramadoByIdRespuesta.model';
+import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastos/gastoRespuesta.model';
 
 
 export const GetGastoProgramado = createAction('GetGastoProgramado', props<{ id: number }>());

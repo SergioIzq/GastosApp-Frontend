@@ -7,7 +7,7 @@ import { Location } from '@angular/common';
 import * as SelectGastosList from '../../ngrx/selectors/gastos-list.selectors'
 import * as GastosListActions from 'src/app/layout/gastos/ngrx/actions/gastos-list.actions';
 import { Table } from 'primeng/table';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { Gasto } from 'src/app/shared/models/entidades/gasto.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';

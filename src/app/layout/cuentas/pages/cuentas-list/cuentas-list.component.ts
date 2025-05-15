@@ -9,7 +9,7 @@ import { Location } from '@angular/common';
 import * as SelectCuentasList from '../../ngrx/selectors/cuentas-list.selectors'
 import * as CuentasListActions from 'src/app/layout/cuentas/ngrx/actions/cuentas-list.actions';
 import { Table } from 'primeng/table';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';

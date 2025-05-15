@@ -4,7 +4,7 @@ import { of, mergeMap } from "rxjs";
 import { map, catchError, tap } from "rxjs/operators";
 import * as PersonasListActions from 'src/app/layout/personas/ngrx/actions/personas-list.actions';
 import { PersonaService } from '../../service/personas.service';
-import { ResponseData } from '../../../../shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from '../../../../shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { Persona } from 'src/app/shared/models/entidades/persona.model';
 import { MessageService } from 'primeng/api';
 

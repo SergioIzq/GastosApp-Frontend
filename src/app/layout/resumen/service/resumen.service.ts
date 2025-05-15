@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Resumen } from 'src/app/shared/models/entidades/resumen.model';
 import { HttpParams } from '@angular/common/http';
-import { ResumenIngresosResponse } from 'src/app/shared/models/entidades/respuestas/resumenIngresosResponse.model'; 
-import { ResumenGastosResponse } from 'src/app/shared/models/entidades/respuestas/ResumenGastosResumen.model';
-import { ResumenDatos } from 'src/app/shared/models/entidades/respuestas/resumenDatos.model'; 
+import { ResumenIngresosResponse } from 'src/app/shared/models/entidades/respuestas/resumen/resumenIngresosResponse.model'; 
+import { ResumenGastosResponse } from 'src/app/shared/models/entidades/respuestas/resumen/ResumenGastosResumen.model';
+import { ResumenDatos } from 'src/app/shared/models/entidades/respuestas/resumen/resumenDatos.model'; 
 import { environment } from 'src/environments/environment';
 
 @Injectable({

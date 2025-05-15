@@ -1,4 +1,4 @@
-import { Gasto } from "../gasto.model";
+import { Gasto } from "../../gasto.model";
 import { GastoRespuesta } from './gastoRespuesta.model';
 
 export class GastoByIdRespuesta{

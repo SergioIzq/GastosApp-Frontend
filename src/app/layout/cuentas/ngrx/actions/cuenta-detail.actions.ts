@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Cuenta } from 'src/app/shared/models/entidades/cuenta.model';
-import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model';
 
 
 export const GetCuenta = createAction('GetCuenta', props<{ id: number }>());

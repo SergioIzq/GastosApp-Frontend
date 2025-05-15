@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Gasto } from 'src/app/shared/models/entidades/gasto.model';
-import { GastoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoByIdRespuesta.model';
-import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastoRespuesta.model';
-import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/responseOne.model';
+import { GastoByIdRespuesta } from 'src/app/shared/models/entidades/respuestas/gastos/gastoByIdRespuesta.model';
+import { GastoRespuesta } from 'src/app/shared/models/entidades/respuestas/gastos/gastoRespuesta.model';
+import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model';
 
 
 export const GetGasto = createAction('GetGasto', props<{ id: number }>());

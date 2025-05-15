@@ -9,7 +9,7 @@ import { Location } from '@angular/common';
 import * as SelectFormasPagoList from '../../ngrx/selectors/formas-pago-list.selectors'
 import * as FormasPagoListActions from 'src/app/layout/formas-pago/ngrx/actions/formas-pago-list.actions';
 import { Table } from 'primeng/table';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { FormaPago } from 'src/app/shared/models/entidades/formaPago.model';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';

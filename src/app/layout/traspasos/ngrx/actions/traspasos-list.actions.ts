@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Traspaso } from 'src/app/shared/models/entidades/traspaso.model';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 
 export const LoadingTraspasos = createAction('LoadingTraspasos', props<{ page: number, size: number, idUsuario: number }>());

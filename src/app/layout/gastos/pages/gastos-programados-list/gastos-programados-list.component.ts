@@ -6,7 +6,7 @@ import { Location } from '@angular/common';
 import * as SelectGastosList from '../../ngrx/selectors/gastos-programados-list.selectors'
 import * as GastosProgramadosListActions from 'src/app/layout/gastos/ngrx/actions/gastos-programados-list.actions';
 import { Table } from 'primeng/table';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';

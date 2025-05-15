@@ -2,7 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import { TraspasoDetailState } from "src/app/shared/models/entidades/estados/traspasoDetail.model";
 import * as TraspasoDetailActions from '../actions/traspaso-detail.actions'
 
-export const estadoInicial: TraspasoDetailState = { loading: false, errorCarga: false, cuentas: null, traspasoPorId: null };
+export const estadoInicial: TraspasoDetailState = { loading: false, errorCarga: false, cuentas: null, traspasoPorIdRespuesta: null };
 export const traspasoDetailFeatureKey = 'traspasoDetailState';
 
 const traspasoDetailReducer = createReducer(
@@ -16,13 +16,30 @@ const traspasoDetailReducer = createReducer(
     on(TraspasoDetailActions.GetTraspasoSuccess, (state, { traspasoPorId }) => ({
         ...state,
         loading: false,
-        traspasoPorId: traspasoPorId,
+        traspasoPorIdRespuesta: traspasoPorId,
         errorCarga: false,
     })),
     on(TraspasoDetailActions.GetTraspasoFailure, (state) => ({
         ...state,
         loading: false,
-        traspasoPorId: null,
+        traspasoPorIdRespuesta: null,
+        errorCarga: true,
+    })),
+    on(TraspasoDetailActions.GetNewTraspaso, (state) => ({
+        ...state,
+        loading: true,
+        errorCarga: false,
+    })),
+    on(TraspasoDetailActions.GetNewTraspasoSuccess, (state, { payload }) => ({
+        ...state,
+        loading: false,
+        cuentas: payload,
+        errorCarga: false,
+    })),
+    on(TraspasoDetailActions.GetNewTraspasoFail, (state) => ({
+        ...state,
+        loading: false,
+        cuentas: null,
         errorCarga: true,
     })),
     on(TraspasoDetailActions.RealizarTraspaso, (state) => ({
@@ -37,25 +54,6 @@ const traspasoDetailReducer = createReducer(
     on(TraspasoDetailActions.RealizarTraspasoFail, (state) => ({
         ...state,
         loading: false,
-    })),
-    on(TraspasoDetailActions.GetCuentas, (state) => ({
-        ...state,
-        loading: true,
-        errorCarga: false,
-        createdSuccess: false
-    })),
-    on(TraspasoDetailActions.GetCuentasFailure, (state) => ({
-        ...state,
-        loading: false,
-        errorCarga: true,
-        createdSuccess: false
-    })),
-    on(TraspasoDetailActions.GetCuentasSuccess, (state, { cuentas }) => ({
-        ...state,
-        loading: false,
-        errorCarga: false,
-        createdSuccess: false,
-        cuentas: cuentas,
     })),
     on(TraspasoDetailActions.UpdateTraspaso, (state) => ({
         ...state,

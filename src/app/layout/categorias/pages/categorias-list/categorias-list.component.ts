@@ -9,7 +9,7 @@ import { Location } from '@angular/common';
 import * as SelectCategoriasList from '../../ngrx/selectors/categorias-list.selectors'
 import * as CategoriasListActions from 'src/app/layout/categorias/ngrx/actions/categorias-list.actions';
 import { Table } from 'primeng/table';
-import { ResponseData } from 'src/app/shared/models/entidades/respuestas/responseData.model';
+import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';

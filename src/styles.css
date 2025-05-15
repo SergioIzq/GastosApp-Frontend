@@ -495,3 +495,7 @@ body.dark-mode .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
 body.dark-mode h4 {
     color: white;
 }
+
+body.dark-mode .p-dropdown-filter {
+    background-color: #444 !important;
+}

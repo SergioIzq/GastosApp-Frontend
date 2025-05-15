@@ -7,8 +7,7 @@ import { Router } from "@angular/router";
 import { BaseService } from "src/app/shared/service/base-service.service";
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
-import { ResponseOne } from "src/app/shared/models/entidades/respuestas/responseOne.model";
-import { Traspaso } from "src/app/shared/models/entidades/traspaso.model";
+import { TraspasoByIdRespuesta } from "src/app/shared/models/entidades/respuestas/traspasos/traspasoByIdRespuesta.model";
 
 @Injectable()
 export class TraspasoDetailEffects extends BaseService {
@@ -60,7 +59,7 @@ export class TraspasoDetailEffects extends BaseService {
     ofType(TraspasoDetailActions.RealizarTraspaso),
     mergeMap(({ payload }) => this.traspasoDetailService.realizarTraspaso(payload)
       .pipe(
-        map((traspaso: ResponseOne<Traspaso>) => {
+        map((traspaso: TraspasoByIdRespuesta) => {
 
           this.messageService.add({
             severity: 'success',
@@ -79,17 +78,17 @@ export class TraspasoDetailEffects extends BaseService {
     ))
   );
 
-  getCuentas$ = createEffect(() => this.actions$.pipe(
-    ofType(TraspasoDetailActions.GetCuentas),
-    mergeMap(({ id }) => this.traspasoDetailService.getCuentas(id)
-      .pipe(
-        map(cuentas => TraspasoDetailActions.GetCuentasSuccess({ cuentas })),
-        catchError((error) => {
-          return of(TraspasoDetailActions.GetCuentasFailure({ errorMessage: error }));
-        })
+    getNewTraspaso$ = createEffect(() => this.actions$.pipe(
+      ofType(TraspasoDetailActions.GetNewTraspaso),
+      mergeMap(({ payload }) => this.traspasoDetailService.getNewTraspaso(payload)
+        .pipe(
+          map(payload => TraspasoDetailActions.GetNewTraspasoSuccess({ payload })),
+          catchError((error) => {
+            return of(TraspasoDetailActions.GetNewTraspasoFail());
+          })
+        )
       )
-    )
-  ));
-
+    ));
+  
 
 }
