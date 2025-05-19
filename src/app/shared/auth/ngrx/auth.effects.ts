@@ -64,7 +64,7 @@ export class AuthEffects extends BaseService {
       )
     ))
   );
-  
+
   confirmEmail$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.confirmEmail),
     mergeMap(({ token }) =>
@@ -81,23 +81,40 @@ export class AuthEffects extends BaseService {
       this.messageService.add({
         severity: 'success',
         summary: 'Cuenta confirmada',
-        detail: 'Redirigiendo a la página principal...',
+        detail: 'Confirme para redirigir a la página principal...',
         life: 5000
       });
-      setTimeout(() => this.router.navigate(['/']), 5000);
     })
   ), { dispatch: false });
 
-  confirmEmailFailure$ = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.confirmEmailFailure),
-    tap(({ error }) => {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error al confirmar',
-        detail: error?.error || 'Token inválido o expirado.',
-        life: 5000
-      });
-    })
-  ), { dispatch: false });
+  emailRecuperarPassword$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.recuperarPasswordCorreo),
+    mergeMap(({ correo }) => this.authService.emailRecuperarPassword(correo).pipe(
+      map(() => {
+        return AuthActions.recuperarPasswordCorreoSuccess();
+      }),
+      catchError((error) => of(AuthActions.recuperarPasswordCorreoFailure({ error: error.message || 'Error desconocido' })))
+    ))
+  ));
+
+  confirmarPassword$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.confirmarNuevaPwd),
+    mergeMap(({ passwordRequest }) => this.authService.confirmarNuevaPassword(passwordRequest).pipe(
+      map(() => {
+        return AuthActions.confirmarNuevaPwdSuccess();
+      }),
+      catchError((error) => of(AuthActions.confirmarNuevaPwdFailure({ error: error.message || 'Error desconocido' })))
+    ))
+  ));
+
+  reenviarConfirmacion$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.reenviarConfirmacion),
+    mergeMap(({ correo }) => this.authService.reenviarConfirmacion(correo).pipe(
+      map(() => {
+        return AuthActions.reenviarConfirmacionSuccess();
+      }),
+      catchError((error) => of(AuthActions.reenviarConfirmacionFailure({ error: error.message || 'Error desconocido' })))
+    ))
+  ));
 
 }

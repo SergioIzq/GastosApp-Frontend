@@ -1,0 +1,22 @@
+<p-dialog header="Recuperación de contraseña" [(visible)]="mostrarDialogo" [modal]="true" [closable]="true"
+    [dismissableMask]="false" [style]="{width: '350px'}">
+    <form [formGroup]="contrasenaForm" (ngSubmit)="enviarContrasena()">
+        <div class="p-fluid">
+            <div class="field">
+                <label for="contrasenaDialog">Nueva contraseña</label>
+                <p-password formControlName="Contrasena" promptLabel="Elija contraseña"
+                                weakLabel="Muy débil" mediumLabel="Normal" strongLabel="Fuerte" [toggleMask]="true" />
+                <small *ngIf="contrasenaForm.get('Contrasena')?.invalid && contrasenaForm.get('Contrasena')?.touched"
+                    class="text-danger">
+                    Introduce una contraseña válido.
+                </small>
+            </div>
+        </div>
+        <div class="p-dialog-footer" style="text-align: center;">
+            <p-button label="Enviar" icon="pi pi-envelope" type="submit" [disabled]="contrasenaForm.invalid"
+                severity="success" />
+        </div>
+    </form>
+</p-dialog>
+<p-confirmDialog [closable]="false" [closeOnEscape]="false" close [rejectVisible]="false"></p-confirmDialog>
+<p>Procesando confirmación...</p>
