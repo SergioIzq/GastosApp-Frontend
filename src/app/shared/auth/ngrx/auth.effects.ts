@@ -52,11 +52,11 @@ export class AuthEffects extends BaseService {
           this.messageService.add({
             severity: 'success',
             summary: 'Operación exitosa',
-            detail: 'Usuario registrado correctamente',
+            detail: 'Usuario registrado correctamente, mire su email y confirme el correo',
             life: 5000
           });
 
-          return AuthActions.signUpSuccess({ token });
+          return AuthActions.signUpSuccess();
         }),
         catchError((error) => {
           return of(AuthActions.signUpFailure({ error }));

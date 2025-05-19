@@ -13,8 +13,7 @@ export const signUp = createAction(
 );
 
 export const signUpSuccess = createAction(
-    '[Auth] Sign Up Success',
-    props<{ token: any }>()
+    '[Auth] Sign Up Success'
 );
 
 export const signUpFailure = createAction(

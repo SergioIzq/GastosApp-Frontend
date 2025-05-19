@@ -30,17 +30,27 @@ export class ErrorInterceptor implements HttpInterceptor {
 
                 } else if (error.status === 401) {
 
-                    // Cierra la sesión y redirige al usuario
-                    this.store.dispatch(logout());
-                    this.router.navigate(['/home']);
+                    const errorMessage = error.error?.message?.toLowerCase();
 
-                    // Muestra un mensaje de error
-                    this.messageService.add({
-                        severity: 'warn',
-                        summary: 'Sesión expirada',
-                        detail: 'Tu sesión ha expirado. Por favor, inicia sesión de nuevo.',
-                        life: 8000
-                    });
+                    if (errorMessage?.includes('Sesión expirada')) {
+                        this.store.dispatch(logout());
+                        this.router.navigate(['/home']);
+                        this.messageService.add({
+                            severity: 'warn',
+                            summary: 'Sesión expirada',
+                            detail: 'Tu sesión ha expirado. Por favor, inicia sesión de nuevo.',
+                            life: 8000
+                        });
+                    } else {
+                        error.error.Errors.forEach((errorMsg: string) => {
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: error.error.Message,
+                                detail: errorMsg,
+                                life: 8000
+                            });
+                        });
+                    }
                 } else if (error.error && error.error.Errors) {
                     // Manejo de otros errores
                     error.error.Errors.forEach((errorMsg: string) => {

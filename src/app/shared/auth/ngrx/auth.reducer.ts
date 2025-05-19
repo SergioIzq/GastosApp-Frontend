@@ -28,7 +28,7 @@ export const authReducer = createReducer(
   on(AuthActions.loginFailure, (state, { error }) => ({
     ...state,
     loading: false,
-    error
+    error: error
   })),
   on(AuthActions.logout, (state) => {
     localStorage.removeItem('token');
@@ -44,11 +44,9 @@ export const authReducer = createReducer(
     loading: true,
     error: null
   })),
-  on(AuthActions.signUpSuccess, (state, { token }) => {
-    localStorage.setItem('token', token.token);
+  on(AuthActions.signUpSuccess, (state) => {
     return {
       ...state,
-      token: token.token,
       loading: false,
       error: null
     };
@@ -56,7 +54,7 @@ export const authReducer = createReducer(
   on(AuthActions.signUpFailure, (state, { error }) => ({
     ...state,
     loading: false,
-    error
+    error: error
   }))
 );
 
