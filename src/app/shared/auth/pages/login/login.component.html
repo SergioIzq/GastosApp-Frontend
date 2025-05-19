@@ -49,13 +49,43 @@
                             type="submit" [style]="{'width': '190px', 'margin-top': '1rem'}">
                         </p-button>
                     </div>
+
+                    <div class="field col-12 md:col-12 flex flex-column md:flex-row justify-content-center align-items-center gap-2"
+                        style="margin-top: 1rem;">
+                        <div>
+                            <span class="enlace" (click)="abrirDialogo('recuperar')">¿Has olvidado tu contraseña?</span>
+                        </div>
+                        <div class="hidden md:inline mx-2">|</div>
+                        <div>
+                            <span class="enlace" (click)="abrirDialogo('confirmar')">Reenviar correo de
+                                confirmación</span>
+                        </div>
+                    </div>
+
+                    <p-dialog header="{{ dialogHeader }}" [(visible)]="mostrarDialogo" [modal]="true" [closable]="true"
+                        [dismissableMask]="false" [style]="{width: '350px'}">
+                        <form [formGroup]="correoForm" (ngSubmit)="enviarCorreo()">
+                            <div class="p-fluid">
+                                <div class="field">
+                                    <label for="correoDialog">Correo electrónico</label>
+                                    <input id="correoDialog" type="email" pInputText formControlName="Correo" />
+                                    <small
+                                        *ngIf="correoForm.get('Correo')?.invalid && correoForm.get('Correo')?.touched"
+                                        class="text-danger">
+                                        Introduce un correo válido.
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="p-dialog-footer" style="text-align: center;">
+                                <p-button label="Enviar" icon="pi pi-envelope" type="submit"
+                                    [disabled]="correoForm.invalid" severity="success" />
+                            </div>
+                        </form>
+                    </p-dialog>
+
                 </div>
             </p-fieldset>
         </form>
-
-
-
-
     </div>
 
 

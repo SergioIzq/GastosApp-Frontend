@@ -32,6 +32,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CheckboxModule } from 'primeng/checkbox';
+import { AccordionModule } from 'primeng/accordion';
 
 @NgModule({
   exports: [    
@@ -66,7 +67,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     ChartModule,
     PaginatorModule,
     ConfirmDialogModule,
-    CheckboxModule
+    CheckboxModule,
+    AccordionModule
   ]
 })
 export class PrimeNgModule { }

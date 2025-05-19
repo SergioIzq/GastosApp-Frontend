@@ -499,3 +499,76 @@ body.dark-mode h4 {
 body.dark-mode .p-dropdown-filter {
     background-color: #444 !important;
 }
+
+body.dark-mode {
+
+    .p-dialog,
+    .p-confirm-dialog {
+        background-color: #1e1e1e;
+        color: #f0f0f0;
+        border: 1px solid #333;
+    }
+
+    .p-dialog .p-dialog-header,
+    .p-confirm-dialog .p-dialog-header {
+        background-color: #2a2a2a;
+        color: #ffffff;
+        margin-bottom: 30px;
+    }
+
+    .p-dialog .p-dialog-content,
+    .p-confirm-dialog .p-dialog-content {
+        background-color: #1e1e1e;
+        color: #e0e0e0;
+    }
+
+    .p-dialog .p-dialog-footer,
+    .p-confirm-dialog .p-dialog-footer {
+        background-color: #1e1e1e;
+    }
+
+    input,
+    .p-inputtext {
+        background-color: #2b2b2b;
+        color: #fff;
+        border: 1px solid #555;
+    }
+
+    input:focus,
+    .p-inputtext:focus {
+        border-color: #888;
+        box-shadow: 0 0 0 0.2rem rgba(100, 149, 237, 0.25);
+    }
+
+    .p-confirm-dialog .p-confirm-dialog-icon {
+        color: #f0ad4e;
+    }
+}
+
+.enlace {
+    color: #005bb5;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+    outline-offset: 2px;
+}
+
+.enlace:hover,
+.enlace:focus {
+    color: #007dff;
+    text-decoration: underline;
+}
+
+body.dark-mode {
+    .enlace {
+        color: #80bfff;
+
+        &:hover {
+            color: #aad4ff;
+        }
+    }
+}
+
+body.dark-mode .p-text-secondary{
+    color: white;
+}

@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../ngrx/auth.actions';
 import { environment } from 'src/environments/environment';
+import { PasswordRequest } from '../../models/entidades/requests/passwordRequest.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +21,8 @@ export class AuthService {
     return this.http.post<string>(`${this.apiUrl}auth/login`, { correo, contrasena });
   }
 
-  signUp(correo: string, contrasena: string): Observable<string> {
-    return this.http.post<string>(`${this.apiUrl}auth/register`, { correo, contrasena });
+  signUp(correo: string, contrasena: string): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}auth/register`, { correo, contrasena });
   }
 
   logout() {
@@ -38,7 +39,23 @@ export class AuthService {
     this.startTokenExpirationTimer(token);
   }
 
-  private startTokenExpirationTimer(token: string) {
+  confirmEmail(token: string): Observable<{ mensaje: string }> {
+    return this.http.get<{ mensaje: string }>(`${this.apiUrl}auth/confirmar-correo?token=${token}`);
+  }
+
+  emailRecuperarPassword(correo: string): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}auth/email-recuperar-password`, { correo });
+  }
+
+  confirmarNuevaPassword(passwordRequest: PasswordRequest): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}auth/confirmar-nueva-pwd`,  passwordRequest );
+  }
+
+  reenviarConfirmacion(correo: string): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}auth/reenviar-correo`, { correo });
+  }
+
+  public startTokenExpirationTimer(token: string) {
     const expirationTime = this.getTokenExpiration(token);
     const currentTime = Date.now();
     const timeUntilExpiration = expirationTime - currentTime;

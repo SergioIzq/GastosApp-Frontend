@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
+import { AuthService } from './shared/auth/service/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,12 @@ import { PrimeNGConfig } from 'primeng/api';
 export class AppComponent implements OnInit {
   title = 'Frontend';
 
-  constructor(private primengConfig: PrimeNGConfig) {}
+  constructor(private primengConfig: PrimeNGConfig, private authService: AuthService) {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.authService.startTokenExpirationTimer(token);
+    }
+  }
 
   ngOnInit(): void {
     this.primengConfig.setTranslation({
