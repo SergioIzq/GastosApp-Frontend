@@ -16,7 +16,7 @@
                             <div class="field col-12 md:col-6">
                                 <span class="p-float-label">
                                     <input type="text" id="Nombre" pInputText formControlName="Nombre">
-                                    <label for="Nombre">Nombre</label>
+                                    <label htmlFor="Nombre">Nombre</label>
                                     <div *ngIf="newCategoriaForm.get('Nombre')?.invalid && (newCategoriaForm.get('Nombre')?.['dirty'] || newCategoriaForm.get('Nombre')?.['touched'])"
                                         class="text-danger">
                                         <div *ngIf="newCategoriaForm.get('Nombre')?.errors?.['required']">El campo

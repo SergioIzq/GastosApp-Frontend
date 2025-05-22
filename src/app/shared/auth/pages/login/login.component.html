@@ -67,13 +67,15 @@
                         <form [formGroup]="correoForm" (ngSubmit)="enviarCorreo()">
                             <div class="p-fluid">
                                 <div class="field">
-                                    <label for="correoDialog">Correo electrónico</label>
-                                    <input id="correoDialog" type="email" pInputText formControlName="Correo" />
-                                    <small
-                                        *ngIf="correoForm.get('Correo')?.invalid && correoForm.get('Correo')?.touched"
-                                        class="text-danger">
-                                        Introduce un correo válido.
-                                    </small>
+                                    <span class="p-float-label mt-4">
+                                        <input id="Correo" type="email" pInputText formControlName="Correo" />
+                                        <label htmlFor="Correo">Correo electrónico</label>
+                                        <small
+                                            *ngIf="correoForm.get('Correo')?.invalid && correoForm.get('Correo')?.touched"
+                                            class="text-danger">
+                                            Introduce un correo válido.
+                                        </small>
+                                    </span>
                                 </div>
                             </div>
                             <div class="p-dialog-footer" style="text-align: center;">
