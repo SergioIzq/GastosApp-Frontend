@@ -225,4 +225,12 @@ export class IngresosProgramadosListComponent implements OnInit, OnDestroy {
     if (!texto) return '';
     return texto.charAt(0).toUpperCase() + texto.slice(1);
   }
+
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

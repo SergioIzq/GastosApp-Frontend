@@ -101,31 +101,31 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
       this.route.paramMap,
       this._store.select(selectUserId).pipe(filter(id => id > 0))
     ])
-    .pipe(
-      takeUntil(this.destroy$),
-    )
-    .subscribe(([params, idUsuario]) => {
-      this.idUsuario = idUsuario;
-    
-      const idString = params.get('id');
-      const id = parseInt(idString!, 10);
-      this.ingresoId = id;
-    
-      if (id === 0) {
-        this.isNewIngreso = true;
-        this.ingresoPorId$ = of(null);
-        this.newIngresoForm.patchValue({
-          Fecha: new Date().toLocaleDateString('es-ES')
-        });
-    
-        this.store.dispatch(IngresoDetailActions.GetNewIngreso({ payload: idUsuario }));
-      } else {
-        this.isNewIngreso = false;
-        this.store.dispatch(IngresoDetailActions.GetIngreso({ id }));
-        this.ingresoPorId$ = this.store.select(IngresoSelector.selectedIngresoSelector);
-      }
-    });
-    
+      .pipe(
+        takeUntil(this.destroy$),
+      )
+      .subscribe(([params, idUsuario]) => {
+        this.idUsuario = idUsuario;
+
+        const idString = params.get('id');
+        const id = parseInt(idString!, 10);
+        this.ingresoId = id;
+
+        if (id === 0) {
+          this.isNewIngreso = true;
+          this.ingresoPorId$ = of(null);
+          this.newIngresoForm.patchValue({
+            Fecha: new Date().toLocaleDateString('es-ES')
+          });
+
+          this.store.dispatch(IngresoDetailActions.GetNewIngreso({ payload: idUsuario }));
+        } else {
+          this.isNewIngreso = false;
+          this.store.dispatch(IngresoDetailActions.GetIngreso({ id }));
+          this.ingresoPorId$ = this.store.select(IngresoSelector.selectedIngresoSelector);
+        }
+      });
+
 
     this.actionsSubject.pipe(filter(action => action.type === 'CreateIngresoSuccess'), takeUntil(this.destroy$))
       .subscribe((action: any) => {
@@ -338,6 +338,10 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
         a.Nombre.localeCompare(b.Nombre)
       ) : [];
     }
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
   }
 
 }

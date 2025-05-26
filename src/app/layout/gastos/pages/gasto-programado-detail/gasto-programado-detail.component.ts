@@ -203,7 +203,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
           this.selectedConceptoId = gasto.Concepto.Id;
 
           this.detailGastoForm.patchValue({
-            ...gasto,            
+            ...gasto,
             Monto: monto,
             Categoria: gasto.Concepto.Categoria,
           });
@@ -212,7 +212,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
           this.filteredConceptos.push(gasto.Concepto);
 
           const fechaLocal = new Date(gasto.FechaEjecucion.toString().replace('Z', ''));
-          
+
           // Verifica si la fecha está en UTC y ajusta según sea necesario
           if (gasto.Frecuencia === 'SEMANAL') {
             const dayIndex = fechaLocal.getUTCDay(); // Usamos getUTCDay para obtener el día de la semana en UTC (0=Domingo, ..., 6=Sábado)
@@ -222,15 +222,15 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
             );
             this.diaSemanaSeleccionado = diaKey!;
           }
-          
+
           if (gasto.Frecuencia === 'MENSUAL') {
             this.diaMesSeleccionado = fechaLocal.getUTCDate(); // Usamos getUTCDate para obtener el día del mes en UTC
           }
-          
+
           this.detailGastoForm.patchValue({
             FechaEjecucion: fechaLocal // Usar la hora ajustada
           });
-          
+
           this.detailGastoForm.markAsPristine();
         }
       });
@@ -311,6 +311,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
     const detailMessage = actionType === 'create'
       ? '¿Está seguro que desea crear este registro?'
       : '¿Está seguro que desea editar este registro?';
+    document.body.classList.add('blur-background');
 
     this._confirmationService.confirm({
       message: detailMessage,
@@ -454,6 +455,10 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
       this.deshabilitarBoton = !this.diaMesSeleccionado;
     } else {
       this.deshabilitarBoton = true;
-    }    
+    }
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
   }
 }

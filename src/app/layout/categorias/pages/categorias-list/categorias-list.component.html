@@ -106,7 +106,7 @@
 
         </div>
         <!-- En pantallas pequeñas (≥ 576px), ocupa 6 columnas; en otras, ocupa 12 columnas -->
-        <p-dialog header="Confirmación de Eliminación" [modal]="true" [(visible)]="showConfirmationDialog"
+        <p-dialog header="Confirmación de Eliminación" [modal]="true" [(visible)]="showConfirmationDialog" (onShow)="addBlur()" (onHide)="removeBlur()" appendTo="body"
             [style]="{ width: '25rem' }" [style.max-width.px]="getDialogWidth()">
             <div style="margin-bottom: 1rem;">
                 <!-- Agrega margen en la parte inferior para separar el texto de los botones -->

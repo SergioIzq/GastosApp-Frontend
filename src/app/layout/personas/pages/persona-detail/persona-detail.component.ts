@@ -139,6 +139,7 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
     const detailMessage = actionType === 'create'
       ? '¿Está seguro que desea crear este registro?'
       : '¿Está seguro que desea editar este registro?';
+    document.body.classList.add('blur-background');
 
     this._confirmationService.confirm({
       message: detailMessage,
@@ -186,4 +187,7 @@ export class PersonaDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

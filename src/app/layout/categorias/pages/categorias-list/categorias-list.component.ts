@@ -44,7 +44,7 @@ export class CategoriasListComponent implements OnInit, OnDestroy {
   totalRecords = 0;
   first = 0;
   totalPages: number = 1;
-  idUsuario!: number;  
+  idUsuario!: number;
 
   constructor(
     private store: Store<EntidadListState<Categoria>>,
@@ -60,8 +60,8 @@ export class CategoriasListComponent implements OnInit, OnDestroy {
 
     this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
-    });    
-    
+    });
+
     this.primengConfig.setTranslation({
       accept: 'Aceptar',
       reject: 'Rechazar',
@@ -164,22 +164,22 @@ export class CategoriasListComponent implements OnInit, OnDestroy {
         'Descripción': item.Descripcion
       };
     });
-  
+
     // Crear una nueva hoja de trabajo de Excel
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-  
+
     // Crear un nuevo libro de Excel y agregar la hoja de trabajo
     const workbook: XLSX.WorkBook = {
       Sheets: { 'Categorias': worksheet },
       SheetNames: ['Categorias']
     };
-  
+
     // Generar el archivo Excel en formato binario
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  
+
     // Crear un blob para el archivo
     const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  
+
     // Guardar el archivo en la carpeta de descargas del usuario
     saveAs(blob, 'categorias.xlsx');
   }
@@ -193,6 +193,14 @@ export class CategoriasListComponent implements OnInit, OnDestroy {
 
   loadCategorias() {
     this.store.dispatch(CategoriasListActions.LoadingCategorias({ page: this.page, size: this.size, idUsuario: this.idUsuario }))
+  }
+
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
   }
 
 }

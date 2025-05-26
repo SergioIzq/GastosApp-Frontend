@@ -170,7 +170,8 @@ export class TraspasosProgramadosListComponent implements OnInit, OnDestroy {
         'CuentaDestino': item.CuentaDestino.Nombre,
         'SaldoCuentaDestino': item.SaldoCuentaDestino,
         'Descripcion': item.Descripcion,
-        'Importe': item.Importe,      };
+        'Importe': item.Importe,
+      };
     });
 
     // Crear una nueva hoja de trabajo de Excel
@@ -220,5 +221,13 @@ export class TraspasosProgramadosListComponent implements OnInit, OnDestroy {
   capitalizarPrimeraLetra(texto: string | null): string {
     if (!texto) return '';
     return texto.charAt(0).toUpperCase() + texto.slice(1);
+  }
+
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
   }
 }

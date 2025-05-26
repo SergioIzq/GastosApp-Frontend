@@ -47,7 +47,7 @@ export class ConceptosListComponent implements OnInit, OnDestroy {
   first = 0;
   totalPages: number = 1;
   idUsuario!: number;
-  
+
   constructor(
     private store: Store<EntidadListState<Concepto>>,
     private _store: Store<AuthState>,
@@ -79,7 +79,7 @@ export class ConceptosListComponent implements OnInit, OnDestroy {
     this.store.select(SelectConceptosList.selectLoading).pipe(takeUntil(this.destroy$)).subscribe(loading => {
       this.loading = loading;
     });
-    
+
     this.error$ = this.store.select(SelectConceptosList.selectErrorCarga);
 
     this.actionsSubject.pipe(filter(action => action.type === 'DeleteConceptoSuccess'), takeUntil(this.destroy$))
@@ -162,22 +162,22 @@ export class ConceptosListComponent implements OnInit, OnDestroy {
         'Categoría asociada': item.Categoria.Nombre
       };
     });
-  
+
     // Crear una nueva hoja de trabajo de Excel
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-  
+
     // Crear un nuevo libro de Excel y agregar la hoja de trabajo
     const workbook: XLSX.WorkBook = {
       Sheets: { 'Conceptos': worksheet },
       SheetNames: ['Conceptos']
     };
-  
+
     // Generar el archivo Excel en formato binario
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  
+
     // Crear un blob para el archivo
     const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  
+
     // Guardar el archivo en la carpeta de descargas del usuario
     saveAs(blob, 'conceptos.xlsx');
   }
@@ -202,6 +202,14 @@ export class ConceptosListComponent implements OnInit, OnDestroy {
     this.size = event.rows;
     this.first = event.first; // Actualiza la página inicial
     this.loadConceptos();
+  }
+
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
   }
 
 }

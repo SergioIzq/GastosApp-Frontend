@@ -159,26 +159,26 @@ export class ClientesListComponent implements OnInit, OnDestroy {
         'Nombre': item.Nombre,
       };
     });
-  
+
     // Crear una nueva hoja de trabajo de Excel
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-  
+
     // Crear un nuevo libro de Excel y agregar la hoja de trabajo
     const workbook: XLSX.WorkBook = {
       Sheets: { 'Clientes': worksheet },
       SheetNames: ['Clientes']
     };
-  
+
     // Generar el archivo Excel en formato binario
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  
+
     // Crear un blob para el archivo
     const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  
+
     // Guardar el archivo en la carpeta de descargas del usuario
     saveAs(blob, 'clientes.xlsx');
   }
-  
+
 
   public loadClientes(): void {
     this.store.dispatch(ClientesListActions.LoadingClientes({ page: this.page, size: this.size, idUsuario: this.idUsuario }));
@@ -191,4 +191,11 @@ export class ClientesListComponent implements OnInit, OnDestroy {
     this.loadClientes();
   }
 
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

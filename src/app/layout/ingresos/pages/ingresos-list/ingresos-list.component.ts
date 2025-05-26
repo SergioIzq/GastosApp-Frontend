@@ -229,4 +229,12 @@ export class IngresosListComponent implements OnInit, OnDestroy {
     this.first = event.first; // Actualiza la página inicial
     this.loadIngresos();
   }
+
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

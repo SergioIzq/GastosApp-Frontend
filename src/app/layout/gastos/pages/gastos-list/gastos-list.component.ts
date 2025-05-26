@@ -229,4 +229,12 @@ export class GastosListComponent implements OnInit, OnDestroy {
     this.first = event.first; // Actualiza la página inicial
     this.loadGastos();
   }
+
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

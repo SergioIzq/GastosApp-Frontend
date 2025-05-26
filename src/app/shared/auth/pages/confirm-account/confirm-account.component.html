@@ -1,2 +1,2 @@
-<p-confirmDialog [closable]="false" [closeOnEscape]="false" close [rejectVisible]="false"></p-confirmDialog>
+<p-confirmDialog [closable]="false" [closeOnEscape]="false" close [rejectVisible]="false" (onShow)="addBlur()" (onHide)="removeBlur()" appendTo="body"></p-confirmDialog>
 <p>Procesando confirmación...</p>

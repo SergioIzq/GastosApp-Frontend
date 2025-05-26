@@ -342,4 +342,7 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

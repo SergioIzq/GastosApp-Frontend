@@ -57,7 +57,7 @@ export class ProveedoresListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario:number)=>{
+    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
     });
 
@@ -156,26 +156,26 @@ export class ProveedoresListComponent implements OnInit, OnDestroy {
         'Nombre': item.Nombre,
       };
     });
-  
+
     // Crear una nueva hoja de trabajo de Excel
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-  
+
     // Crear un nuevo libro de Excel y agregar la hoja de trabajo
     const workbook: XLSX.WorkBook = {
       Sheets: { 'Proveedores': worksheet },
       SheetNames: ['Proveedores']
     };
-  
+
     // Generar el archivo Excel en formato binario
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  
+
     // Crear un blob para el archivo
     const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  
+
     // Guardar el archivo en la carpeta de descargas del usuario
     saveAs(blob, 'proveedores.xlsx');
   }
-  
+
 
   public loadProveedores(): void {
     this.store.dispatch(ProveedoresListActions.LoadingProveedores({ page: this.page, size: this.size, idUsuario: this.idUsuario }));
@@ -188,4 +188,11 @@ export class ProveedoresListComponent implements OnInit, OnDestroy {
     this.loadProveedores();
   }
 
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

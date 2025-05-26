@@ -377,4 +377,4 @@
 <div *ngIf="loading" class="overlay">
     <p-progressSpinner ariaLabel="loading" />
 </div>
-<p-confirmDialog></p-confirmDialog>
+<p-confirmDialog (onHide)="removeBlur()" appendTo="body"></p-confirmDialog>

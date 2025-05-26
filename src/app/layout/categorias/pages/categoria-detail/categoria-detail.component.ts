@@ -13,6 +13,7 @@ import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CategoriaDetailState } from 'src/app/shared/models/entidades/estados/categoriaDetail.model';
 import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
+import { DialogBlurService } from 'src/app/shared/service/dialog.service';
 
 @Component({
   selector: 'app-categoria-detail',
@@ -34,6 +35,7 @@ export class CategoriaDetailComponent implements OnInit, OnDestroy {
   IdUsuario!: number;
   deshabilitarBoton: boolean = false;
   private _confirmationService: ConfirmationService = inject(ConfirmationService);
+  private _dialogService: DialogBlurService = inject(DialogBlurService);
 
   constructor(
     private store: Store<CategoriaDetailState>,
@@ -76,7 +78,7 @@ export class CategoriaDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(CategoriaDetailActions.GetCategoria({ id: id }));
           this.categoriaPorId$ = this.store.select(CategoriaSelector.selectedCategoriaSelector);
         }
-      } 
+      }
     });
 
     this.categoriaPorId$ = this.store.select(CategoriaSelector.selectedCategoriaSelector);
@@ -119,7 +121,7 @@ export class CategoriaDetailComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-onSubmit() {
+  onSubmit() {
     const formValue = this.isNewCategoria ? this.newCategoriaForm.value : this.detailCategoriaForm.value;
     formValue.IdUsuario = this.IdUsuario;
 
@@ -136,6 +138,7 @@ onSubmit() {
     const detailMessage = actionType === 'create'
       ? '¿Está seguro que desea crear este registro?'
       : '¿Está seguro que desea editar este registro?';
+    document.body.classList.add('blur-background');
 
     this._confirmationService.confirm({
       message: detailMessage,
@@ -174,4 +177,7 @@ onSubmit() {
     this.router.navigate(['categorias/categorias-list']);
   }
 
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

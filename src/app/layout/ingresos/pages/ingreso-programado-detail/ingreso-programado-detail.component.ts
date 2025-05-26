@@ -263,7 +263,7 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
     const formValue = this.isNewIngreso ? this.newIngresoForm.value : this.detailIngresoForm.value;
 
     formValue.IdUsuario = this.idUsuario;
-console.log(formValue)
+    console.log(formValue)
     let fechaLocal = formValue.FechaEjecucion;
 
     if (this.diaMesSeleccionado && formValue.Frecuencia == 'MENSUAL' && fechaLocal instanceof Date) {
@@ -316,6 +316,7 @@ console.log(formValue)
     const detailMessage = actionType === 'create'
       ? '¿Está seguro que desea crear este registro?'
       : '¿Está seguro que desea editar este registro?';
+    document.body.classList.add('blur-background');
 
     this._confirmationService.confirm({
       message: detailMessage,
@@ -460,7 +461,10 @@ console.log(formValue)
       this.deshabilitarBoton = !this.diaMesSeleccionado;
     } else {
       this.deshabilitarBoton = true;
-    }    
+    }
   }
 
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

@@ -62,7 +62,7 @@
                         </div>
                     </div>
 
-                    <p-dialog header="{{ dialogHeader }}" [(visible)]="mostrarDialogo" [modal]="true" [closable]="true"
+                    <p-dialog header="{{ dialogHeader }}" [(visible)]="mostrarDialogo" [modal]="true" [closable]="true" (onShow)="addBlur()" (onHide)="removeBlur()" appendTo="body"
                         [dismissableMask]="false" [style]="{width: '350px'}">
                         <form [formGroup]="correoForm" (ngSubmit)="enviarCorreo()">
                             <div class="p-fluid">

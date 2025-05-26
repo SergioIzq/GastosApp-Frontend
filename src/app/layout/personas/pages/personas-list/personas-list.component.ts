@@ -46,7 +46,7 @@ export class PersonasListComponent implements OnInit, OnDestroy {
   totalRecords: number = 0;
   first = 0;
   totalPages: number = 1;
-  idUsuario!:number;
+  idUsuario!: number;
   res: Excel = new Excel()
 
   constructor(
@@ -60,7 +60,7 @@ export class PersonasListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario:number)=>{
+    this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario
     });
 
@@ -155,22 +155,22 @@ export class PersonasListComponent implements OnInit, OnDestroy {
         'Nombre': item.Nombre,
       };
     });
-  
+
     // Crear una nueva hoja de trabajo de Excel
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-  
+
     // Crear un nuevo libro de Excel y agregar la hoja de trabajo
     const workbook: XLSX.WorkBook = {
       Sheets: { 'Personas': worksheet },
       SheetNames: ['Personas']
     };
-  
+
     // Generar el archivo Excel en formato binario
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  
+
     // Crear un blob para el archivo
     const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  
+
     // Guardar el archivo en la carpeta de descargas del usuario
     saveAs(blob, 'personas.xlsx');
   }
@@ -186,4 +186,11 @@ export class PersonasListComponent implements OnInit, OnDestroy {
     this.loadPersonas();
   }
 
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

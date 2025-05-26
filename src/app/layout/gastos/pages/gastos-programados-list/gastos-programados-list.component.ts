@@ -163,7 +163,7 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
 
   exportarAExcel(): void {
     const exportData = this.respuesta.Items.map(item => {
-      return {        
+      return {
         'Persona': item.Persona,
         'FormaPago': item.FormaPago,
         'Proveedor': item.Proveedor,
@@ -195,14 +195,14 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
   }
 
   // Función para transformar el objeto
-  transformData(data: ResponseData<GastoProgramado>) {    
+  transformData(data: ResponseData<GastoProgramado>) {
     return data.Items.map((item: any) => ({
       Id: item.Id,
       Importe: item.Monto,
       Proveedor: item.Proveedor.Nombre,
       CategoriaNombre: item.Concepto.Categoria.Nombre,
       Concepto: item.Concepto.Nombre,
-      Cuenta: item.Cuenta.Nombre,   
+      Cuenta: item.Cuenta.Nombre,
       Persona: item.Persona.Nombre,
       FormaPago: item.FormaPago.Nombre,
       FechaEjecucion: new Date(item.FechaEjecucion.toString().replace('Z', '')),
@@ -225,6 +225,13 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
   capitalizarPrimeraLetra(texto: string | null): string {
     if (!texto) return '';
     return texto.charAt(0).toUpperCase() + texto.slice(1);
-  }  
+  }
   
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

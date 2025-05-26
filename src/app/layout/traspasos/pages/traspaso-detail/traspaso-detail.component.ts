@@ -73,14 +73,14 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
 
     this.actionsSubject.pipe(filter(action => action.type === 'GetNewTraspasoSuccess'), takeUntil(this.destroy$))
       .subscribe((action: any) => {
-        if (action) {          
+        if (action) {
           this.cuentas = [...action.payload];
           this.filteredCuentasDestinos = this.cuentas.slice().sort((a, b) => a.Nombre.localeCompare(b.Nombre));
           this.filteredCuentasOrigen = this.cuentas.slice().sort((a, b) => a.Nombre.localeCompare(b.Nombre));
 
           if (!this.isNewTraspaso) {
             this.filterInitialCuentas();
-          }          
+          }
         }
       })
 
@@ -197,44 +197,45 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-    private showConfirmation(actionType: string, formValue: any) {
-      const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
-      const detailMessage = actionType === 'create'
-        ? '¿Está seguro que desea crear este registro?'
-        : '¿Está seguro que desea editar este registro?';
-  
-      this._confirmationService.confirm({
-        message: detailMessage,
-        header: headerMessage,
-        icon: 'pi pi-info-circle',
-        acceptLabel: 'Sí',
-        rejectLabel: 'No',
-        acceptButtonStyleClass: 'p-button-success',
-        rejectButtonStyleClass: 'p-button-danger',
-        accept: () => {
-          // Acción confirmada, proceder con el envío del formulario
-          if (actionType === 'create') {
-            this.createTraspaso(formValue);
-          } else {
-            this.updateTraspaso(formValue);
-          }
+  private showConfirmation(actionType: string, formValue: any) {
+    const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
+    const detailMessage = actionType === 'create'
+      ? '¿Está seguro que desea crear este registro?'
+      : '¿Está seguro que desea editar este registro?';
+    document.body.classList.add('blur-background');
+
+    this._confirmationService.confirm({
+      message: detailMessage,
+      header: headerMessage,
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        // Acción confirmada, proceder con el envío del formulario
+        if (actionType === 'create') {
+          this.createTraspaso(formValue);
+        } else {
+          this.updateTraspaso(formValue);
         }
-      });
-    }
-  
-    private createTraspaso(formattedFormValue: any) {
-      const newTraspasoData = { ...formattedFormValue };
-      this.store.dispatch(TraspasoDetailActions.RealizarTraspaso({ payload: newTraspasoData }));
-      this.deshabilitarBoton = true;
-    }
-  
-    private updateTraspaso(formattedFormValue: any) {
-      const updatedTraspasoData = { ...formattedFormValue };
-      updatedTraspasoData.Id = this.traspasoId;
-      this.store.dispatch(TraspasoDetailActions.UpdateTraspaso({ traspaso: updatedTraspasoData }));
-      this.detailTraspasoForm.markAsPristine();
-      this.deshabilitarBoton = true;
-    }
+      }
+    });
+  }
+
+  private createTraspaso(formattedFormValue: any) {
+    const newTraspasoData = { ...formattedFormValue };
+    this.store.dispatch(TraspasoDetailActions.RealizarTraspaso({ payload: newTraspasoData }));
+    this.deshabilitarBoton = true;
+  }
+
+  private updateTraspaso(formattedFormValue: any) {
+    const updatedTraspasoData = { ...formattedFormValue };
+    updatedTraspasoData.Id = this.traspasoId;
+    this.store.dispatch(TraspasoDetailActions.UpdateTraspaso({ traspaso: updatedTraspasoData }));
+    this.detailTraspasoForm.markAsPristine();
+    this.deshabilitarBoton = true;
+  }
 
   private replaceCommasWithDots(value: any): any {
     if (typeof value === 'string') {
@@ -308,5 +309,9 @@ export class TraspasoDetailComponent implements OnInit, OnDestroy {
     stringValue = stringValue.replace(/\./g, ',');
 
     return stringValue;
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
   }
 }

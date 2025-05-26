@@ -30,7 +30,7 @@ export class UsuarioDetailComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<UsuarioDetailState>,
-    private _store: Store<MenuState>,  
+    private _store: Store<MenuState>,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private location: Location,
@@ -61,7 +61,7 @@ export class UsuarioDetailComponent implements OnInit, OnDestroy {
     this.store.select(UsuarioSelector.selectLoading).pipe(takeUntil(this.destroy$)).subscribe((loading: boolean) => {
       this.loading = loading;
     });
-    
+
     this.error$ = this.store.select(UsuarioSelector.selectErrorCarga);
 
   }
@@ -108,4 +108,11 @@ export class UsuarioDetailComponent implements OnInit, OnDestroy {
     return '25rem';
   }
 
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

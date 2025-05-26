@@ -80,10 +80,10 @@ export class FormasPagoListComponent implements OnInit, OnDestroy {
 
     this.error$ = this.store.select(SelectFormasPagoList.selectErrorCarga);
 
-    this.actionsSubject.pipe(filter(action => action.type === 'DeleteFormaPagoSuccess'),takeUntil(this.destroy$))
+    this.actionsSubject.pipe(filter(action => action.type === 'DeleteFormaPagoSuccess'), takeUntil(this.destroy$))
       .subscribe((action: any) => {
         this.loadFormasPago()
-      });      
+      });
 
     this.error$ = this.store.select(selectErrorCarga);
 
@@ -157,22 +157,22 @@ export class FormasPagoListComponent implements OnInit, OnDestroy {
         'Nombre': item.Nombre,
       };
     });
-  
+
     // Crear una nueva hoja de trabajo de Excel
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-  
+
     // Crear un nuevo libro de Excel y agregar la hoja de trabajo
     const workbook: XLSX.WorkBook = {
       Sheets: { 'Forma de pago': worksheet },
       SheetNames: ['Forma de pago']
     };
-  
+
     // Generar el archivo Excel en formato binario
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  
+
     // Crear un blob para el archivo
     const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  
+
     // Guardar el archivo en la carpeta de descargas del usuario
     saveAs(blob, 'forma-pago.xlsx');
   }
@@ -188,4 +188,11 @@ export class FormasPagoListComponent implements OnInit, OnDestroy {
     this.loadFormasPago();
   }
 
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }
