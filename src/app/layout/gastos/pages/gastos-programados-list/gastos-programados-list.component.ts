@@ -170,7 +170,7 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
         'Categoria': item.Concepto.Categoria,
         'Concepto': item.Concepto,
         'Cuenta': item.Cuenta,
-        'Importe': item.Monto,
+        'Importe': item.Importe,
         'Descripcion': item.Descripcion,
       };
     });
@@ -198,7 +198,7 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
   transformData(data: ResponseData<GastoProgramado>) {
     return data.Items.map((item: any) => ({
       Id: item.Id,
-      Importe: item.Monto,
+      Importe: item.Importe,
       Proveedor: item.Proveedor.Nombre,
       CategoriaNombre: item.Concepto.Categoria.Nombre,
       Concepto: item.Concepto.Nombre,

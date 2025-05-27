@@ -39,26 +39,4 @@ export class TraspasosListEffects {
             })
         ))
     ));
-
-    exportExcel$ = createEffect(() => this.actions$.pipe(
-        ofType(TraspasosListActions.ExportExcelTraspaso),
-        mergeMap(({ res }) =>
-            this.traspasosService.exportExcel(res).pipe(
-                // Acción en caso de éxito
-                tap(() => {
-                    // Mostrar mensaje de éxito
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Operación exitosa',
-                        detail: 'Los datos se han exportado a Excel correctamente.',
-                        life: 5000
-                    });
-                }),
-                map(() => TraspasosListActions.ExportExcelTraspasoSuccess()),
-                catchError((error) => {
-                    return of(TraspasosListActions.ExportExcelTraspasoFailure({ errorMessage: error }));
-                })
-            )
-        )
-    ));
 }

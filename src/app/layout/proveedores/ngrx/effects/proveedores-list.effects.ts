@@ -40,26 +40,4 @@ export class ProveedoresListEffects {
       })
     ))
   ));
-
-  exportExcel$ = createEffect(() => this.actions$.pipe(
-    ofType(ProveedoresListActions.ExportExcelProveedores),
-    mergeMap(({ res }) =>
-      this.proveedorService.exportExcel(res).pipe(
-        // Acción en caso de éxito
-        tap(() => {
-          // Mostrar mensaje de éxito
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Operación exitosa',
-            detail: 'Los datos se han exportado a Excel correctamente.',
-            life: 5000
-          });
-        }),
-        map(() => ProveedoresListActions.ExportExcelProveedoresSuccess()),
-        catchError((error) => {
-          return of(ProveedoresListActions.ExportExcelProveedoresFailure({ errorMessage: error }));
-        })
-      )
-    )
-  ));
 }

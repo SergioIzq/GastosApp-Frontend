@@ -13,6 +13,7 @@ import { PrimeNgModule } from 'src/app/primeng/primeng.module';
 import { StoreModule } from '@ngrx/store';
 import * as CategoriasListReducers from './ngrx/reducer/categorias-list.reducer';
 import * as CategoriaDetailReducers from './ngrx/reducer/categoria-detail.reducer';
+import { ExportarExcelModule } from 'src/app/shared/excel/exportar-excel.module';
 
 const CATEGORIAS_COMPONENTS = [
     CategoriasListComponent,
@@ -39,6 +40,7 @@ const CATEGORIAS_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         CategoriasRoutingModule,
+        ExportarExcelModule,
         StoreModule.forFeature(CategoriasListReducers.categoriasListFeatureKey, CategoriasListReducers.reducer),
         StoreModule.forFeature(CategoriaDetailReducers.categoriaDetailFeatureKey, CategoriaDetailReducers.reducer),
         EffectsModule.forFeature(CATEGORIAS_EFFECTS),

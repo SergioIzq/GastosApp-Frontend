@@ -21,6 +21,7 @@ import { IngresosProgramadosListEffects } from './ngrx/effects/ingresos-programa
 import { IngresosProgramadosListComponent } from './pages/ingresos-programados-list/ingresos-programados-list.component';
 import { IngresoProgramadoDetailComponent } from './pages/ingreso-programado-detail/ingreso-programado-detail.component';
 import { IngresoProgramadoDetailEffects } from './ngrx/effects/ingreso-programado-detail.effects';
+import { ExportarExcelModule } from 'src/app/shared/excel/exportar-excel.module';
 
 const INGRESOS_COMPONENTS = [
   IngresosListComponent,
@@ -42,7 +43,7 @@ const INGRESOS_PROVIDERS = [
 
 @NgModule({
   declarations: [
-    ...INGRESOS_COMPONENTS,    
+    ...INGRESOS_COMPONENTS,
   ],
   imports: [
     CommonModule,
@@ -52,6 +53,7 @@ const INGRESOS_PROVIDERS = [
     RouterModule,
     PrimeNgModule,
     IngresosRoutingModule,
+    ExportarExcelModule,
     StoreModule.forFeature(IngresosListReducers.ingresosListFeatureKey, IngresosListReducers.reducer),
     StoreModule.forFeature(IngresoDetailReducers.ingresoDetailFeatureKey, IngresoDetailReducers.reducer),
     StoreModule.forFeature(IngresosProgramadosListReducers.ingresosProgramadosListFeatureKey, IngresosProgramadosListReducers.reducer),

@@ -30,48 +30,26 @@ export class ClientesListEffects {
 
   deleteCliente$ = createEffect(() => this.actions$.pipe(
     ofType(ClientesListActions.DeleteCliente),
-    mergeMap(action => 
+    mergeMap(action =>
       this.clientesService.delete(action.id).pipe(
         map((response: any) => {
-          this.messageService.add({ 
-            severity: 'success', 
-            summary: 'Operación exitosa', 
-            detail: 'Cliente eliminado correctamente', 
-            life: 5000 
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Operación exitosa',
+            detail: 'Cliente eliminado correctamente',
+            life: 5000
           });
           return ClientesListActions.DeleteClienteSuccess();
         }),
         catchError(error => {
           // Aquí podrías querer manejar el error de forma más específica
-          this.messageService.add({ 
-            severity: 'error', 
-            summary: 'Error', 
-            detail: 'No se pudo eliminar el cliente', 
-            life: 5000 
-          });
-          return of(ClientesListActions.DeleteClienteFailure({ errorMessage: error.message || 'Error desconocido' }));
-        })
-      )
-    )
-  ));
-  
-  exportExcel$ = createEffect(() => this.actions$.pipe(
-    ofType(ClientesListActions.ExportExcelClientes),
-    mergeMap(({ res }) =>
-      this.clientesService.exportExcel(res).pipe(
-        // Acción en caso de éxito
-        tap(() => {
-          // Mostrar mensaje de éxito
           this.messageService.add({
-            severity: 'success',
-            summary: 'Operación exitosa',
-            detail: 'Los datos se han exportado a Excel correctamente.',
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo eliminar el cliente',
             life: 5000
           });
-        }),
-        map(() => ClientesListActions.ExportExcelClientesSuccess()),
-        catchError((error) => {
-          return of(ClientesListActions.ExportExcelClientesFailure({ errorMessage: error }));
+          return of(ClientesListActions.DeleteClienteFailure({ errorMessage: error.message || 'Error desconocido' }));
         })
       )
     )

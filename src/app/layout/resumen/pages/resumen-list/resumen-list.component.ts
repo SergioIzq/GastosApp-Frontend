@@ -63,7 +63,7 @@ export class ResumenListComponent implements OnInit, OnDestroy, AfterViewInit {
   dataPie: any = [];
   optionsPie: any = [];
   options: any;
-  ingresosMonto: any = null;
+  ingresosImporte: any = null;
   isButtonDisabled: boolean = true;
   pageGastos: number = 1;
   sizeGastos: number = 10;
@@ -352,7 +352,7 @@ export class ResumenListComponent implements OnInit, OnDestroy, AfterViewInit {
   transformGastos(data: any): any[] {
     return data.map((item: any) => ({
       Id: item.Id,
-      Importe: item.Monto,
+      Importe: item.Importe,
       Proveedor: item.Proveedor ? item.Proveedor.Nombre : null,
       CategoriaNombre: item.Concepto ? item.Concepto.Categoria ? item.Concepto.Categoria.Nombre : null : null,
       Concepto: item.Concepto ? item.Concepto.Nombre : null,
@@ -367,7 +367,7 @@ export class ResumenListComponent implements OnInit, OnDestroy, AfterViewInit {
   transformIngresos(data: any): any[] {
     return data.map((item: any) => ({
       Id: item.Id,
-      Importe: item.Monto,
+      Importe: item.Importe,
       Cliente: item.Cliente ? item.Cliente.Nombre : null,
       CategoriaNombre: item.Concepto ? item.Concepto.Categoria ? item.Concepto.Categoria.Nombre : null : null,
       Concepto: item.Concepto ? item.Concepto.Nombre : null,

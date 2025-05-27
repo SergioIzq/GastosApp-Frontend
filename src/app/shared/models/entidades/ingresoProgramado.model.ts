@@ -14,7 +14,7 @@ export class IngresoProgramado {
     Cuenta!: Cuenta;
     IdUsuario!: number;
     FechaEjecucion!: Date;
-    Monto!: number;
+    Importe!: number;
     Activo!: boolean;
     Frecuencia!: string;
     HangfireJobId!: string

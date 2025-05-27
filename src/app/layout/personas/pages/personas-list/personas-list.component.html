@@ -27,9 +27,8 @@
 
                         <!-- Botón Exportar Excel -->
                         <div class="field col-12 md:col-4" style="width:200px; text-align: right;">
-                            <p-button label="Exportar Excel" pRipple severity="info" [raised]="true"
-                                icon="pi pi-file-excel" [disabled]="isButtonDisabled"
-                                (click)="exportarAExcel()"></p-button>
+                            <app-exportar-excel [columnasDisponibles]="columnas" [tamano]="this.size"
+                                [pagina]="this.page" (exportar)="onExportar($event)"></app-exportar-excel>
                         </div>
                     </div>
                 </ng-template>

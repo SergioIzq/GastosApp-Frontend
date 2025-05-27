@@ -86,12 +86,6 @@ export class IngresoService {
     return this.http.post<ResponseOne<IngresoProgramado>>(`${this.apiUrl}ingresoProgramado`, ingresoProgramado);
   }
 
-  exportExcel(res: Excel): Observable<any> {
-    const url = `${this.apiUrl}ingreso/exportExcel`;
-
-    return this.http.post<Excel>(url, res);
-  }
-
   getNewIngreso(idUsuario: number): Observable<IngresoRespuesta> {
     const url = `${this.apiUrl}ingreso/getNewIngreso/${idUsuario}`;
     return this.http.get<IngresoRespuesta>(url);

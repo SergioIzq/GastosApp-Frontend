@@ -41,26 +41,4 @@ export class CategoriasListEffects {
     ))
   ));
 
-  exportExcel$ = createEffect(() => this.actions$.pipe(
-    ofType(CategoriasListActions.ExportExcelCategoria),
-    mergeMap(({ res }) =>
-      this.categoriasService.exportExcel(res).pipe(
-        // Acción en caso de éxito
-        tap(() => {
-          // Mostrar mensaje de éxito
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Operación exitosa',
-            detail: 'Los datos se han exportado a Excel correctamente.',
-            life: 5000
-          });
-        }),
-        map(() => CategoriasListActions.ExportExcelCategoriaSuccess()),
-        catchError((error) => {
-          return of(CategoriasListActions.ExportExcelCategoriaFailure({ errorMessage: error }));
-        })
-      )
-    )
-  ));
-
 }

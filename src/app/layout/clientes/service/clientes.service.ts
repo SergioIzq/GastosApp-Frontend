@@ -5,7 +5,6 @@ import { Cliente } from 'src/app/shared/models/entidades/cliente.model';
 import { HttpParams } from '@angular/common/http';
 import { ResponseData } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
 import { ResponseOne } from 'src/app/shared/models/entidades/respuestas/respuestas-genericas/responseOne.model';
-import { Excel } from 'src/app/shared/models/entidades/excelEstado.model';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -29,7 +28,7 @@ export class ClienteService {
       .set('size', size)
       .set('idUsuario', idUsuario)
 
-      return this.http.get<ResponseData<Cliente>>(url, { params });
+    return this.http.get<ResponseData<Cliente>>(url, { params });
   }
 
   getById(id: number): Observable<Cliente> {
@@ -49,12 +48,6 @@ export class ClienteService {
 
   create(cliente: Cliente): Observable<ResponseOne<Cliente>> {
     return this.http.post<ResponseOne<Cliente>>(`${this.apiUrl}cliente`, cliente);
-  }
-
-  exportExcel(res: Excel): Observable<any> {
-    const url = `${this.apiUrl}cliente/exportExcel`;
-
-    return this.http.post<Excel>(url, res);
   }
 
 }

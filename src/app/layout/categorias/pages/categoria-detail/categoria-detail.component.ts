@@ -3,7 +3,6 @@ import { Subject, Observable, takeUntil, of, switchMap } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { Store, ActionsSubject } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as CategoriaDetailActions from '../../ngrx/actions/categoria-detail.actions';
 import * as CategoriaSelector from '../../ngrx/selectors/categoria-detail.selectors';
@@ -13,7 +12,6 @@ import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CategoriaDetailState } from 'src/app/shared/models/entidades/estados/categoriaDetail.model';
 import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
-import { DialogBlurService } from 'src/app/shared/service/dialog.service';
 
 @Component({
   selector: 'app-categoria-detail',
@@ -35,7 +33,6 @@ export class CategoriaDetailComponent implements OnInit, OnDestroy {
   IdUsuario!: number;
   deshabilitarBoton: boolean = false;
   private _confirmationService: ConfirmationService = inject(ConfirmationService);
-  private _dialogService: DialogBlurService = inject(DialogBlurService);
 
   constructor(
     private store: Store<CategoriaDetailState>,

@@ -1,0 +1,26 @@
+<p-button label="Exportar Excel" icon="pi pi-file-excel" (onClick)="visible = true"></p-button>
+<p-dialog appendTo="body" header="Exportar" [(visible)]="visible" [modal]="true" [style]="{ width: '500px' }"
+  (onHide)="cerrar()" (onShow)="addBlur()" (onHide)="cerrar()">
+  <div class="p-fluid">
+    <div class="field">
+      <label>Origen de datos</label><br />
+      <p-radioButton name="origen" value="tabla" [(ngModel)]="opciones.origen" inputId="tabla"
+        label="Datos visibles en tabla"></p-radioButton><br /><br />
+      <p-radioButton name="origen" value="bbdd" [(ngModel)]="opciones.origen" inputId="bbdd"
+        label="Todos los datos almacenados"></p-radioButton>
+    </div>
+
+    <div class="field">
+      <label>Columnas a exportar</label>
+      <p-multiSelect [showToggleAll]="true" [appendTo]="'body'" [filter]="true" [options]="columnasDisponibles"
+        [(ngModel)]="opciones.columnas" placeholder="Selecciona columnas"></p-multiSelect>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" icon="pi pi-times" (onClick)="cerrar()" severity="danger"></p-button>
+    <p-button label="Exportar" icon="pi pi-check" (onClick)="confirmar()" severity="success"
+      [disabled]="!opciones.columnas || opciones.columnas.length === 0">
+    </p-button>
+  </ng-template>
+</p-dialog>

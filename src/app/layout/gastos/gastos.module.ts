@@ -21,6 +21,7 @@ import * as GastosListReducer from './ngrx/reducer/gastos-list.reducer'
 import * as GastosProgramadosListReducer from './ngrx/reducer/gastos-programados-list.reducer'
 import * as GastoProgramadoDetailReducer from './ngrx/reducer/gasto-programado-detail.reducer'
 import { GastoProgramadoDetailEffects } from './ngrx/effects/gasto-programado-detail.effects';
+import { ExportarExcelModule } from 'src/app/shared/excel/exportar-excel.module';
 
 
 const GASTOS_COMPONENTS = [
@@ -53,6 +54,7 @@ const GASTOS_PROVIDERS = [
     RouterModule,
     PrimeNgModule,
     GastosRoutingModule,
+    ExportarExcelModule,
     StoreModule.forFeature(GastosListReducer.gastosListFeatureKey, GastosListReducer.reducer),
     StoreModule.forFeature(GastoDetailReducer.gastoDetailFeatureKey, GastoDetailReducer.reducer),
     StoreModule.forFeature(GastosProgramadosListReducer.gastosProgramadosListFeatureKey, GastosProgramadosListReducer.reducer),

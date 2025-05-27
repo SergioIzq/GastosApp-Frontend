@@ -41,25 +41,4 @@ export class FormasPagoListEffects {
     ))
   ));
 
-  exportExcel$ = createEffect(() => this.actions$.pipe(
-    ofType(FormasPagosListActions.ExportExcelFormaPago),
-    mergeMap(({ res }) =>
-      this.formasPagoService.exportExcel(res).pipe(
-        // Acción en caso de éxito
-        tap(() => {
-          // Mostrar mensaje de éxito
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Operación exitosa',
-            detail: 'Los datos se han exportado a Excel correctamente.',
-            life: 5000
-          });
-        }),
-        map(() => FormasPagosListActions.ExportExcelFormaPagoSuccess()),
-        catchError((error) => {
-          return of(FormasPagosListActions.ExportExcelFormaPagoFailure({ errorMessage: error }));
-        })
-      )
-    )
-  ));
 }

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of, mergeMap } from "rxjs";
-import { map, catchError, tap } from "rxjs/operators";
+import { map, catchError } from "rxjs/operators";
 import * as CuentasListActions from 'src/app/layout/cuentas/ngrx/actions/cuentas-list.actions';
 import { CuentaService } from '../../service/cuentas.service';
 import { ResponseData } from '../../../../shared/models/entidades/respuestas/respuestas-genericas/responseData.model';
@@ -39,27 +39,5 @@ export class CuentasListEffects {
         return of(CuentasListActions.DeleteCuentaFailure({ errorMessage: error }));
       })
     ))
-  ));
-
-  exportExcel$ = createEffect(() => this.actions$.pipe(
-    ofType(CuentasListActions.ExportExcelCuentas),
-    mergeMap(({ res }) =>
-      this.cuentasService.exportExcel(res).pipe(
-        // Acción en caso de éxito
-        tap(() => {
-          // Mostrar mensaje de éxito
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Operación exitosa',
-            detail: 'Los datos se han exportado a Excel correctamente.',
-            life: 5000
-          });
-        }),
-        map(() => CuentasListActions.ExportExcelCuentasSuccess()),
-        catchError((error) => {
-          return of(CuentasListActions.ExportExcelCuentasFailure({ errorMessage: error }));
-        })
-      )
-    )
   ));
 }
