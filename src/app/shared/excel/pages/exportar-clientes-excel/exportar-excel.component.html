@@ -13,7 +13,9 @@
     <div class="field">
       <label>Columnas a exportar</label>
       <p-multiSelect [showToggleAll]="true" [appendTo]="'body'" [filter]="true" [options]="columnasDisponibles"
-        [(ngModel)]="opciones.columnas" placeholder="Selecciona columnas"></p-multiSelect>
+        [(ngModel)]="opciones.columnas" placeholder="Selecciona columnas" defaultLabel="Selecciona"
+        selectAllLabel="Seleccionar todos" unselectAllLabel="Deseleccionar todos" filterPlaceholder="Buscar"
+        [displaySelectedLabel]="true" selectedItemsLabel="{0} elementos seleccionados"></p-multiSelect>
     </div>
   </div>
 

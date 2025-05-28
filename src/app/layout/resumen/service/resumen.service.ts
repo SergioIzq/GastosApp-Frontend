@@ -54,14 +54,4 @@ export class ResumenService {
     }
   }
 
-  exportExcel(datos: ResumenDatos, dirPath: string): Observable<any> {
-    const url = `${this.apiUrl}resumen/exportExcel`;
-    const body = {
-      Datos: datos,
-      dirPath: dirPath
-    }
-    return this.http.post<any>(url, body);
-  }
-
-
 }

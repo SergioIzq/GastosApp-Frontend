@@ -15,6 +15,8 @@ import { saveAs } from 'file-saver';
 import { GastoProgramado } from 'src/app/shared/models/entidades/gastoProgramado.model';
 import { EntidadListState } from 'src/app/shared/models/entidades/estados/entidadListState.model';
 import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
+import { exportarExcel } from 'src/app/shared/excel/actions/excel.actions';
+import { ExportarExcelOpciones } from 'src/app/shared/excel/exportar-excel-opciones.interface';
 
 @Component({
   selector: 'app-gastos-programados-list',
@@ -45,6 +47,7 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
   first = 0;
   totalPages: number = 1;
   idUsuario!: number;
+  columnas: { label: string; value: string }[] = [];
 
   constructor(
     private store: Store<EntidadListState<GastoProgramado>>,
@@ -92,6 +95,17 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
         this.totalRecords = this.respuesta.TotalRecords;
         this.totalPages = Math.ceil(this.totalRecords / this.size);
         this.transformedData = this.transformData(respuesta);
+
+        if (this.respuesta.Items && this.respuesta.Items.length > 0) {
+          this.columnas = Object.keys(this.respuesta.Items[0])
+            .filter(key => key !== 'Id' && key !== 'IdUsuario' && key !== 'FechaCreacion' && key !== 'HangfireJobId')
+            .map(key => ({
+              label: this.splitCamelCase(key),
+              value: key
+            }));
+        } else {
+          this.columnas = [];
+        }
 
         if (this.respuesta.Items.length > 0) {
           this.isButtonDisabled = false;
@@ -161,37 +175,9 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
     return `${day}/${month}/${year}`;
   }
 
-  exportarAExcel(): void {
-    const exportData = this.respuesta.Items.map(item => {
-      return {
-        'Persona': item.Persona,
-        'FormaPago': item.FormaPago,
-        'Proveedor': item.Proveedor,
-        'Categoria': item.Concepto.Categoria,
-        'Concepto': item.Concepto,
-        'Cuenta': item.Cuenta,
-        'Importe': item.Importe,
-        'Descripcion': item.Descripcion,
-      };
-    });
-
-    // Crear una nueva hoja de trabajo de Excel
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-
-    // Crear un nuevo libro de Excel y agregar la hoja de trabajo
-    const workbook: XLSX.WorkBook = {
-      Sheets: { 'Gastos': worksheet },
-      SheetNames: ['Gastos']
-    };
-
-    // Generar el archivo Excel en formato binario
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-
-    // Crear un blob para el archivo
-    const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-    // Guardar el archivo en la carpeta de descargas del usuario
-    saveAs(blob, 'gastos-programados.xlsx');
+  onExportar(opciones: ExportarExcelOpciones) {
+    opciones.nombreArchivo = "Gastos Programados";
+    this.store.dispatch(exportarExcel({ url: "gastoProgramado", opciones }));
   }
 
   // Función para transformar el objeto
@@ -226,12 +212,16 @@ export class GastosProgramadosListComponent implements OnInit, OnDestroy {
     if (!texto) return '';
     return texto.charAt(0).toUpperCase() + texto.slice(1);
   }
-  
+
   addBlur() {
     document.body.classList.add('blur-background');
   }
 
   removeBlur() {
     document.body.classList.remove('blur-background');
+  }
+
+  splitCamelCase(text: string) {
+    return text.replace(/([a-z])([A-Z])/g, '$1 $2');
   }
 }

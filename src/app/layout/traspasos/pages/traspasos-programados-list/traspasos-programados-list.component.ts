@@ -15,6 +15,8 @@ import { saveAs } from 'file-saver';
 import { TraspasoProgramado } from 'src/app/shared/models/entidades/traspasoProgramado.model';
 import { EntidadListState } from 'src/app/shared/models/entidades/estados/entidadListState.model';
 import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
+import { ExportarExcelOpciones } from 'src/app/shared/excel/exportar-excel-opciones.interface';
+import { exportarExcel } from 'src/app/shared/excel/actions/excel.actions';
 
 @Component({
   selector: 'app-traspasos-programados-list',
@@ -45,6 +47,7 @@ export class TraspasosProgramadosListComponent implements OnInit, OnDestroy {
   first = 0;
   totalPages: number = 1;
   idUsuario!: number;
+  columnas: { label: string; value: string }[] = [];
 
   constructor(
     private store: Store<EntidadListState<TraspasoProgramado>>,
@@ -92,6 +95,17 @@ export class TraspasosProgramadosListComponent implements OnInit, OnDestroy {
         this.totalRecords = this.respuesta.TotalRecords;
         this.totalPages = Math.ceil(this.totalRecords / this.size);
         this.transformedData = this.transformData(respuesta);
+
+        if (this.respuesta.Items && this.respuesta.Items.length > 0) {
+          this.columnas = Object.keys(this.respuesta.Items[0])
+            .filter(key => key !== 'Id' && key !== 'IdUsuario' && key !== 'FechaCreacion' && key !== 'HangfireJobId')
+            .map(key => ({
+              label: this.splitCamelCase(key),
+              value: key
+            }));
+        } else {
+          this.columnas = [];
+        }
 
         if (this.respuesta.Items.length > 0) {
           this.isButtonDisabled = false;
@@ -161,36 +175,9 @@ export class TraspasosProgramadosListComponent implements OnInit, OnDestroy {
     return `${day}/${month}/${year}`;
   }
 
-  exportarAExcel(): void {
-    const exportData = this.respuesta.Items.map(item => {
-      return {
-        'Fecha': item.Fecha,
-        'CuentaOrigen': item.CuentaOrigen.Nombre,
-        'SaldoCuentaOrigen': item.SaldoCuentaOrigen,
-        'CuentaDestino': item.CuentaDestino.Nombre,
-        'SaldoCuentaDestino': item.SaldoCuentaDestino,
-        'Descripcion': item.Descripcion,
-        'Importe': item.Importe,
-      };
-    });
-
-    // Crear una nueva hoja de trabajo de Excel
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-
-    // Crear un nuevo libro de Excel y agregar la hoja de trabajo
-    const workbook: XLSX.WorkBook = {
-      Sheets: { 'Traspasos': worksheet },
-      SheetNames: ['Traspasos']
-    };
-
-    // Generar el archivo Excel en formato binario
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-
-    // Crear un blob para el archivo
-    const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-    // Guardar el archivo en la carpeta de descargas del usuario
-    saveAs(blob, 'traspasos-programados.xlsx');
+  onExportar(opciones: ExportarExcelOpciones) {
+    opciones.nombreArchivo = "Traspasos Programados";
+    this.store.dispatch(exportarExcel({ url: "traspasoProgramado", opciones }));
   }
 
   transformData(data: ResponseData<TraspasoProgramado>) {
@@ -229,5 +216,9 @@ export class TraspasosProgramadosListComponent implements OnInit, OnDestroy {
 
   removeBlur() {
     document.body.classList.remove('blur-background');
+  }
+
+  splitCamelCase(text: string) {
+    return text.replace(/([a-z])([A-Z])/g, '$1 $2');
   }
 }

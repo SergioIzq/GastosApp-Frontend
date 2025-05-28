@@ -584,3 +584,8 @@ body.dark-mode .p-multiselect-header {
   background-color: #333; /* color oscuro de ejemplo */
   color: #eee; /* si quieres también cambiar el texto */
 }
+
+body.dark-mode .p-multiselect-filter{
+    background-color: #333;
+    color: white;
+}

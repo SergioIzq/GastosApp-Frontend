@@ -41,25 +41,4 @@ export class GastosListEffects {
     ))
   ));
 
-  exportExcel$ = createEffect(() => this.actions$.pipe(
-    ofType(GastosListActions.ExportExcelGasto),
-    mergeMap(({ res }) =>
-      this.gastosService.exportExcel(res).pipe(
-        // Acción en caso de éxito
-        tap(() => {
-          // Mostrar mensaje de éxito
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Operación exitosa',
-            detail: 'Los datos se han exportado a Excel correctamente.',
-            life: 5000
-          });
-        }),
-        map(() => GastosListActions.ExportExcelGastoSuccess()),
-        catchError((error) => {
-          return of(GastosListActions.ExportExcelGastoFailure({ errorMessage: error }));
-        })
-      )
-    )
-  ));
 }

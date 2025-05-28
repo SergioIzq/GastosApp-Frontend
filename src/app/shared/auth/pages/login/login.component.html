@@ -1,0 +1,99 @@
+<div class="card">
+    <div class="p-grid p-justify-center p-align-center">
+
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <p-fieldset legend="Datos inicio de sesión">
+                <div class="grid p-fluid mt-3">
+                    <!-- Primera fila de inputs -->
+                    <div class="field col-12 md:col-12">
+                        <span class="p-float-label">
+                            <input type="email" id="Correo" pInputText formControlName="Correo">
+                            <label for="Correo">Correo electrónico</label>
+                            <div *ngIf="loginForm.get('Correo')?.invalid && (loginForm.get('Correo')?.['dirty'] || loginForm.get('Correo')?.['touched'])"
+                                class="text-danger">
+                                <div *ngIf="loginForm.get('Correo')?.errors?.['required']">El campo
+                                    Correo electrónico
+                                    es
+                                    obligatorio.</div>
+                                <div *ngIf="loginForm.get('Correo')?.errors?.['email']">Formato email inválido.
+                                    Ej: sergio@gmail.com</div>
+                                <div *ngIf="loginForm.get('Correo')?.errors?.['maxlength']">Ha excedido
+                                    el
+                                    máximo número de caracteres (5)</div>
+                            </div>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-12">
+                        <span class="p-float-label">
+                            <p-password formControlName="Contrasena" [feedback]="false" [toggleMask]="true" />
+                            <label for="Contrasena">Contraseña</label>
+                            <div *ngIf="loginForm.get('Contrasena')?.invalid && (loginForm.get('Contrasena')?.['dirty'] || loginForm.get('Contrasena')?.['touched'])"
+                                class="text-danger">
+                                <div *ngIf="loginForm.get('Contrasena')?.errors?.['required']">El campo
+                                    Contraseña
+                                    es
+                                    obligatorio.</div>
+                                <div *ngIf="loginForm.get('Contrasena')?.errors?.['maxlength']">Ha excedido
+                                    el
+                                    máximo número de caracteres (5)</div>
+                            </div>
+                        </span>
+                    </div>
+                    <!-- Fila de botones -->
+
+                    <div class="field col-12 md:col-12" style="text-align: center;">
+                        <p-button label="Iniciar sesión" icon="pi pi-check" severity="success" [raised]="true"
+                            iconPos="right" [disabled]="loginForm.invalid || !loginForm.dirty || deshabilitarBoton"
+                            type="submit" [style]="{'width': '190px', 'margin-top': '1rem'}">
+                        </p-button>
+                    </div>
+
+                    <div class="field col-12 md:col-12 flex flex-column md:flex-row justify-content-center align-items-center gap-2"
+                        style="margin-top: 1rem;">
+                        <div>
+                            <span class="enlace" (click)="abrirDialogo('recuperar')">¿Has olvidado tu contraseña?</span>
+                        </div>
+                        <div class="hidden md:inline mx-2">|</div>
+                        <div>
+                            <span class="enlace" (click)="abrirDialogo('confirmar')">Reenviar correo de
+                                confirmación</span>
+                        </div>
+                    </div>
+
+                    <p-dialog header="{{ dialogHeader }}" [(visible)]="mostrarDialogo" [modal]="true" [closable]="true"
+                        (onShow)="addBlur()" (onHide)="removeBlur()" appendTo="body" [dismissableMask]="false"
+                        [style]="{width: '350px'}">
+                        <form [formGroup]="correoForm" (ngSubmit)="enviarCorreo()">
+                            <div class="p-fluid">
+                                <div class="field">
+                                    <span class="p-float-label mt-4">
+                                        <input id="Correo" type="email" pInputText formControlName="Correo" />
+                                        <label htmlFor="Correo">Correo electrónico</label>
+                                        <small
+                                            *ngIf="correoForm.get('Correo')?.invalid && correoForm.get('Correo')?.touched"
+                                            class="text-danger">
+                                            Introduce un correo válido.
+                                        </small>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-dialog-footer" style="text-align: center;">
+                                <p-button label="Enviar" icon="pi pi-envelope" type="submit"
+                                    [disabled]="correoForm.invalid" severity="success" />
+                            </div>
+                        </form>
+                    </p-dialog>
+
+                </div>
+            </p-fieldset>
+        </form>
+    </div>
+
+
+</div>
+
+<div *ngIf="loading" class="overlay">
+    <p-progressSpinner ariaLabel="loading" />
+</div>

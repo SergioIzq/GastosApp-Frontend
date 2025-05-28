@@ -88,12 +88,6 @@ export class GastoService {
     return this.http.post<ResponseOne<GastoProgramado>>(`${this.apiUrl}gastoProgramado`, gastoProgramado);
   }
 
-  exportExcel(res: Excel): Observable<any> {
-    const url = `${this.apiUrl}gasto/exportExcel`;
-
-    return this.http.post<Excel>(url, res);
-  }
-
   getNewGasto(idUsuario: number): Observable<GastoRespuesta>{    
     const url = `${this.apiUrl}gasto/getNewGasto/${idUsuario}`;
     return this.http.get<GastoRespuesta>(url);
