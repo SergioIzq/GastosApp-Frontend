@@ -57,10 +57,4 @@ export class ConceptoService {
     return this.http.get<ResponseData<Categoria>>(url);
   }
 
-  exportExcel(res: Excel): Observable<any> {
-    const url = `${this.apiUrl}concepto/exportExcel`;
-
-    return this.http.post<Excel>(url, res);
-  }
-
 }

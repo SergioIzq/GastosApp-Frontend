@@ -24,11 +24,6 @@
         <p-button label="Limpiar Filtros" severity="warning" icon="pi pi-times" [disabled]="puedeBuscar"
             (click)="limpiarFiltros()"></p-button>
     </div>
-    <!-- Botón Exportar Excel -->
-    <div class="field col-12 md:col-2 md:mt-4">
-        <p-button label="Exportar Excel" pRipple severity="info" [raised]="true" icon="pi pi-file-excel"
-            [disabled]="isButtonDisabled" (click)="exportarAExcel()"></p-button>
-    </div>
 
     <div class="field-group col-12 md:col-12" *ngIf="mostrarContenido">
         <h3>Ingresos</h3>

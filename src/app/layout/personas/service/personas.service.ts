@@ -51,10 +51,4 @@ export class PersonaService {
     return this.http.post<ResponseOne<Persona>>(`${this.apiUrl}persona`, persona);
   }
 
-  exportExcel(res: Excel): Observable<any> {
-    const url = `${this.apiUrl}persona/exportExcel`;
-
-    return this.http.post<Excel>(url, res);
-  }
-
 }

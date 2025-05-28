@@ -41,25 +41,4 @@ export class IngresosListEffects {
     ))
   ));
 
-  exportExcel$ = createEffect(() => this.actions$.pipe(
-    ofType(IngresosListActions.ExportExcelIngreso),
-    mergeMap(({ res }) =>
-      this.ingresosService.exportExcel(res).pipe(
-        // Acción en caso de éxito
-        tap(() => {
-          // Mostrar mensaje de éxito
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Operación exitosa',
-            detail: 'Los datos se han exportado a Excel correctamente.',
-            life: 5000
-          });
-        }),
-        map(() => IngresosListActions.ExportExcelIngresoSuccess()),
-        catchError((error) => {
-          return of(IngresosListActions.ExportExcelIngresoFailure({ errorMessage: error }));
-        })
-      )
-    )
-  ));
 }

@@ -12,7 +12,7 @@ export class Gasto {
     Proveedor!: Proveedor;
     FormaPago!: FormaPago;
     Cuenta!: Cuenta;
-    Monto!: number | null;
+    Importe!: number | null;
     Fecha!: Date;
     Descripcion!:string;
     IdUsuario!: number;

@@ -50,10 +50,4 @@ export class CuentaService {
   create(cuenta: Cuenta): Observable<ResponseOne<Cuenta>> {
     return this.http.post<ResponseOne<Cuenta>>(`${this.apiUrl}cuenta`, cuenta);
   }
-
-  exportExcel(res: Excel): Observable<any> {
-    const url = `${this.apiUrl}cuenta/exportExcel`;
-
-    return this.http.post<Excel>(url, res);
-  }
 }

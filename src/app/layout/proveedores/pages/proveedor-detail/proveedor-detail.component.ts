@@ -104,7 +104,7 @@ export class ProveedorDetailComponent implements OnInit, OnDestroy {
         this.router.navigate(['proveedores/proveedor-detail', action.proveedor.Item.Id])
         this.isNewProveedor = false;
         this.detailProveedorForm.patchValue(action.Item);
-        
+
       });
     this.detailProveedorForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.deshabilitarBoton = false;
@@ -132,11 +132,12 @@ export class ProveedorDetailComponent implements OnInit, OnDestroy {
   }
 
   // Método privado para mostrar el modal de confirmación
-  private showConfirmation(actionType: string, formValue: any) {    
+  private showConfirmation(actionType: string, formValue: any) {
     const headerMessage = actionType === 'create' ? 'Confirmar creación' : 'Confirmar edición';
     const detailMessage = actionType === 'create'
       ? '¿Está seguro que desea crear este registro?'
       : '¿Está seguro que desea editar este registro?';
+    document.body.classList.add('blur-background');
 
     this._confirmationService.confirm({
       message: detailMessage,
@@ -177,4 +178,7 @@ export class ProveedorDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['proveedores/proveedores-list']);
   }
 
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

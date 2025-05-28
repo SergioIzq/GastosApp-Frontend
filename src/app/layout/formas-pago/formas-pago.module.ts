@@ -13,6 +13,7 @@ import { PrimeNgModule } from 'src/app/primeng/primeng.module';
 import { StoreModule } from '@ngrx/store';
 import * as FormaPagoDetailReducers from './ngrx/reducers/forma-pago-detail.reducer'
 import * as FormasPagoListReducers from './ngrx/reducers/formas-pago-list.reducer'
+import { ExportarExcelModule } from 'src/app/shared/excel/exportar-excel.module';
 
 const FORMAS_PAGO_COMPONENTS = [
     FormasPagoListComponent,
@@ -39,6 +40,7 @@ const FORMAS_PAGO_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         FormasPagoRoutingModule,
+        ExportarExcelModule,
         StoreModule.forFeature(FormaPagoDetailReducers.formaPagoDetailFeatureKey, FormaPagoDetailReducers.reducer),
         StoreModule.forFeature(FormasPagoListReducers.formasPagoListFeatureKey, FormasPagoListReducers.reducer),
         EffectsModule.forFeature(FORMAS_PAGO_EFFECTS),

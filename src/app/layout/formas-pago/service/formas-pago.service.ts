@@ -51,10 +51,4 @@ export class FormasPagoService {
     return this.http.post<ResponseOne<FormaPago>>(`${this.apiUrl}formapago`, formapago);
   }
 
-  exportExcel(res: Excel): Observable<any> {
-    const url = `${this.apiUrl}formapago/exportExcel`;
-
-    return this.http.post<Excel>(url, res);
-  }
-
 }

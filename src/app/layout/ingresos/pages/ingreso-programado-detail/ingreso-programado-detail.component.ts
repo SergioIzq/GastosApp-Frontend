@@ -74,7 +74,7 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
     this.newIngresoForm = this.fb.group({
       IdUsuario: [''],
       HangfireJobId: [''],
-      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
+      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
       Cliente: ['', [Validators.required]],
@@ -91,7 +91,7 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
       Id: [''],
       IdUsuario: [''],
       HangfireJobId: [''],
-      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
+      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
       Categoria: ['', [Validators.required]],
@@ -201,13 +201,13 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
           this.categorias = [...ingresoByIdRespuesta.IngresoRespuesta.ListaCategorias];
           this.cdRef.detectChanges();
 
-          const monto = this.replaceDotsWithCommas(ingreso.Monto);
+          const importe = this.replaceDotsWithCommas(ingreso.Importe);
           this.selectedCategoria = ingreso.Concepto.Categoria.Id;
           this.selectedConceptoId = ingreso.Concepto.Id;
 
           this.detailIngresoForm.patchValue({
             ...ingreso,
-            Monto: monto,
+            Importe: importe,
             Categoria: ingreso.Concepto.Categoria,
           });
 
@@ -263,7 +263,7 @@ export class IngresoProgramadoDetailComponent implements OnInit, OnDestroy {
     const formValue = this.isNewIngreso ? this.newIngresoForm.value : this.detailIngresoForm.value;
 
     formValue.IdUsuario = this.idUsuario;
-console.log(formValue)
+    console.log(formValue)
     let fechaLocal = formValue.FechaEjecucion;
 
     if (this.diaMesSeleccionado && formValue.Frecuencia == 'MENSUAL' && fechaLocal instanceof Date) {
@@ -294,12 +294,12 @@ console.log(formValue)
       fechaLocal = new Date(fechaLocal.getTime() - offset);
     }
 
-    const formattedImporte = this.replaceCommasWithDots(formValue.Monto);
+    const formattedImporte = this.replaceCommasWithDots(formValue.Importe);
 
-    // Crea un nuevo objeto con el Monto formateado
+    // Crea un nuevo objeto con el Importe formateado
     const formattedFormValue = {
       ...formValue,
-      Monto: formattedImporte,
+      Importe: formattedImporte,
       FechaEjecucion: fechaLocal
     };
     console.log(formValue)
@@ -316,6 +316,7 @@ console.log(formValue)
     const detailMessage = actionType === 'create'
       ? '¿Está seguro que desea crear este registro?'
       : '¿Está seguro que desea editar este registro?';
+    document.body.classList.add('blur-background');
 
     this._confirmationService.confirm({
       message: detailMessage,
@@ -460,7 +461,10 @@ console.log(formValue)
       this.deshabilitarBoton = !this.diaMesSeleccionado;
     } else {
       this.deshabilitarBoton = true;
-    }    
+    }
   }
 
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

@@ -13,6 +13,7 @@ import { PrimeNgModule } from 'src/app/primeng/primeng.module';
 import * as ProveedoresListReducers from './ngrx/reducers/proveedores-list.reducer';
 import * as ProveedorDetailReducers from './ngrx/reducers/proveedor-detail.reducer';
 import { StoreModule } from '@ngrx/store';
+import { ExportarExcelModule } from 'src/app/shared/excel/exportar-excel.module';
 
 const PROVEEDORES_COMPONENTS = [
     ProveedoresListComponent,
@@ -39,6 +40,7 @@ const PROVEEDORES_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         ProveedoresRoutingModule,
+        ExportarExcelModule,
         StoreModule.forFeature(ProveedoresListReducers.proveedoresListFeatureKey, ProveedoresListReducers.reducer),
         StoreModule.forFeature(ProveedorDetailReducers.proveedorFeatureKey, ProveedorDetailReducers.reducer),
         EffectsModule.forFeature(PROVEEDORES_EFFECTS),

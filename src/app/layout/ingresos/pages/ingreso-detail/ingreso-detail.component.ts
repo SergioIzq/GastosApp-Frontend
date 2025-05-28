@@ -67,7 +67,7 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
 
     this.newIngresoForm = this.fb.group({
       IdUsuario: [''],
-      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
+      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Fecha: ['', [Validators.required]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
@@ -81,7 +81,7 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
     this.detailIngresoForm = this.fb.group({
       Id: [''],
       IdUsuario: [''],
-      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
+      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Fecha: ['', [Validators.required]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
@@ -101,31 +101,31 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
       this.route.paramMap,
       this._store.select(selectUserId).pipe(filter(id => id > 0))
     ])
-    .pipe(
-      takeUntil(this.destroy$),
-    )
-    .subscribe(([params, idUsuario]) => {
-      this.idUsuario = idUsuario;
-    
-      const idString = params.get('id');
-      const id = parseInt(idString!, 10);
-      this.ingresoId = id;
-    
-      if (id === 0) {
-        this.isNewIngreso = true;
-        this.ingresoPorId$ = of(null);
-        this.newIngresoForm.patchValue({
-          Fecha: new Date().toLocaleDateString('es-ES')
-        });
-    
-        this.store.dispatch(IngresoDetailActions.GetNewIngreso({ payload: idUsuario }));
-      } else {
-        this.isNewIngreso = false;
-        this.store.dispatch(IngresoDetailActions.GetIngreso({ id }));
-        this.ingresoPorId$ = this.store.select(IngresoSelector.selectedIngresoSelector);
-      }
-    });
-    
+      .pipe(
+        takeUntil(this.destroy$),
+      )
+      .subscribe(([params, idUsuario]) => {
+        this.idUsuario = idUsuario;
+
+        const idString = params.get('id');
+        const id = parseInt(idString!, 10);
+        this.ingresoId = id;
+
+        if (id === 0) {
+          this.isNewIngreso = true;
+          this.ingresoPorId$ = of(null);
+          this.newIngresoForm.patchValue({
+            Fecha: new Date().toLocaleDateString('es-ES')
+          });
+
+          this.store.dispatch(IngresoDetailActions.GetNewIngreso({ payload: idUsuario }));
+        } else {
+          this.isNewIngreso = false;
+          this.store.dispatch(IngresoDetailActions.GetIngreso({ id }));
+          this.ingresoPorId$ = this.store.select(IngresoSelector.selectedIngresoSelector);
+        }
+      });
+
 
     this.actionsSubject.pipe(filter(action => action.type === 'CreateIngresoSuccess'), takeUntil(this.destroy$))
       .subscribe((action: any) => {
@@ -169,14 +169,14 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
           // Convierte la fecha de UTC a local
           const fechaUTC = new Date(ingreso.Fecha);
           const fechaLocal = new Date(fechaUTC.getTime() - fechaUTC.getTimezoneOffset() * 60000);
-          const monto = this.replaceDotsWithCommas(ingreso.Monto);
+          const importe = this.replaceDotsWithCommas(ingreso.Importe);
           this.selectedCategoria = ingreso.Concepto.Categoria.Id;
           this.selectedConceptoId = ingreso.Concepto.Id;
 
           this.detailIngresoForm.patchValue({
             ...ingreso,
             Fecha: fechaLocal,
-            Monto: monto,
+            Importe: importe,
             Categoria: ingreso.Concepto.Categoria,
           });
 
@@ -219,12 +219,12 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
 
     const fechaUTC = new Date(fechaLocal.getTime() - fechaLocal.getTimezoneOffset() * 60000).toISOString();
 
-    const formattedImporte = this.replaceCommasWithDots(formValue.Monto);
+    const formattedImporte = this.replaceCommasWithDots(formValue.Importe);
 
-    // Crea un nuevo objeto con el Monto formateado
+    // Crea un nuevo objeto con el Importe formateado
     const formattedFormValue = {
       ...formValue,
-      Monto: formattedImporte
+      Importe: formattedImporte
     };
 
     if (this.isNewIngreso) {
@@ -338,6 +338,10 @@ export class IngresoDetailComponent implements OnInit, OnDestroy {
         a.Nombre.localeCompare(b.Nombre)
       ) : [];
     }
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
   }
 
 }

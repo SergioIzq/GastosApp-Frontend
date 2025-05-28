@@ -74,7 +74,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
     this.newGastoForm = this.fb.group({
       IdUsuario: [''],
       HangfireJobId: [''],
-      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
+      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
       Proveedor: ['', [Validators.required]],
@@ -91,7 +91,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
       Id: [''],
       IdUsuario: [''],
       HangfireJobId: [''],
-      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
+      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
       Categoria: ['', [Validators.required]],
@@ -198,13 +198,13 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
           this.categorias = [...gastoByIdRespuesta.GastoRespuesta.ListaCategorias];
           this.cdRef.detectChanges();
 
-          const monto = this.replaceDotsWithCommas(gasto.Monto);
+          const importe = this.replaceDotsWithCommas(gasto.Importe);
           this.selectedCategoria = gasto.Concepto.Categoria.Id;
           this.selectedConceptoId = gasto.Concepto.Id;
 
           this.detailGastoForm.patchValue({
-            ...gasto,            
-            Monto: monto,
+            ...gasto,
+            Importe: importe,
             Categoria: gasto.Concepto.Categoria,
           });
           this.originalGastoData = { ...gasto }
@@ -212,7 +212,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
           this.filteredConceptos.push(gasto.Concepto);
 
           const fechaLocal = new Date(gasto.FechaEjecucion.toString().replace('Z', ''));
-          
+
           // Verifica si la fecha está en UTC y ajusta según sea necesario
           if (gasto.Frecuencia === 'SEMANAL') {
             const dayIndex = fechaLocal.getUTCDay(); // Usamos getUTCDay para obtener el día de la semana en UTC (0=Domingo, ..., 6=Sábado)
@@ -222,15 +222,15 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
             );
             this.diaSemanaSeleccionado = diaKey!;
           }
-          
+
           if (gasto.Frecuencia === 'MENSUAL') {
             this.diaMesSeleccionado = fechaLocal.getUTCDate(); // Usamos getUTCDate para obtener el día del mes en UTC
           }
-          
+
           this.detailGastoForm.patchValue({
             FechaEjecucion: fechaLocal // Usar la hora ajustada
           });
-          
+
           this.detailGastoForm.markAsPristine();
         }
       });
@@ -290,12 +290,12 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
       fechaLocal = new Date(fechaLocal.getTime() - offset);
     }
 
-    const formattedImporte = this.replaceCommasWithDots(formValue.Monto);
+    const formattedImporte = this.replaceCommasWithDots(formValue.Importe);
 
-    // Crea un nuevo objeto con el Monto formateado
+    // Crea un nuevo objeto con el Importe formateado
     const formattedFormValue = {
       ...formValue,
-      Monto: formattedImporte,
+      Importe: formattedImporte,
       FechaEjecucion: fechaLocal
     };
 
@@ -311,6 +311,7 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
     const detailMessage = actionType === 'create'
       ? '¿Está seguro que desea crear este registro?'
       : '¿Está seguro que desea editar este registro?';
+    document.body.classList.add('blur-background');
 
     this._confirmationService.confirm({
       message: detailMessage,
@@ -454,6 +455,10 @@ export class GastoProgramadoDetailComponent implements OnInit, OnDestroy {
       this.deshabilitarBoton = !this.diaMesSeleccionado;
     } else {
       this.deshabilitarBoton = true;
-    }    
+    }
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
   }
 }

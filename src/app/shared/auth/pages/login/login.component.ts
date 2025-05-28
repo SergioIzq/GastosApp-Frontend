@@ -116,4 +116,12 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.mostrarDialogo = false;
     }
   }
+
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

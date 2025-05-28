@@ -3,7 +3,6 @@ import { Subject, Observable, takeUntil, of, switchMap } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { Store, ActionsSubject } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as CategoriaDetailActions from '../../ngrx/actions/categoria-detail.actions';
 import * as CategoriaSelector from '../../ngrx/selectors/categoria-detail.selectors';
@@ -76,7 +75,7 @@ export class CategoriaDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(CategoriaDetailActions.GetCategoria({ id: id }));
           this.categoriaPorId$ = this.store.select(CategoriaSelector.selectedCategoriaSelector);
         }
-      } 
+      }
     });
 
     this.categoriaPorId$ = this.store.select(CategoriaSelector.selectedCategoriaSelector);
@@ -119,7 +118,7 @@ export class CategoriaDetailComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-onSubmit() {
+  onSubmit() {
     const formValue = this.isNewCategoria ? this.newCategoriaForm.value : this.detailCategoriaForm.value;
     formValue.IdUsuario = this.IdUsuario;
 
@@ -136,6 +135,7 @@ onSubmit() {
     const detailMessage = actionType === 'create'
       ? '¿Está seguro que desea crear este registro?'
       : '¿Está seguro que desea editar este registro?';
+    document.body.classList.add('blur-background');
 
     this._confirmationService.confirm({
       message: detailMessage,
@@ -174,4 +174,7 @@ onSubmit() {
     this.router.navigate(['categorias/categorias-list']);
   }
 
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

@@ -15,6 +15,7 @@ import { NumberFormatterPipe } from 'src/app/shared/pipes/numberFormatterPipe.pi
 import * as CuentaDetailReducers from './ngrx/reducers/cuenta-detail.reducer'
 import * as CuentasListReducers from './ngrx/reducers/cuentas-list.reducer'
 import { StoreModule } from '@ngrx/store';
+import { ExportarExcelModule } from 'src/app/shared/excel/exportar-excel.module';
 
 const CUENTAS_COMPONENTS = [
     CuentasListComponent,
@@ -42,6 +43,7 @@ const CUENTAS_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         CuentasRoutingModule,
+        ExportarExcelModule,
         StoreModule.forFeature(CuentaDetailReducers.cuentaDetailFeatureKey, CuentaDetailReducers.reducer),
         StoreModule.forFeature(CuentasListReducers.cuentasListFeatureKey, CuentasListReducers.reducer),
         EffectsModule.forFeature(CUENTAS_EFFECTS),

@@ -45,7 +45,7 @@ export class RecuperarPwdComponent implements OnInit, OnDestroy {
           detail: 'Contraseña restablecida correctamente.',
           life: 5000
         });
-
+        this.addBlur();
         this.confirmationService.confirm({
           message: 'Tu contraseña ha sido restablecida correctamente.',
           header: 'Confirmación',
@@ -74,10 +74,18 @@ export class RecuperarPwdComponent implements OnInit, OnDestroy {
 
       passwordRequest.Password = this.contrasenaForm.value.Contrasena;
       passwordRequest.Token = this.token!;
-      
+
       this.store.dispatch(AuthActions.confirmarNuevaPwd({ passwordRequest }));
 
       this.mostrarDialogo = false;
     }
+  }
+
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
   }
 }

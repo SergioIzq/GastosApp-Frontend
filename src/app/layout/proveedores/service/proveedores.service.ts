@@ -50,10 +50,4 @@ export class ProveedorService {
     return this.http.post<ResponseOne<Proveedor>>(`${this.apiUrl}proveedor`, proveedor);
   }
 
-  exportExcel(res: Excel): Observable<any> {
-    const url = `${this.apiUrl}proveedor/exportExcel`;
-
-    return this.http.post<Excel>(url, res);
-  }
-
 }

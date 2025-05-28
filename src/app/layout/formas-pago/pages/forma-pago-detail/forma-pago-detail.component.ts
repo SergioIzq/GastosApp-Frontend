@@ -34,8 +34,8 @@ export class FormaPagoDetailComponent implements OnInit, OnDestroy {
   selectedOption!: string;
   idUsuario!: number;
   deshabilitarBoton: boolean = false;
-  private _confirmationService:ConfirmationService = inject(ConfirmationService);
-  
+  private _confirmationService: ConfirmationService = inject(ConfirmationService);
+
   constructor(
     private store: Store<FormaPagoDetailState>,
     private _store: Store<AuthState>,
@@ -135,6 +135,7 @@ export class FormaPagoDetailComponent implements OnInit, OnDestroy {
     const detailMessage = actionType === 'create'
       ? '¿Está seguro que desea crear este registro?'
       : '¿Está seguro que desea editar este registro?';
+    document.body.classList.add('blur-background');
 
     this._confirmationService.confirm({
       message: detailMessage,
@@ -173,4 +174,7 @@ export class FormaPagoDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['formas-pago/formas-pago-list']);
   }
 
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

@@ -67,7 +67,7 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
 
     this.newGastoForm = this.fb.group({
       IdUsuario: [''],
-      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
+      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Fecha: ['', [Validators.required]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
@@ -81,7 +81,7 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
     this.detailGastoForm = this.fb.group({
       Id: [''],
       IdUsuario: [''],
-      Monto: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
+      Importe: ['', [Validators.required, Validators.pattern(/^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/), minAmountValidator]],
       Fecha: ['', [Validators.required]],
       Descripcion: ['', [Validators.maxLength(200)]],
       Concepto: ['', [Validators.required]],
@@ -168,14 +168,14 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
           // Convierte la fecha de UTC a local
           const fechaUTC = new Date(gasto.Fecha);
           const fechaLocal = new Date(fechaUTC.getTime() - fechaUTC.getTimezoneOffset() * 60000);
-          const monto = this.replaceDotsWithCommas(gasto.Monto);
+          const importe = this.replaceDotsWithCommas(gasto.Importe);
           this.selectedCategoria = gasto.Concepto.Categoria.Id;
           this.selectedConceptoId = gasto.Concepto.Id;
 
           this.detailGastoForm.patchValue({
             ...gasto,
             Fecha: fechaLocal,
-            Monto: monto,
+            Importe: importe,
             Categoria: gasto.Concepto.Categoria,
           });
 
@@ -221,12 +221,12 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
 
     const fechaUTC = new Date(fechaLocal.getTime() - fechaLocal.getTimezoneOffset() * 60000).toISOString();
 
-    const formattedImporte = this.replaceCommasWithDots(formValue.Monto);
+    const formattedImporte = this.replaceCommasWithDots(formValue.Importe);
 
-    // Crea un nuevo objeto con el Monto formateado
+    // Crea un nuevo objeto con el Importe formateado
     const formattedFormValue = {
       ...formValue,
-      Monto: formattedImporte
+      Importe: formattedImporte
     };
 
     if (this.isNewGasto) {
@@ -342,4 +342,7 @@ export class GastoDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
 }

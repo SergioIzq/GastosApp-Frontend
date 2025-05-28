@@ -13,6 +13,7 @@ import { PrimeNgModule } from 'src/app/primeng/primeng.module';
 import * as ClientesListReducers from './ngrx/reducers/clientes-list.reducer';
 import * as ClienteDetailReducers from './ngrx/reducers/cliente-detail.reducer';
 import { StoreModule } from '@ngrx/store';
+import { ExportarExcelModule } from 'src/app/shared/excel/exportar-excel.module';
 
 const CLIENTES_COMPONENTS = [
     ClientesListComponent,
@@ -30,7 +31,7 @@ const CLIENTES_PROVIDERS = [
 
 @NgModule({
     declarations: [
-        ...CLIENTES_COMPONENTS,
+        ...CLIENTES_COMPONENTS
     ],
     imports: [
         CommonModule,
@@ -39,6 +40,7 @@ const CLIENTES_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         ClientesRoutingModule,
+        ExportarExcelModule,
         StoreModule.forFeature(ClientesListReducers.clientesListFeatureKey, ClientesListReducers.reducer),
         StoreModule.forFeature(ClienteDetailReducers.clienteDetailFeaturekey, ClienteDetailReducers.reducer),
         EffectsModule.forFeature(CLIENTES_EFFECTS)

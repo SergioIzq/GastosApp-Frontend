@@ -15,19 +15,19 @@
                             <!-- Primera fila de inputs -->
                             <div class="field col-12 md:col-3">
                                 <span class="p-float-label euro-input-container">
-                                    <input type="text" id="Monto" pInputText style="text-align: right;"
-                                        formControlName="Monto" appNumberFormatter>
-                                    <label for="Monto">Importe</label>
-                                    <div *ngIf="newIngresoForm.get('Monto')?.invalid && (newIngresoForm.get('Monto')?.['dirty'] || newIngresoForm.get('Monto')?.['touched'])"
+                                    <input type="text" id="Importe" pInputText style="text-align: right;"
+                                        formControlName="Importe" appNumberFormatter>
+                                    <label for="Importe">Importe</label>
+                                    <div *ngIf="newIngresoForm.get('Importe')?.invalid && (newIngresoForm.get('Importe')?.['dirty'] || newIngresoForm.get('Importe')?.['touched'])"
                                         class="text-danger">
-                                        <div *ngIf="newIngresoForm.get('Monto')?.errors?.['required']">El campo importe
+                                        <div *ngIf="newIngresoForm.get('Importe')?.errors?.['required']">El campo importe
                                             es
                                             obligatorio.</div>
-                                        <div *ngIf="newIngresoForm.get('Monto')?.errors?.['pattern']">El importe debe
+                                        <div *ngIf="newIngresoForm.get('Importe')?.errors?.['pattern']">El importe debe
                                             ser
                                             un
                                             número válido. Ej: 22.22</div>
-                                        <div *ngIf="newIngresoForm.get('Monto')?.errors?.['minAmount']">
+                                        <div *ngIf="newIngresoForm.get('Importe')?.errors?.['minAmount']">
                                             El Importe mínimo es de 0,01 €
                                         </div>
                                     </div>
@@ -274,20 +274,20 @@
                             <!-- Primera fila de inputs -->
                             <div class="field col-12 md:col-3">
                                 <span class="p-float-label euro-input-container">
-                                    <input type="text" id="Monto" pInputText style="text-align: right;"
-                                        formControlName="Monto" appNumberFormatter>
-                                    <label for="Monto">Importe</label>
-                                    <div *ngIf="detailIngresoForm.get('Monto')?.invalid && (detailIngresoForm.get('Monto')?.['dirty'] || detailIngresoForm.get('Monto')?.['touched'])"
+                                    <input type="text" id="Importe" pInputText style="text-align: right;"
+                                        formControlName="Importe" appNumberFormatter>
+                                    <label for="Importe">Importe</label>
+                                    <div *ngIf="detailIngresoForm.get('Importe')?.invalid && (detailIngresoForm.get('Importe')?.['dirty'] || detailIngresoForm.get('Importe')?.['touched'])"
                                         class="text-danger">
-                                        <div *ngIf="detailIngresoForm.get('Monto')?.errors?.['required']">El campo
+                                        <div *ngIf="detailIngresoForm.get('Importe')?.errors?.['required']">El campo
                                             importe
                                             es
                                             obligatorio.</div>
-                                        <div *ngIf="detailIngresoForm.get('Monto')?.errors?.['pattern']">El importe debe
+                                        <div *ngIf="detailIngresoForm.get('Importe')?.errors?.['pattern']">El importe debe
                                             ser
                                             un
                                             número válido. Ej: 22.22</div>
-                                        <div *ngIf="detailIngresoForm.get('Monto')?.errors?.['minAmount']">
+                                        <div *ngIf="detailIngresoForm.get('Importe')?.errors?.['minAmount']">
                                             El Importe mínimo es de 0,01 €
                                         </div>
                                     </div>
@@ -535,4 +535,4 @@
 <div *ngIf="loading" class="overlay">
     <p-progressSpinner ariaLabel="loading" />
 </div>
-<p-confirmDialog></p-confirmDialog>
+<p-confirmDialog (onHide)="removeBlur()" appendTo="body"></p-confirmDialog>

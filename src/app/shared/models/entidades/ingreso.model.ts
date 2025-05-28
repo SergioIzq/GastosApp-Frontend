@@ -11,7 +11,7 @@ export class Ingreso {
     Cliente!: Cliente;
     FormaPago!: FormaPago;
     Cuenta!: Cuenta;
-    Monto!: number;
+    Importe!: number;
     Fecha!: Date;
     Descripcion!:string;
     IdUsuario!: number;

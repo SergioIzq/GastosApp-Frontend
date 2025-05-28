@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, filter, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { selectErrorCarga } from '../../ngrx/selectors/categorias-list.selectors';
 import { ActionsSubject, Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import * as SelectCategoriasList from '../../ngrx/selectors/categorias-list.selectors'
@@ -14,10 +13,10 @@ import { Categoria } from 'src/app/shared/models/entidades/categoria.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
 import { EntidadListState } from 'src/app/shared/models/entidades/estados/entidadListState.model';
 import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
+import { ExportarExcelOpciones } from 'src/app/shared/excel/exportar-excel-opciones.interface';
+import { exportarExcel } from 'src/app/shared/excel/actions/excel.actions';
 
 @Component({
   selector: 'app-categorias-list',
@@ -44,7 +43,8 @@ export class CategoriasListComponent implements OnInit, OnDestroy {
   totalRecords = 0;
   first = 0;
   totalPages: number = 1;
-  idUsuario!: number;  
+  idUsuario!: number;
+  columnas: { label: string; value: string }[] = [];
 
   constructor(
     private store: Store<EntidadListState<Categoria>>,
@@ -60,8 +60,8 @@ export class CategoriasListComponent implements OnInit, OnDestroy {
 
     this._store.select(selectUserId).pipe(takeUntil(this.destroy$)).subscribe((idUsuario: number) => {
       this.idUsuario = idUsuario;
-    });    
-    
+    });
+
     this.primengConfig.setTranslation({
       accept: 'Aceptar',
       reject: 'Rechazar',
@@ -93,6 +93,18 @@ export class CategoriasListComponent implements OnInit, OnDestroy {
         this.respuesta = cloneDeep(respuesta);
         this.totalRecords = this.respuesta.TotalRecords;
         this.totalPages = Math.ceil(this.totalRecords / this.size);
+
+        if (this.respuesta.Items && this.respuesta.Items.length > 0) {
+          this.columnas = Object.keys(this.respuesta.Items[0])
+            .filter(key => key !== 'Id' && key !== 'IdUsuario' && key !== 'FechaCreacion' && key !== 'HangfireJobId')
+            .map(key => ({
+              label: this.splitCamelCase(key),
+              value: key
+            }));
+        } else {
+          this.columnas = [];
+        }
+
         if (this.respuesta.Items.length > 0) {
           this.isButtonDisabled = false;
         } else {
@@ -157,31 +169,9 @@ export class CategoriasListComponent implements OnInit, OnDestroy {
     return this.getDateTimeLocalFormat(new Date(fechaStr));
   }
 
-  exportarAExcel(): void {
-    const exportData = this.respuesta.Items.map(item => {
-      return {
-        'Nombre': item.Nombre,
-        'Descripción': item.Descripcion
-      };
-    });
-  
-    // Crear una nueva hoja de trabajo de Excel
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-  
-    // Crear un nuevo libro de Excel y agregar la hoja de trabajo
-    const workbook: XLSX.WorkBook = {
-      Sheets: { 'Categorias': worksheet },
-      SheetNames: ['Categorias']
-    };
-  
-    // Generar el archivo Excel en formato binario
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  
-    // Crear un blob para el archivo
-    const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  
-    // Guardar el archivo en la carpeta de descargas del usuario
-    saveAs(blob, 'categorias.xlsx');
+  onExportar(opciones: ExportarExcelOpciones) {
+    opciones.nombreArchivo = "Categorías";
+    this.store.dispatch(exportarExcel({ url: "categoria", opciones }));
   }
 
   onPageChange(event: any) {
@@ -195,4 +185,15 @@ export class CategoriasListComponent implements OnInit, OnDestroy {
     this.store.dispatch(CategoriasListActions.LoadingCategorias({ page: this.page, size: this.size, idUsuario: this.idUsuario }))
   }
 
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
+
+  splitCamelCase(text: string) {
+    return text.replace(/([a-z])([A-Z])/g, '$1 $2');
+  }
 }

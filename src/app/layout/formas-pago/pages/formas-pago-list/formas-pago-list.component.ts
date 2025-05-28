@@ -18,6 +18,8 @@ import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
 import { EntidadListState } from 'src/app/shared/models/entidades/estados/entidadListState.model';
 import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
+import { ExportarExcelOpciones } from 'src/app/shared/excel/exportar-excel-opciones.interface';
+import { exportarExcel } from 'src/app/shared/excel/actions/excel.actions';
 
 
 @Component({
@@ -46,6 +48,7 @@ export class FormasPagoListComponent implements OnInit, OnDestroy {
   first = 0;
   totalPages: number = 1;
   idUsuario!: number;
+  columnas: { label: string; value: string }[] = [];
 
   constructor(
     private store: Store<EntidadListState<FormaPago>>,
@@ -80,10 +83,10 @@ export class FormasPagoListComponent implements OnInit, OnDestroy {
 
     this.error$ = this.store.select(SelectFormasPagoList.selectErrorCarga);
 
-    this.actionsSubject.pipe(filter(action => action.type === 'DeleteFormaPagoSuccess'),takeUntil(this.destroy$))
+    this.actionsSubject.pipe(filter(action => action.type === 'DeleteFormaPagoSuccess'), takeUntil(this.destroy$))
       .subscribe((action: any) => {
         this.loadFormasPago()
-      });      
+      });
 
     this.error$ = this.store.select(selectErrorCarga);
 
@@ -92,6 +95,18 @@ export class FormasPagoListComponent implements OnInit, OnDestroy {
         // Clonar respuesta de manera profunda
         this.respuesta = cloneDeep(respuesta);
         this.totalRecords = this.respuesta.TotalRecords;
+
+        if (this.respuesta.Items && this.respuesta.Items.length > 0) {
+          this.columnas = Object.keys(this.respuesta.Items[0])
+            .filter(key => key !== 'Id' && key !== 'IdUsuario' && key !== 'FechaCreacion' && key !== 'HangfireJobId')
+            .map(key => ({
+              label: this.splitCamelCase(key),
+              value: key
+            }));
+        } else {
+          this.columnas = [];
+        }
+
         this.totalPages = Math.ceil(this.totalRecords / this.size);
 
         if (this.respuesta.Items.length > 0) {
@@ -151,30 +166,9 @@ export class FormasPagoListComponent implements OnInit, OnDestroy {
     return '25rem';
   }
 
-  exportarAExcel(): void {
-    const exportData = this.respuesta.Items.map(item => {
-      return {
-        'Nombre': item.Nombre,
-      };
-    });
-  
-    // Crear una nueva hoja de trabajo de Excel
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-  
-    // Crear un nuevo libro de Excel y agregar la hoja de trabajo
-    const workbook: XLSX.WorkBook = {
-      Sheets: { 'Forma de pago': worksheet },
-      SheetNames: ['Forma de pago']
-    };
-  
-    // Generar el archivo Excel en formato binario
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  
-    // Crear un blob para el archivo
-    const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  
-    // Guardar el archivo en la carpeta de descargas del usuario
-    saveAs(blob, 'forma-pago.xlsx');
+  onExportar(opciones: ExportarExcelOpciones) {
+    opciones.nombreArchivo = "Formas de pago";
+    this.store.dispatch(exportarExcel({ url: "formapago", opciones }));
   }
 
   public loadFormasPago(): void {
@@ -188,4 +182,15 @@ export class FormasPagoListComponent implements OnInit, OnDestroy {
     this.loadFormasPago();
   }
 
+  addBlur() {
+    document.body.classList.add('blur-background');
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
+  }
+
+  splitCamelCase(text: string) {
+    return text.replace(/([a-z])([A-Z])/g, '$1 $2');
+  }
 }

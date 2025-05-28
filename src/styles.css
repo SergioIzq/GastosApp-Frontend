@@ -509,7 +509,7 @@ body.dark-mode {
         border: 1px solid #333;
     }
 
-    .p-dialog .p-dialog-header,
+    .p-dialog .p-dialog-header ,
     .p-confirm-dialog .p-dialog-header {
         background-color: #2a2a2a;
         color: #ffffff;
@@ -527,10 +527,12 @@ body.dark-mode {
         background-color: #1e1e1e;
     }
 
-    input,
+    /* input,
     .p-inputtext {
+        background-color: #2b2b2b;
         color: #fff;
-    }
+        border: 1px solid #555;
+    } */
 
     input:focus,
     .p-inputtext:focus {
@@ -568,5 +570,22 @@ body.dark-mode {
 }
 
 body.dark-mode .p-text-secondary{
+    color: white;
+}
+
+body.blur-background app-root {
+  filter: blur(5px);
+  pointer-events: none;
+  user-select: none;
+  transition: filter 0.3s ease;
+}
+
+body.dark-mode .p-multiselect-header {
+  background-color: #333; /* color oscuro de ejemplo */
+  color: #eee; /* si quieres también cambiar el texto */
+}
+
+body.dark-mode .p-multiselect-filter{
+    background-color: #333;
     color: white;
 }

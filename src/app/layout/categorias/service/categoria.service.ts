@@ -56,10 +56,4 @@ export class CategoriaService {
     const url = `${this.apiUrl}categoria/${id}`;
     return this.http.delete<void>(url, { headers: this.getHeaders() });
   }
-
-  exportExcel(res: Excel): Observable<any> {
-    const url = `${this.apiUrl}categoria/exportExcel`;
-
-    return this.http.post<Excel>(url, res);
-  }
 }

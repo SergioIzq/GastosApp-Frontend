@@ -84,12 +84,6 @@ export class TraspasoService {
     return this.http.delete<Traspaso>(url);
   }
 
-  exportExcel(res: Excel): Observable<any> {
-    const url = `${this.apiUrl}traspaso/exportExcel`;
-
-    return this.http.post<Excel>(url, res);
-  }
-
   deleteTraspasoProgramado(id: number): Observable<TraspasoProgramado> {
     const url = `${this.apiUrl}traspasoProgramado/${id}`;
     return this.http.delete<TraspasoProgramado>(url);

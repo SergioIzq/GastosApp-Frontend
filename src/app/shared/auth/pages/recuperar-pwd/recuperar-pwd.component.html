@@ -1,4 +1,4 @@
-<p-dialog header="Recuperación de contraseña" [(visible)]="mostrarDialogo" [modal]="true" [closable]="true"
+<p-dialog header="Recuperación de contraseña" [(visible)]="mostrarDialogo" [modal]="true" [closable]="true" (onShow)="addBlur()" (onHide)="removeBlur()" appendTo="body"
     [dismissableMask]="false" [style]="{width: '350px'}">
     <form [formGroup]="contrasenaForm" (ngSubmit)="enviarContrasena()">
         <div class="p-fluid">
@@ -21,5 +21,5 @@
         </div>
     </form>
 </p-dialog>
-<p-confirmDialog [closable]="false" [closeOnEscape]="false" close [rejectVisible]="false"></p-confirmDialog>
+<p-confirmDialog [closable]="false" [closeOnEscape]="false" close [rejectVisible]="false" (onHide)="removeBlur()" appendTo="body"></p-confirmDialog>
 <p>Procesando confirmación...</p>

@@ -263,12 +263,12 @@ export class TraspasoProgramadoDetailComponent implements OnInit, OnDestroy {
       fechaLocal = new Date(fechaLocal.getTime() - offset);
     }
 
-    const formattedImporte = this.replaceCommasWithDots(formValue.Monto);
+    const formattedImporte = this.replaceCommasWithDots(formValue.Importe);
 
-    // Crea un nuevo objeto con el Monto formateado
+    // Crea un nuevo objeto con el Importe formateado
     const formattedFormValue = {
       ...formValue,
-      Monto: formattedImporte,
+      Importe: formattedImporte,
       FechaEjecucion: fechaLocal
     };
     console.log(formValue)
@@ -285,6 +285,7 @@ export class TraspasoProgramadoDetailComponent implements OnInit, OnDestroy {
     const detailMessage = actionType === 'create'
       ? '¿Está seguro que desea crear este registro?'
       : '¿Está seguro que desea editar este registro?';
+    document.body.classList.add('blur-background');
 
     this._confirmationService.confirm({
       message: detailMessage,
@@ -437,5 +438,9 @@ export class TraspasoProgramadoDetailComponent implements OnInit, OnDestroy {
     if (cuentaDestino) {
       this.filterCuentasOrigen(cuentaDestino);
     }
+  }
+
+  removeBlur() {
+    document.body.classList.remove('blur-background');
   }
 }

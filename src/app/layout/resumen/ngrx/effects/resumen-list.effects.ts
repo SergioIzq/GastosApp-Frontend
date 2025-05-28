@@ -39,27 +39,4 @@ export class ResumenListEffects {
       )
     )
   ));
-
-  exportExcel$ = createEffect(() => this.actions$.pipe(
-    ofType(ResumenListActions.ExportExcel),
-    mergeMap(({ datos, dirPath }) =>
-      this.resumenService.exportExcel(datos, dirPath).pipe(
-        // Acción en caso de éxito
-        tap(() => {
-          // Mostrar mensaje de éxito
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Operación exitosa',
-            detail: 'Los datos se han exportado a Excel correctamente.',
-            life: 5000
-          });
-        }),
-        map(() => ResumenListActions.ExportExcelSuccess()),
-        catchError((error) => {
-          return of(ResumenListActions.ExportExcelFailure({ errorMessage: error }));
-        })
-      )
-    )
-  ));
-
 }

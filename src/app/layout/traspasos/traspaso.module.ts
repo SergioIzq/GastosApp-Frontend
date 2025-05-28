@@ -20,6 +20,7 @@ import { TraspasosProgramadosListComponent } from './pages/traspasos-programados
 import { TraspasosProgramadosListEffects } from './ngrx/effects/traspasos-programados-list.effects';
 import { TraspasoProgramadoDetailComponent } from './pages/traspaso-programado-detail/traspaso-programado-detail.component';
 import { TraspasoProgramadoDetailEffects } from './ngrx/effects/traspaso-programado-detail.effects';
+import { ExportarExcelModule } from 'src/app/shared/excel/exportar-excel.module';
 
 const TRASPASO_COMPONENTS = [
     TraspasoDetailComponent,
@@ -51,6 +52,7 @@ const TRASPASO_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         TraspasoRoutingModule,
+        ExportarExcelModule,
         StoreModule.forFeature(TraspasosListReducers.traspasosListFeatureKey, TraspasosListReducers.reducer),
         StoreModule.forFeature(TraspasoDetailReducers.traspasoDetailFeatureKey, TraspasoDetailReducers.reducer),
         StoreModule.forFeature(TraspasosProgramadosListReducers.traspasosProgramadosListFeatureKey, TraspasosProgramadosListReducers.reducer),

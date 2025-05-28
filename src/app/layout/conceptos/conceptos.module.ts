@@ -13,6 +13,7 @@ import { PrimeNgModule } from 'src/app/primeng/primeng.module';
 import * as ConceptoDetailReducers from './ngrx/reducers/concepto-detail.reducer';
 import * as ConceptosListReducers from './ngrx/reducers/conceptos-list.reducer';
 import { StoreModule } from '@ngrx/store';
+import { ExportarExcelModule } from 'src/app/shared/excel/exportar-excel.module';
 
 const CONCEPTOS_COMPONENTS = [
     ConceptosListComponent,
@@ -39,6 +40,7 @@ const CONCEPTOS_PROVIDERS = [
         RouterModule,
         PrimeNgModule,
         ConceptosRoutingModule,
+        ExportarExcelModule,
         StoreModule.forFeature(ConceptoDetailReducers.conceptoDetailFeatureKey, ConceptoDetailReducers.reducer),
         StoreModule.forFeature(ConceptosListReducers.conceptosListFeatureKey, ConceptosListReducers.reducer),
         EffectsModule.forFeature(CONCEPTOS_EFFECTS),

@@ -40,26 +40,4 @@ export class ConceptosListEffects {
       })
     ))
   ));
-
-  exportExcel$ = createEffect(() => this.actions$.pipe(
-    ofType(ConceptosListActions.ExportExcelConcepto),
-    mergeMap(({ res }) =>
-      this.conceptosService.exportExcel(res).pipe(
-        // Acción en caso de éxito
-        tap(() => {
-          // Mostrar mensaje de éxito
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Operación exitosa',
-            detail: 'Los datos se han exportado a Excel correctamente.',
-            life: 5000
-          });
-        }),
-        map(() => ConceptosListActions.ExportExcelConceptoSuccess()),
-        catchError((error) => {
-          return of(ConceptosListActions.ExportExcelConceptoFailure({ errorMessage: error }));
-        })
-      )
-    )
-  ));
 }

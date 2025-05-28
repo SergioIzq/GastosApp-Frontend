@@ -23,6 +23,7 @@ import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
 import { MenuReducer } from './shared/menu/ngrx/reducer/menu.reducer';
 import { authReducer } from './shared/auth/ngrx/auth.reducer';
 import { AuthEffects } from './shared/auth/ngrx/auth.effects';
+import { ExportarExcelModule } from './shared/excel/exportar-excel.module';
 
 // Register the locale data
 registerLocaleData(localeEs);
@@ -41,6 +42,7 @@ registerLocaleData(localeEs);
     BrowserModule,
     BrowserAnimationsModule,
     PrimeNgModule,
+    ExportarExcelModule,
     StoreModule.forRoot({ auth: authReducer, menu: MenuReducer }),
     EffectsModule.forRoot([MenuEffects, AuthEffects]),  
   ],
