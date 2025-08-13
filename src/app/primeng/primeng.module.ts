@@ -34,9 +34,10 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { AccordionModule } from 'primeng/accordion';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { PanelModule } from 'primeng/panel';
 
 @NgModule({
-  exports: [    
+  exports: [
     ButtonModule,
     CardModule,
     SelectButtonModule,
@@ -59,18 +60,19 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     MessagesModule,
     ReactiveFormsModule,
     FormsModule,
-    MultiSelectModule,    
+    MultiSelectModule,
     SliderModule,
     ProgressBarModule,
-    MenubarModule,        
-    BadgeModule, 
+    MenubarModule,
+    BadgeModule,
     TagModule,
     ChartModule,
     PaginatorModule,
     ConfirmDialogModule,
     CheckboxModule,
     AccordionModule,
-    RadioButtonModule
+    RadioButtonModule,
+    PanelModule
   ]
 })
 export class PrimeNgModule { }

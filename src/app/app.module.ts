@@ -24,6 +24,8 @@ import { MenuReducer } from './shared/menu/ngrx/reducer/menu.reducer';
 import { authReducer } from './shared/auth/ngrx/auth.reducer';
 import { AuthEffects } from './shared/auth/ngrx/auth.effects';
 import { ExportarExcelModule } from './shared/excel/exportar-excel.module';
+import { PoliticaPrivacidadComponent } from './layout/legal/politica-privacidad/pages/politica-privacidad.component';
+import { AppFooterComponent } from './shared/footer/app-footer.component';
 
 // Register the locale data
 registerLocaleData(localeEs);
@@ -32,6 +34,8 @@ registerLocaleData(localeEs);
   declarations: [
     AppComponent,
     HomePageComponent,
+    PoliticaPrivacidadComponent,
+    AppFooterComponent,
     MenuComponent,
     NotFoundComponent,
   ],

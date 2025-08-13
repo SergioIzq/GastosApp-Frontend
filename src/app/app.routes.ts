@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from './shared/home/home-page.component';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { PoliticaPrivacidadComponent } from './layout/legal/politica-privacidad/pages/politica-privacidad.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -71,6 +72,7 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./shared/auth/auth.module').then(m => m.AuthModule),
   },
+  { path: 'legal/politica-privacidad', component: PoliticaPrivacidadComponent },
   { path: '**', component: NotFoundComponent },
 
 ];

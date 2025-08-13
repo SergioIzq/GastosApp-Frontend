@@ -1,0 +1,61 @@
+.footer-card {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  background-color: var(--surface-ground);
+  color: var(--text-color-secondary);
+  border-top: 1px solid var(--surface-border);
+  text-align: center;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-links {
+  margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+  margin: 0 0.5rem;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+.footer-copy {
+  margin: 0;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem; /* espacio uniforme entre elementos */
+}
+
+.separator {
+  color: inherit;
+}
+
+/* En móvil quitamos los separadores y ponemos en vertical */
+@media (max-width: 768px) {
+  .footer-links {
+    flex-direction: column;
+    gap: 0.25rem; /* espacio más pequeño en vertical */
+  }
+
+  .separator {
+    display: none;
+  }
+}
