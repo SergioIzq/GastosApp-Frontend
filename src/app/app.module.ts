@@ -24,8 +24,12 @@ import { MenuReducer } from './shared/menu/ngrx/reducer/menu.reducer';
 import { authReducer } from './shared/auth/ngrx/auth.reducer';
 import { AuthEffects } from './shared/auth/ngrx/auth.effects';
 import { ExportarExcelModule } from './shared/excel/exportar-excel.module';
-import { PoliticaPrivacidadComponent } from './layout/legal/politica-privacidad/pages/politica-privacidad.component';
+import { PoliticaPrivacidadComponent } from './layout/legal/politica-privacidad/politica-privacidad.component';
 import { AppFooterComponent } from './shared/footer/app-footer.component';
+import { AvisoLegalComponent } from './layout/legal/aviso-legal/aviso-legal.component';
+import { PoliticaCookiesComponent } from './layout/legal/politica-cookies/politica-cookies.component';
+import { ContactoComponent } from './layout/legal/contacto/contacto.component';
+import { AboutUsComponent } from './layout/legal/about-us/about-us.component';
 
 // Register the locale data
 registerLocaleData(localeEs);
@@ -35,6 +39,10 @@ registerLocaleData(localeEs);
     AppComponent,
     HomePageComponent,
     PoliticaPrivacidadComponent,
+    AvisoLegalComponent,
+    PoliticaCookiesComponent,
+    ContactoComponent,
+    AboutUsComponent,
     AppFooterComponent,
     MenuComponent,
     NotFoundComponent,
