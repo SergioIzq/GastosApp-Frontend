@@ -774,3 +774,32 @@ body.dark-mode .sobre-nosotros p {
 body.dark-mode .sobre-nosotros strong {
     color: #bb86fc;
 }
+
+body.dark-mode .p-fieldset {
+  background-color: #1e1e1e !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #333 !important;
+}
+
+body.dark-mode textarea {
+  background-color: #1e1e1e !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #333 !important;
+}
+
+/* styles.scss o global.scss */
+.p-toast {
+  max-width: 90vw;   /* ocupa hasta el 90% del ancho de la pantalla */
+  word-wrap: break-word; /* fuerza salto de línea */
+}
+
+@media (max-width: 600px) {
+  .p-toast {
+    left: 5% !important;
+    right: 5% !important;
+    width: 90% !important; /* ancho casi completo */
+  }
+  .p-toast-message {
+    font-size: 14px; /* texto un poco más pequeño */
+  }
+}

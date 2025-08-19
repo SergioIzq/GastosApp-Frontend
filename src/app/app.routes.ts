@@ -6,7 +6,6 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { PoliticaPrivacidadComponent } from './layout/legal/politica-privacidad/politica-privacidad.component';
 import { AvisoLegalComponent } from './layout/legal/aviso-legal/aviso-legal.component';
 import { PoliticaCookiesComponent } from './layout/legal/politica-cookies/politica-cookies.component';
-import { ContactoComponent } from './layout/legal/contacto/contacto.component';
 import { AboutUsComponent } from './layout/legal/about-us/about-us.component';
 
 const routes: Routes = [
@@ -79,8 +78,11 @@ const routes: Routes = [
   { path: 'legal/politica-privacidad', component: PoliticaPrivacidadComponent },
   { path: 'legal/aviso-legal', component: AvisoLegalComponent },
   { path: 'legal/politica-cookies', component: PoliticaCookiesComponent },
-  { path: 'legal/contacto', component: ContactoComponent },
   { path: 'legal/about-us', component: AboutUsComponent },
+  {
+    path: 'legal/contacto',
+    loadChildren: () => import('./layout/legal/contacto/contacto.module').then(m => m.ContactoFormModule),
+  },
   { path: '**', component: NotFoundComponent },
 
 ];

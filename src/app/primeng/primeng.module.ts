@@ -35,6 +35,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { AccordionModule } from 'primeng/accordion';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { PanelModule } from 'primeng/panel';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
   exports: [
@@ -72,7 +73,8 @@ import { PanelModule } from 'primeng/panel';
     CheckboxModule,
     AccordionModule,
     RadioButtonModule,
-    PanelModule
+    PanelModule,
+    InputTextareaModule
   ]
 })
 export class PrimeNgModule { }

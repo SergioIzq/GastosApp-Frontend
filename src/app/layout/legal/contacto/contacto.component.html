@@ -3,19 +3,71 @@
     <p>¿Tienes dudas, sugerencias o necesitas soporte? Puedes escribirnos directamente usando el siguiente formulario o
         enviarnos un correo.</p>
 
-    <form action="mailto:ahorroland@sergioizq.es" method="post" enctype="text/plain">
-        <label for="nombre">Nombre:</label><br>
-        <input type="text" id="nombre" name="nombre" required><br><br>
+    <form [formGroup]="contactoForm" (ngSubmit)="onSubmit(contactoForm)">
+        <p-fieldset legend="Contáctanos">
+            <div class="grid p-fluid mt-3">
+                <!-- Primera fila de inputs -->
+                <div class="field col-12 md:col-12">
+                    <span class="p-float-label">
+                        <input type="text" id="Nombre" pInputText formControlName="Nombre">
+                        <label for="Nombre">Nombre</label>
+                        <div *ngIf="contactoForm.get('Nombre')?.invalid && (contactoForm.get('Nombre')?.['dirty'] || contactoForm.get('Nombre')?.['touched'])"
+                            class="text-danger">
+                            <div *ngIf="contactoForm.get('Nombre')?.errors?.['required']">El campo
+                                Nombre
+                                es
+                                obligatorio.</div>
+                            <div *ngIf="contactoForm.get('Nombre')?.errors?.['maxlength']">Ha excedido
+                                el
+                                máximo número de caracteres (100)</div>
+                        </div>
+                    </span>
+                </div>
 
-        <label for="email">Correo electrónico:</label><br>
-        <input type="email" id="email" name="email" required><br><br>
+                <div class="field col-12 md:col-12">
+                    <span class="p-float-label">
+                        <input type="text" id="Email" pInputText formControlName="Email">
+                        <label for="Email">Correo electrónico</label>
+                        <div *ngIf="contactoForm.get('Email')?.invalid && (contactoForm.get('Email')?.['dirty'] || contactoForm.get('Email')?.['touched'])"
+                            class="text-danger">
+                            <div *ngIf="contactoForm.get('Email')?.errors?.['required']">El campo
+                                Correo electrónico
+                                es
+                                obligatorio.</div>
+                            <div *ngIf="contactoForm.get('Email')?.errors?.['maxlength']">Ha excedido
+                                el
+                                máximo número de caracteres (100)</div>
+                        </div>
+                    </span>
+                </div>
 
-        <label for="mensaje">Mensaje:</label><br>
-        <textarea id="mensaje" name="mensaje" rows="5" required></textarea><br><br>
+                <div class="field col-12 md:col-12">
+                    <span class="p-float-label">
+                        <textarea type="text" id="Mensaje" pInputTextarea rows="5" cols="50" formControlName="Mensaje"
+                            style="width: 100%;" [autoResize]="true"></textarea>
+                        <label for="Mensaje">Mensaje</label>
+                        <div *ngIf="contactoForm.get('Mensaje')?.invalid && (contactoForm.get('Mensaje')?.['dirty'] || contactoForm.get('Mensaje')?.['touched'])"
+                            class="text-danger">
+                            <div *ngIf="contactoForm.get('Mensaje')?.errors?.['required']">El campo
+                                Mensaje
+                                es
+                                obligatorio.</div>
+                            <div *ngIf="contactoForm.get('Mensaje')?.errors?.['maxlength']">Ha excedido
+                                el
+                                máximo número de caracteres (100)</div>
+                        </div>
+                    </span>
+                </div>
 
-        <input type="submit" value="Enviar">
+                <div class="field col-12 md:col-12" style="text-align: center;">
+                    <p-button label="Enviar" icon="pi pi-check" severity="success" [raised]="true" iconPos="right"
+                        [disabled]="contactoForm.invalid || !contactoForm.dirty || deshabilitarBoton"
+                        (onClick)="onSubmit(contactoForm)" [style]="{'width': '140px', 'margin-top': '1rem'}">
+                    </p-button>
+                </div>
+            </div>
+        </p-fieldset>
     </form>
-
     <p>También puedes escribirnos directamente a <strong>ahorroland@sergioizq.es</strong>.</p>
 
     <p>Al enviar este formulario, aceptas nuestra <a href="/legal/politica-privacidad">Política de Privacidad</a>.</p>

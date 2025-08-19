@@ -4,7 +4,6 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app.routes';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
-import { ROOT_REDUCERS } from './app.state';
 import { EffectsModule } from '@ngrx/effects';
 import { HomePageComponent } from './shared/home/home-page.component';
 import { MenuComponent } from './shared/menu/menu.component';
@@ -41,7 +40,6 @@ registerLocaleData(localeEs);
     PoliticaPrivacidadComponent,
     AvisoLegalComponent,
     PoliticaCookiesComponent,
-    ContactoComponent,
     AboutUsComponent,
     AppFooterComponent,
     MenuComponent,
