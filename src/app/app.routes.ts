@@ -3,6 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from './shared/home/home-page.component';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { PoliticaPrivacidadComponent } from './layout/legal/politica-privacidad/politica-privacidad.component';
+import { AvisoLegalComponent } from './layout/legal/aviso-legal/aviso-legal.component';
+import { PoliticaCookiesComponent } from './layout/legal/politica-cookies/politica-cookies.component';
+import { AboutUsComponent } from './layout/legal/about-us/about-us.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -70,6 +74,14 @@ const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./shared/auth/auth.module').then(m => m.AuthModule),
+  },
+  { path: 'legal/politica-privacidad', component: PoliticaPrivacidadComponent },
+  { path: 'legal/aviso-legal', component: AvisoLegalComponent },
+  { path: 'legal/politica-cookies', component: PoliticaCookiesComponent },
+  { path: 'legal/about-us', component: AboutUsComponent },
+  {
+    path: 'legal/contacto',
+    loadChildren: () => import('./layout/legal/contacto/contacto.module').then(m => m.ContactoFormModule),
   },
   { path: '**', component: NotFoundComponent },
 

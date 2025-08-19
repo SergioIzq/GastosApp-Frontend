@@ -4,7 +4,6 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app.routes';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
-import { ROOT_REDUCERS } from './app.state';
 import { EffectsModule } from '@ngrx/effects';
 import { HomePageComponent } from './shared/home/home-page.component';
 import { MenuComponent } from './shared/menu/menu.component';
@@ -24,6 +23,12 @@ import { MenuReducer } from './shared/menu/ngrx/reducer/menu.reducer';
 import { authReducer } from './shared/auth/ngrx/auth.reducer';
 import { AuthEffects } from './shared/auth/ngrx/auth.effects';
 import { ExportarExcelModule } from './shared/excel/exportar-excel.module';
+import { PoliticaPrivacidadComponent } from './layout/legal/politica-privacidad/politica-privacidad.component';
+import { AppFooterComponent } from './shared/footer/app-footer.component';
+import { AvisoLegalComponent } from './layout/legal/aviso-legal/aviso-legal.component';
+import { PoliticaCookiesComponent } from './layout/legal/politica-cookies/politica-cookies.component';
+import { ContactoComponent } from './layout/legal/contacto/contacto.component';
+import { AboutUsComponent } from './layout/legal/about-us/about-us.component';
 
 // Register the locale data
 registerLocaleData(localeEs);
@@ -32,6 +37,11 @@ registerLocaleData(localeEs);
   declarations: [
     AppComponent,
     HomePageComponent,
+    PoliticaPrivacidadComponent,
+    AvisoLegalComponent,
+    PoliticaCookiesComponent,
+    AboutUsComponent,
+    AppFooterComponent,
     MenuComponent,
     NotFoundComponent,
   ],

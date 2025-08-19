@@ -509,7 +509,7 @@ body.dark-mode {
         border: 1px solid #333;
     }
 
-    .p-dialog .p-dialog-header ,
+    .p-dialog .p-dialog-header,
     .p-confirm-dialog .p-dialog-header {
         background-color: #2a2a2a;
         color: #ffffff;
@@ -569,23 +569,237 @@ body.dark-mode {
     }
 }
 
-body.dark-mode .p-text-secondary{
+body.dark-mode .p-text-secondary {
     color: white;
 }
 
 body.blur-background app-root {
-  filter: blur(5px);
-  pointer-events: none;
-  user-select: none;
-  transition: filter 0.3s ease;
+    filter: blur(5px);
+    pointer-events: none;
+    user-select: none;
+    transition: filter 0.3s ease;
 }
 
 body.dark-mode .p-multiselect-header {
-  background-color: #333; /* color oscuro de ejemplo */
-  color: #eee; /* si quieres también cambiar el texto */
+    background-color: #333;
+    color: #eee;
 }
 
-body.dark-mode .p-multiselect-filter{
+body.dark-mode .p-multiselect-filter {
     background-color: #333;
     color: white;
+}
+
+body.dark-mode .footer-copy {
+    color: white;
+}
+
+body.dark-mode .footer-links {
+    color: white;
+}
+
+body.dark-mode .footer-card .footer-content .footer-links a {
+    color: white;
+}
+
+body.dark-mode .footer-card .footer-content .footer-links a:hover {
+    color: #007dff;
+    text-decoration: underline;
+}
+
+body.dark-mode .p-card-body {
+    background-color: #333;
+}
+
+.footer {
+    margin-top: 3rem;
+}
+
+body.dark-mode .textoNotFound {
+    color: white;
+}
+
+body.dark-mode .privacidad {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+body.dark-mode .privacidad h1,
+body.dark-mode .privacidad h2 {
+    color: #ffffff;
+}
+
+body.dark-mode .privacidad p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body.dark-mode .privacidad strong {
+    color: #bb86fc;
+}
+
+body.dark-mode .aviso-legal {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+body.dark-mode .aviso-legal h1,
+body.dark-mode .aviso-legal h2 {
+    color: #ffffff;
+}
+
+body.dark-mode .aviso-legal p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body.dark-mode .aviso-legal strong {
+    color: #bb86fc;
+}
+
+body.dark-mode .aviso-legal ul {
+    list-style: none;
+    background-color: #1a1a1a !important;
+}
+
+body.dark-mode .aviso-legal li {
+    background-color: #1a1a1a !important;
+}
+
+body.dark-mode .politica-cookies {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+body.dark-mode .politica-cookies h1,
+body.dark-mode .politica-cookies h2 {
+    color: #ffffff;
+}
+
+body.dark-mode .politica-cookies p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body.dark-mode .politica-cookies strong {
+    color: #bb86fc;
+}
+
+body.dark-mode .politica-cookies ul {
+    list-style: none;
+    background-color: #1a1a1a !important;
+}
+
+.politica-cookies ul {
+    list-style: none;
+}
+
+body.dark-mode .politica-cookies li {
+    background-color: #1a1a1a !important;
+}
+
+#cookie-banner button {
+    background-color: #bb86fc;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#cookie-banner {
+    background: #e0e0e0;
+    color: #222;
+}
+
+#cookie-banner button:hover {
+    background-color: #9b6de0;
+}
+
+body.dark-mode #cookie-banner {
+    background-color: #1e1e1e;
+    color: #f0f0f0;
+}
+
+body.dark-mode #cookie-banner button {
+    background-color: #bb86fc;
+    color: #000;
+}
+
+body.dark-mode #cookie-banner button:hover {
+    background-color: #a675f5;
+}
+
+body.dark-mode .contacto {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+body.dark-mode .contacto h1,
+body.dark-mode .contacto h2 {
+    color: #ffffff;
+}
+
+body.dark-mode .contacto p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body.dark-mode .contacto strong {
+    color: #bb86fc;
+}
+
+body.dark-mode .sobre-nosotros {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+body.dark-mode .sobre-nosotros h1,
+body.dark-mode .sobre-nosotros h2 {
+    color: #ffffff;
+}
+
+body.dark-mode .sobre-nosotros p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body.dark-mode .sobre-nosotros strong {
+    color: #bb86fc;
+}
+
+body.dark-mode .p-fieldset {
+  background-color: #1e1e1e !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #333 !important;
+}
+
+body.dark-mode textarea {
+  background-color: #1e1e1e !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #333 !important;
+}
+
+/* styles.scss o global.scss */
+.p-toast {
+  max-width: 90vw;   /* ocupa hasta el 90% del ancho de la pantalla */
+  word-wrap: break-word; /* fuerza salto de línea */
+}
+
+@media (max-width: 600px) {
+  .p-toast {
+    left: 5% !important;
+    right: 5% !important;
+    width: 90% !important; /* ancho casi completo */
+  }
+  .p-toast-message {
+    font-size: 14px; /* texto un poco más pequeño */
+  }
 }

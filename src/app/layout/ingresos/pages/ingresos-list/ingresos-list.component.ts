@@ -12,8 +12,6 @@ import { Ingreso } from 'src/app/shared/models/entidades/ingreso.model';
 import { cloneDeep } from 'lodash';
 import { PrimeNGConfig } from 'primeng/api';
 import { selectUserId } from 'src/app/shared/auth/ngrx/auth.selectors';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
 import { EntidadListState } from 'src/app/shared/models/entidades/estados/entidadListState.model';
 import { AuthState } from 'src/app/shared/models/entidades/estados/authState.model';
 import { exportarExcel } from 'src/app/shared/excel/actions/excel.actions';
