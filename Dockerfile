@@ -23,7 +23,7 @@ FROM nginx:alpine
 
 # Copia los archivos estáticos (el resultado de la compilación) al directorio de Nginx
 # El contenido de 'dist/out/browser' es lo que ng build genera por defecto en las versiones modernas de Angular
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist/out /usr/share/nginx/html
 
 # Opcional: Copia una configuración de Nginx personalizada (si la necesitas)
 # COPY nginx.conf /etc/nginx/conf.d/default.conf
