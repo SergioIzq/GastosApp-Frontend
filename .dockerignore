@@ -1,0 +1,15 @@
+# Carpetas y archivos de Node
+node_modules
+npm-debug.log
+
+# Logs y Cache
+logs
+tmp
+
+# Carpeta de distribución generada (se crea en la etapa de build)
+dist
+
+# VS Code y otros entornos
+.vscode
+.git
+.gitignore
