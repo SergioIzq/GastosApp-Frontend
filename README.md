@@ -1,5 +1,18 @@
 # 💰 Aplicación de Gestión de Gastos
 
+<div align="center">
+
+![CI/CD Pipeline](https://github.com/SergioIzq/GastosApp-Frontend/workflows/CI%2FCD%20Frontend%20-%20Docker%20Build%20%26%20Push/badge.svg)
+![Docker Image Version](https://img.shields.io/docker/v/sergioizqdev/ahorroland-frontend?sort=semver&logo=docker)
+![Docker Image Size](https://img.shields.io/docker/image-size/sergioizqdev/ahorroland-frontend/latest)
+![Docker Pulls](https://img.shields.io/docker/pulls/sergioizqdev/ahorroland-frontend)
+![Angular Version](https://img.shields.io/badge/Angular-16-DD0031?logo=angular)
+![License](https://img.shields.io/github/license/SergioIzq/GastosApp-Frontend)
+
+</div>
+
+---
+
 Bienvenido a la aplicación de gestión económica personal desarrollada para ayudarte a organizar y controlar tus **ingresos, gastos, cuentas y más** de forma sencilla y eficiente.
 
 🌐 **Accede a la aplicación aquí:** [https://ahorroland.sergioizq.es](https://ahorroland.sergioizq.es)

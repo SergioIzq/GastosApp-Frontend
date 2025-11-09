@@ -10,12 +10,12 @@ WORKDIR /app
 # (algunas librerías de Node pueden necesitar python y make)
 RUN apk add --no-cache python3 make g++
 
-# Copiar archivos de definición de dependencias
-COPY package.json package-lock.json ./
+# Copiar package.json y package-lock.json (si existe)
+COPY package*.json ./
 
-# Instalar dependencias de producción
-# --legacy-peer-deps para evitar conflictos
-RUN npm ci --legacy-peer-deps
+# Instalar dependencias
+# Nota: npm install funciona tanto con como sin package-lock.json
+RUN npm install --legacy-peer-deps
 
 # Copiar el resto del código fuente
 COPY . .
