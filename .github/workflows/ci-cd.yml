@@ -144,29 +144,6 @@ jobs:
           
       - name: Image digest
         run: echo ${{ steps.meta.outputs.digest }}
-
-  trigger-webhook:
-    name: Trigger Deployment Webhook
-    runs-on: ubuntu-latest
-    needs: docker-build-and-push
-    if: success() && github.ref == 'refs/heads/main'
-    
-    steps:
-      - name: Trigger production deployment
-        run: |
-          curl -X POST "https://webhook.sergioizq.com/webhook/frontend?token=${{ secrets.WEBHOOK_SECRET }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "push_data": {
-                "tag": "latest",
-                "pusher": "github-actions"
-              },
-              "repository": {
-                "repo_name": "${{ env.DOCKER_IMAGE }}"
-              }
-            }'
-          echo "✅ Webhook triggered for deployment"
-        continue-on-error: true
         
   notify:
     name: Notify Deployment
