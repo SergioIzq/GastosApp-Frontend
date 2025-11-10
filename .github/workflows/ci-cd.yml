@@ -154,7 +154,7 @@ jobs:
     steps:
       - name: Trigger production deployment
         run: |
-          curl -X POST "https://tu-servidor.com:3000/webhook/frontend?token=${{ secrets.WEBHOOK_SECRET }}" \
+          curl -X POST "https://webhook.sergioizq.com/webhook/frontend?token=${{ secrets.WEBHOOK_SECRET }}" \
             -H "Content-Type: application/json" \
             -d '{
               "push_data": {
