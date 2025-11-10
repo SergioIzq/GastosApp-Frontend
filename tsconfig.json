@@ -33,7 +33,9 @@
     "strictNullChecks": false,
     "strictTemplates": true,
     "noImplicitAny": false,
-    "entryModule": "./src/app/app.module#AppModule"
+    "entryModule": "./src/app/app.module#AppModule",
+    "enableResourceInlining": true,
+    "fullTemplateTypeCheck": true
 
   },
   "include": [

@@ -6,25 +6,36 @@ FROM node:20-alpine AS builder
 # Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copiar SOLO package.json y package-lock.json primero
-# Esto aprovecha la caché de Docker cuando solo cambia el código
-COPY package*.json ./
+# OPTIMIZACIÓN 1: Copiar archivos de configuración primero (mejor aprovechamiento de caché)
+COPY package*.json angular.json tsconfig*.json ./
+COPY extra-webpack.config.js generate-sitemap.js ./
 
-# Instalar dependencias (incluye devDependencies necesarias para build)
-# --prefer-offline: Usa caché local si está disponible
-RUN npm ci --legacy-peer-deps --prefer-offline
+# OPTIMIZACIÓN 2: Instalar dependencias con flags de velocidad mejorados
+# --no-audit: Omite auditoría de seguridad (ahorra ~30s)
+# --no-fund: Omite mensajes de funding (ahorra ~5s)
+# --legacy-peer-deps: Resuelve dependencias conflictivas
+# --prefer-offline: Usa caché local cuando está disponible
+RUN npm ci --legacy-peer-deps --prefer-offline --no-audit --no-fund
 
-# Copiar el resto del código fuente DESPUÉS de instalar dependencias
-COPY . .
+# OPTIMIZACIÓN 3: Copiar solo directorio src/ (evita copiar archivos innecesarios)
+COPY src ./src
 
-# Compilar la aplicación en modo producción con optimizaciones
-# --output-hashing=all: Hashing para caché del navegador
-# --source-map=false: No genera source maps (más rápido y ligero)
+# OPTIMIZACIÓN 4: Build con máxima optimización de velocidad y tamaño
+# --build-optimizer: Optimizaciones adicionales de Angular
+# --aot: Compilación Ahead-of-Time (obligatorio en producción)
+# --vendor-chunk=false: Evita chunk separado de vendors (bundle más optimizado)
+# --common-chunk=false: Evita chunk común (reduce complejidad)
+# --progress=false: No muestra barra de progreso (más rápido en CI/CD)
 RUN npm run build -- \
     --output-path=./dist/out \
     --configuration=production \
     --source-map=false \
-    --optimization=true
+    --optimization=true \
+    --build-optimizer=true \
+    --aot=true \
+    --vendor-chunk=false \
+    --common-chunk=false \
+    --progress=false
 
 # ============================================
 # ETAPA 2: PRODUCTION - Servir con Nginx Alpine

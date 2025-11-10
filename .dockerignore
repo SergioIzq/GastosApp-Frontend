@@ -2,58 +2,69 @@
 # Docker ignore - Optimización de builds
 # ============================================
 
-# Dependencies
+# Dependencies (se instalan en el build)
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-# NO excluir package-lock.json (necesario para builds reproducibles)
-# package-lock.json
-yarn.lock
+pnpm-debug.log*
+.pnpm-store/
 
-# Build outputs
+# Build outputs (se generan en el build)
 dist/
 .angular/
 out-tsc/
 build/
+.next/
+.nuxt/
+.cache/
 
-# IDE
+# IDE & Editors
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 .vs/
+*.sublime-workspace
+*.sublime-project
 
-# OS
+# OS Files
 .DS_Store
 Thumbs.db
 Desktop.ini
+$RECYCLE.BIN/
 
-# Git
+# Git & Version Control
 .git/
 .gitignore
 .gitattributes
 .github/
+.gitlab-ci.yml
 
 # Documentation
 *.md
-README.md
+!README.md
 LICENSE
 CHANGELOG.md
 docs/
+.editorconfig
 
 # CI/CD
-.gitlab-ci.yml
 azure-pipelines.yml
 Jenkinsfile
+.circleci/
+.travis.yml
 
-# Environment
+# Environment & Secrets
 .env
 .env.local
 .env.*.local
 .env.development
 .env.staging
+.env.test
+*.key
+*.pem
 
 # Testing
 coverage/
@@ -63,13 +74,32 @@ coverage/
 e2e/
 karma.conf.js
 protractor.conf.js
+jest.config.js
+cypress/
+.jest/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
 # Misc
-*.log
-.cache/
 tmp/
 temp/
-logs/
+.tmp/
+*.tmp
+*.bak
+*.swp
+.eslintcache
+.stylelintcache
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
 
 # Angular specific
 .angular/
