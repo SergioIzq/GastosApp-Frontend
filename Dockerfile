@@ -6,22 +6,26 @@ FROM node:20-alpine AS builder
 # Establecer el directorio de trabajo
 WORKDIR /app
 
-# Instalar dependencias necesarias para compilación
-# (algunas librerías de Node pueden necesitar python y make)
-RUN apk add --no-cache python3 make g++
-
-# Copiar package.json y package-lock.json (si existe)
+# Copiar SOLO package.json y package-lock.json primero
+# Esto aprovecha la caché de Docker cuando solo cambia el código
 COPY package*.json ./
 
 # Instalar dependencias
-# Nota: npm install funciona tanto con como sin package-lock.json
-RUN npm install --legacy-peer-deps
+# --omit=dev: No instala devDependencies innecesarias en producción
+# --prefer-offline: Usa caché local si está disponible
+RUN npm ci --legacy-peer-deps --omit=dev --prefer-offline
 
-# Copiar el resto del código fuente
+# Copiar el resto del código fuente DESPUÉS de instalar dependencias
 COPY . .
 
-# Compilar la aplicación en modo producción
-RUN npm run build -- --output-path=./dist/out --configuration=production
+# Compilar la aplicación en modo producción con optimizaciones
+# --output-hashing=all: Hashing para caché del navegador
+# --source-map=false: No genera source maps (más rápido y ligero)
+RUN npm run build -- \
+    --output-path=./dist/out \
+    --configuration=production \
+    --source-map=false \
+    --optimization=true
 
 # ============================================
 # ETAPA 2: PRODUCTION - Servir con Nginx Alpine
