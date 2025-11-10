@@ -10,10 +10,9 @@ WORKDIR /app
 # Esto aprovecha la caché de Docker cuando solo cambia el código
 COPY package*.json ./
 
-# Instalar dependencias
-# --omit=dev: No instala devDependencies innecesarias en producción
+# Instalar dependencias (incluye devDependencies necesarias para build)
 # --prefer-offline: Usa caché local si está disponible
-RUN npm ci --legacy-peer-deps --omit=dev --prefer-offline
+RUN npm ci --legacy-peer-deps --prefer-offline
 
 # Copiar el resto del código fuente DESPUÉS de instalar dependencias
 COPY . .
